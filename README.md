@@ -3,6 +3,7 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 
 ## 效果演示
 
+|:---:|:---:|
 |![](screenRecorder/Screenshot_1.gif)|
 
 ## Demo
