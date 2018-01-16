@@ -2,63 +2,26 @@ package com.ckr.pagesnaphelper.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * Created by PC大佬 on 2018/1/4.
  */
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
+public class MainAdapter extends BasePageAdapter<Item,MainAdapter.MainHolder>{
 	public static final String TAG = "MainAdapter";
-	private Context mContext;
-	private List<Item> mList;
-	private final static int COLUMN = 4, SUM = 8;
 
-
-	public MainAdapter(Context context, ArrayList<Item> list) {
-		mContext = context;
-		mList = list;
+	public MainAdapter(Context context, @LayoutOrientation int orientation, @PageRow int row, @PageColumn int column) {
+		super(context,orientation,row,column);
 	}
 
-	@Override
-	public MainHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new MainHolder(LayoutInflater.from(mContext).inflate(R.layout.item_picture, parent, false));
-	}
-
-	@Override
-	public void onBindViewHolder(MainHolder holder, int position) {
-		int realPosition = getRealPosition24(position, SUM);
-		if (position<8) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color1));
-		}else if (position<16) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color2));
-		}else {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.color3));
-
-		}
-		if (realPosition != -1) {
-			Item item = mList.get(realPosition);
-			if (item == null) {
-				holder.linearLayout.setVisibility(View.INVISIBLE);
-			}else {
-				holder.linearLayout.setVisibility(View.VISIBLE);
-				holder.textView.setText(item.getName());
-			}
-		}
-	}
 
 	public int getRealPosition24(int position, int sum) {
 		int pos = -1;
@@ -92,11 +55,36 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
 	}
 
 	@Override
-	public int getItemCount() {
-		return mList == null ? 0 : mList.size();
+	protected int getLayoutId(int viewType) {
+		return R.layout.item_picture;
 	}
 
-	class MainHolder extends RecyclerView.ViewHolder {
+	@Override
+	protected MainHolder getViewHolder(View itemView, int viewType) {
+		return new MainHolder(itemView);
+	}
+
+	@Override
+	protected void convert(MainHolder holder, int position, Item item) {
+		int realPosition = getRealPosition24(position, mRow*mColumn);
+		if (position < mRow*mColumn) {
+			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
+		} else if (position < mRow*mColumn*2) {
+			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color2));
+		} else {
+			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color3));
+		}
+		if (realPosition != -1) {
+			if (item == null) {
+				holder.linearLayout.setVisibility(View.INVISIBLE);
+			} else {
+				holder.linearLayout.setVisibility(View.VISIBLE);
+				holder.textView.setText(item.getName());
+			}
+		}
+	}
+
+	class MainHolder extends BaseViewHolder {
 		private TextView textView;
 		private LinearLayout linearLayout;
 

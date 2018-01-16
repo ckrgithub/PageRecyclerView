@@ -3,16 +3,17 @@ package com.ckr.pagesnaphelper.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.util.Log;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
+import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
 import com.ckr.pagesnaphelper.model.Item;
 import com.ckr.pagesnaphelper.widget.PageRecyclerView;
+import com.ckr.pagesnaphelper.widget.PageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -21,12 +22,11 @@ import butterknife.BindView;
  */
 public class MainFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
 	public static final String TAG = "MainFragment";
-	@BindView(R.id.pagerRecyclerView)
-	PageRecyclerView pagerRecyclerView;
-	private final static int ROW = 2;
-	private final static int COLUMN = 4;
-	private int pages;
-	private final static int ORIENTATION = GridLayoutManager.HORIZONTAL;
+	@BindView(R.id.pageView)
+	PageView pageView;
+	private final static int ROW = OnPageDataListener.TWO;
+	private final static int COLUMN = OnPageDataListener.FOUR;
+	private final static int ORIENTATION = OrientationHelper.HORIZONTAL;
 	private MainAdapter mainAdapter;
 	private ArrayList<Item> items;
 	private final static int CAPACITY = 20;
@@ -52,11 +52,10 @@ public class MainFragment extends BaseFragment implements PageRecyclerView.OnPag
 	}
 
 	private void initView() {
-		pagerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), ROW, ORIENTATION, false));
-		pagerRecyclerView.setColumn(COLUMN);
-		mainAdapter = new MainAdapter(getContext(), items);
-		pagerRecyclerView.setAdapter(mainAdapter);
-		pagerRecyclerView.addOnPageChangeListener(this);
+		pageView.addOnPageChangeListener(this);
+		mainAdapter = new MainAdapter(getContext(), ORIENTATION, ROW, COLUMN);
+		pageView.setAdapter(mainAdapter);
+		pageView.updatePage(items);
 	}
 
 	private void initData() {
@@ -66,19 +65,6 @@ public class MainFragment extends BaseFragment implements PageRecyclerView.OnPag
 			item.setName("item  " + i);
 			item.setPosition(i);
 			items.add(item);
-		}
-		dividePage(items);
-	}
-
-	private void dividePage(List<Item> list) {
-		if (list == null || list.size() == 0) {
-			return;
-		}
-		Log.i(TAG, "dividePage-->size:" + list.size());
-		pages = (int) Math.ceil(list.size() / (double) (COLUMN * ROW));            //多少页
-		Log.i(TAG, "dividePage-->pages:" + pages);
-		for (int i = list.size(); i < pages * COLUMN * ROW; i++) {
-			list.add(null);
 		}
 	}
 

@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,6 +38,7 @@ public class PageRecyclerView extends RecyclerView {
 	private boolean forwardDirection;//滑动方向
 	private OnPageChangeListener listener;
 	private DecimalFormat decimalFormat;
+	private OnPageDataListener onPageDataListener;
 
 	public PageRecyclerView(Context context) {
 		super(context);
@@ -59,16 +62,25 @@ public class PageRecyclerView extends RecyclerView {
 		init(context);
 	}
 
-	public void setColumn(int column) {
-		this.column = column;
-	}
-
 	private void init(Context context) {
 		screenWidth = getScreenWidth(context);
 		decimalFormat = new DecimalFormat("0.00");
 		decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 		getScrollerByReflection();
 		setOnFlingListener(new OnPageFlingListener());
+	}
+
+	public int getCurrentPage() {
+		return mCurrentPage;
+	}
+
+	@Override
+	public void setAdapter(Adapter adapter) {
+		if (adapter instanceof OnPageDataListener) {
+			onPageDataListener = (OnPageDataListener) adapter;
+			column=onPageDataListener.getPageColumn();
+		}
+		super.setAdapter(adapter);
 	}
 
 	private int getScreenWidth(Context context) {

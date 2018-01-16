@@ -5,10 +5,9 @@
              tools:context="com.ckr.pagesnaphelper.view.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.ckr.pagesnaphelper.widget.PageRecyclerView
-        android:id="@+id/pagerRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"></com.ckr.pagesnaphelper.widget.PageRecyclerView>
+   <com.ckr.pagesnaphelper.widget.PageView
+       android:id="@+id/pageView"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"></com.ckr.pagesnaphelper.widget.PageView>
 
 </FrameLayout>
