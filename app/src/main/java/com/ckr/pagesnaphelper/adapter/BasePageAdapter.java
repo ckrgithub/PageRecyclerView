@@ -12,10 +12,10 @@ import java.util.List;
 
 
 /**
- * Created by PC大佬 on 2018/1/4.
+ * Created by PC大佬 on 2018/1/15.
  */
 
-public abstract class BasePageAdapter<T, ViewHolder extends BaseViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener {
+public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener {
 	private static final String TAG = "BasePageAdapter";
 	protected Context mContext;
 	protected List<T> data;

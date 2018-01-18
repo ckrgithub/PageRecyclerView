@@ -19,7 +19,9 @@ import java.lang.reflect.Method;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-
+/**
+ * Created by PC大佬 on 2018/1/14.
+ */
 public class PageRecyclerView extends RecyclerView {
 	public static final String TAG = "PageRecyclerView";
 	private static final int MAX_SCROLL_ON_FLING_DURATION = 100; // 最大滚动毫秒

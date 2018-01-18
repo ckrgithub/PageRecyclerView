@@ -2,6 +2,7 @@ package com.ckr.pagesnaphelper.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,7 +13,7 @@ import com.ckr.pagesnaphelper.model.Item;
 
 
 /**
- * Created by PC大佬 on 2018/1/4.
+ * Created by PC大佬 on 2018/1/14.
  */
 
 public class MainAdapter extends BasePageAdapter<Item,MainAdapter.MainHolder>{
@@ -84,7 +85,7 @@ public class MainAdapter extends BasePageAdapter<Item,MainAdapter.MainHolder>{
 		}
 	}
 
-	class MainHolder extends BaseViewHolder {
+	class MainHolder extends RecyclerView.ViewHolder {
 		private TextView textView;
 		private LinearLayout linearLayout;
 

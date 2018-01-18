@@ -14,6 +14,9 @@ import com.ckr.pagesnaphelper.adapter.BasePageAdapter;
 
 import java.util.List;
 
+/**
+ * Created by PC大佬 on 2018/1/16.
+ */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener {
 	private static final String TAG = "PageView";
 	private Context context;
