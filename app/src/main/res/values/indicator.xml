@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="viewpager_unselected_indicator_diameter">5dp</dimen>
+    <dimen name="viewpager_selected_indicator_diameter">5dp</dimen>
+    <dimen name="viewpager_indicator_margin">5dp</dimen>
+    <color name="viewpager_selected_indicator_color">#ff0000</color>
+    <color name="viewpager_unselected_indicator_color">#000000</color>
+
+</resources>

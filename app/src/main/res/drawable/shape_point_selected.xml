@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="oval">
     <size
-        android:width="5dp"
-        android:height="5dp"/>
-    <solid android:color="#f00"/>
+        android:width="@dimen/viewpager_selected_indicator_diameter"
+        android:height="@dimen/viewpager_selected_indicator_diameter"/>
+    <solid android:color="@color/viewpager_selected_indicator_color"/>
 </shape>
