@@ -19,10 +19,9 @@ import com.ckr.pagesnaphelper.model.Item;
 public class MainAdapter extends BasePageAdapter<Item,MainAdapter.MainHolder>{
 	public static final String TAG = "MainAdapter";
 
-	public MainAdapter(Context context, @LayoutOrientation int orientation, @PageRow int row, @PageColumn int column) {
-		super(context,orientation,row,column);
+	public MainAdapter(Context context) {
+		super(context);
 	}
-
 
 	public int getRealPosition24(int position, int sum) {
 		int pos = -1;
@@ -66,8 +65,10 @@ public class MainAdapter extends BasePageAdapter<Item,MainAdapter.MainHolder>{
 	}
 
 	@Override
-	protected void convert(MainHolder holder, int position, Item item) {
+	protected void convert(MainHolder holder, int position, Item originItem) {
 		int realPosition = getRealPosition24(position, mRow*mColumn);
+		Item item = data.get(realPosition);
+
 		if (position < mRow*mColumn) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
 		} else if (position < mRow*mColumn*2) {

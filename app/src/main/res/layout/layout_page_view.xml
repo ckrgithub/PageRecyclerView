@@ -2,34 +2,34 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff">
+    android:layout_height="wrap_content">
 
     <com.ckr.pagesnaphelper.widget.PageRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:minHeight="34dp"></com.ckr.pagesnaphelper.widget.PageRecyclerView>
+        android:background="#fff"/>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/recyclerView"
         android:layout_centerInParent="true"
         android:background="#fff">
 
         <LinearLayout
-            android:id="@+id/pointGroup"
+            android:id="@+id/indicatorGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal"/>
 
         <View
-            android:id="@+id/movePoint"
-            android:layout_width="5dp"
-            android:layout_height="5dp"
+            android:id="@+id/moveIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
 

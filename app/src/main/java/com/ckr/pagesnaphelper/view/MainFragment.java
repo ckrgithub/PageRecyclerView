@@ -53,7 +53,7 @@ public class MainFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	private void initView() {
 		pageView.addOnPageChangeListener(this);
-		mainAdapter = new MainAdapter(getContext(), ORIENTATION, ROW, COLUMN);
+		mainAdapter = new MainAdapter(getContext());
 		pageView.setAdapter(mainAdapter);
 		pageView.updatePage(items);
 	}

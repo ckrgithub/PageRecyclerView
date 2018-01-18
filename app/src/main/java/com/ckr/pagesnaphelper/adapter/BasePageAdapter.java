@@ -24,12 +24,24 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	private int mPages;
 	private int mOrientation;
 
-	public BasePageAdapter(Context context, @LayoutOrientation int orientation, @PageRow int row, @PageColumn int column) {
+	public BasePageAdapter(Context context) {
 		mContext = context;
 		data = new ArrayList<>();
-		mOrientation = orientation;
-		mRow = row;
-		mColumn = column;
+	}
+
+	public BasePageAdapter setRow(int mRow) {
+		this.mRow = mRow;
+		return this;
+	}
+
+	public BasePageAdapter setColumn(int mColumn) {
+		this.mColumn = mColumn;
+		return this;
+	}
+
+	public BasePageAdapter setOrientation(int mOrientation) {
+		this.mOrientation = mOrientation;
+		return this;
 	}
 
 	public void updateAll(List list) {
