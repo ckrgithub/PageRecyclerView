@@ -1,26 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/container"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
              tools:context="com.ckr.pagesnaphelper.view.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <com.ckr.pagesnaphelper.widget.PageView
-        android:id="@+id/pageView"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
-        app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
-        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
-        app:indicator_margin="@dimen/viewpager_indicator_margin"
-        app:hide_indicator="false"
-        app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_drawable="@drawable/shape_point_unselected"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
-        app:orientation="horizontal"
-        app:page_row="two"
-        app:page_column="four"
+    <com.ckr.pagesnaphelper.widget.MyViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="200dp"></com.ckr.pagesnaphelper.widget.MyViewPager>
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_tablayout"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="#f00"
+        app:tabTextColor="#333"></android.support.design.widget.TabLayout>
 </FrameLayout>

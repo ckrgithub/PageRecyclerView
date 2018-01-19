@@ -3,75 +3,94 @@ package com.ckr.pagesnaphelper.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.ckr.pagesnaphelper.R;
+import com.ckr.pagesnaphelper.adapter.MainAdapter;
+import com.ckr.pagesnaphelper.model.Item;
+import com.ckr.pagesnaphelper.widget.PageRecyclerView;
+import com.ckr.pagesnaphelper.widget.PageView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OneFragment extends Fragment {
-    public static final String TEXT = "text";
-    public static final String COLOR = "color";
-    @BindView(R.id.textView)
-    TextView textView;
-    @BindView(R.id.relativeLayout)
-    RelativeLayout relativeLayout;
-    private Unbinder unbinder;
-    private String text;
-    private int color;
-    private View view;
+public class OneFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
+	private static final String TAG = "OneFragment";
+	private static final String LAYOUT = "layoutId";
+	private static final String LAYOUT_ITEM = "itemLayoutId";
+	@BindView(R.id.pageView)
+	PageView pageView;
+	private MainAdapter mainAdapter;
+	private ArrayList<Item> items;
+	private final static int CAPACITY = 21;
+	private int layoutId;
+	private int itemLayoutId;
 
-    public static OneFragment newInstance(String text,int color) {
+	public static OneFragment newInstance(@LayoutRes int layoutId,@LayoutRes int itemLayoutId) {
+		Bundle args = new Bundle();
+		args.putInt(LAYOUT, layoutId);
+		args.putInt(LAYOUT_ITEM, itemLayoutId);
+		OneFragment fragment = new OneFragment();
+		fragment.setArguments(args);
+		return fragment;
+	}
 
-        Bundle args = new Bundle();
-        args.putString(TEXT, text);
-        args.putInt(COLOR, color);
-        OneFragment fragment = new OneFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		Bundle arguments = getArguments();
+		if (arguments != null) {
+			layoutId = arguments.getInt(LAYOUT, R.layout.fragment_one);
+			itemLayoutId = arguments.getInt(LAYOUT_ITEM, R.layout.item_picture);
+		}
+	}
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            text = arguments.getString(TEXT, "");
-            color = arguments.getInt(COLOR);
-        }
-    }
+	@Override
+	protected int getContentLayoutId() {
+		return layoutId;
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_one, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
+	@Override
+	protected void init() {
+		initData();
+		initView();
+	}
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+	private void initView() {
+		pageView.addOnPageChangeListener(this);
+		mainAdapter = new MainAdapter(getContext(),itemLayoutId);
+		pageView.setAdapter(mainAdapter);
+		pageView.updatePage(items);
+	}
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        textView.setText(text);
-        relativeLayout.setBackgroundColor(color);
-    }
+	private void initData() {
+		items = new ArrayList<>(CAPACITY);
+		for (int i = 0; i < CAPACITY; i++) {
+			Item item = new Item();
+			item.setName("item  " + i);
+			item.setPosition(i);
+			items.add(item);
+		}
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+		Log.d(TAG, "onPageScrolled() called with: position = [" + position + "], positionOffset = [" + positionOffset + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		Log.d(TAG, "onPageSelected() called with: position = [" + position + "]");
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
+		Log.d(TAG, "onPageScrollStateChanged() called with: state = [" + state + "]");
+	}
 }

@@ -2,16 +2,15 @@ package com.ckr.pagesnaphelper.view;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.OrientationHelper;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.ckr.pagesnaphelper.R;
-import com.ckr.pagesnaphelper.adapter.MainAdapter;
-import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
-import com.ckr.pagesnaphelper.model.Item;
-import com.ckr.pagesnaphelper.widget.PageRecyclerView;
-import com.ckr.pagesnaphelper.widget.PageView;
+import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -20,21 +19,21 @@ import butterknife.BindView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
+public class MainFragment extends BaseFragment {
 	public static final String TAG = "MainFragment";
-	@BindView(R.id.pageView)
-	PageView pageView;
-	private final static int ROW = OnPageDataListener.TWO;
-	private final static int COLUMN = OnPageDataListener.FOUR;
-	private final static int ORIENTATION = OrientationHelper.HORIZONTAL;
-	private MainAdapter mainAdapter;
-	private ArrayList<Item> items;
-	private final static int CAPACITY = 20;
+	private static final String PAGE = "page";
+	@BindView(R.id.viewPager)
+	ViewPager viewPager;
+	@BindView(R.id.tabLayout)
+	TabLayout tabLayout;
+	private FragmentManager fragmentManager;
+	private ArrayList<BaseFragment> fragmentList;
+	private static final String[] TITLES = {"One", "Two", "Three"};
+	private int currentPage;
+	private Bundle saveState;
 
 	public static MainFragment newInstance() {
-
 		Bundle args = new Bundle();
-
 		MainFragment fragment = new MainFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -47,39 +46,78 @@ public class MainFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	@Override
 	protected void init() {
-		initData();
+		initFragment();
 		initView();
 	}
 
-	private void initView() {
-		pageView.addOnPageChangeListener(this);
-		mainAdapter = new MainAdapter(getContext());
-		pageView.setAdapter(mainAdapter);
-		pageView.updatePage(items);
-	}
-
-	private void initData() {
-		items = new ArrayList<>(CAPACITY);
-		for (int i = 0; i < CAPACITY; i++) {
-			Item item = new Item();
-			item.setName("item  " + i);
-			item.setPosition(i);
-			items.add(item);
+	private void initFragment() {
+		fragmentManager = getChildFragmentManager();
+		fragmentList = new ArrayList<>();
+		for (int i = 0; i < TITLES.length; i++) {
+			String name = makeFragmentName(R.id.viewPager, i);
+			BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
+			if (fragment == null) {
+				if (i == 0) {
+					fragmentList.add(OneFragment.newInstance(R.layout.fragment_one,R.layout.item_picture));
+				} else if (i == 1) {
+					fragmentList.add(OneFragment.newInstance(R.layout.fragment_two,R.layout.item_picture_two));
+				} else if (i == 2) {
+					fragmentList.add(OneFragment.newInstance(R.layout.fragment_three,R.layout.item_picture_three));
+				}
+			} else {
+				fragmentList.add(fragment);
+			}
 		}
 	}
 
-	@Override
-	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		Log.d(TAG, "onPageScrolled() called with: position = [" + position + "], positionOffset = [" + positionOffset + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
+	private static String makeFragmentName(int viewId, long id) {
+		return "android:switcher:" + viewId + ":" + id;
+	}
+
+	private void initView() {
+		viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, fragmentList, TITLES));
+		tabLayout.setupWithViewPager(viewPager);
 	}
 
 	@Override
-	public void onPageSelected(int position) {
-		Log.d(TAG, "onPageSelected() called with: position = [" + position + "]");
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		Bundle bundle = restoreState();
+		if (bundle != null) {
+			currentPage = bundle.getInt(PAGE, currentPage);
+		}
+		viewPager.setCurrentItem(currentPage, false);
+	}
+
+	private Bundle restoreState() {
+		Bundle arguments = getArguments();
+		if (arguments == null) {
+			return null;
+		}
+		Bundle bundle = arguments.getBundle(MainFragment.class.getName());
+		return bundle;
 	}
 
 	@Override
-	public void onPageScrollStateChanged(int state) {
-		Log.d(TAG, "onPageScrollStateChanged() called with: state = [" + state + "]");
+	public void onSaveInstanceState(Bundle outState) {
+		saveState = outState;
+		saveState();
+	}
+
+	private void saveState() {
+		if (saveState == null) {
+			saveState = new Bundle();
+		}
+		saveState.putInt(PAGE, currentPage);
+		Bundle arguments = getArguments();
+		arguments.putBundle(MainFragment.class.getName(), saveState);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (saveState == null) {
+			saveState();
+		}
 	}
 }
+

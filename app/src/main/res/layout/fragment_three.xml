@@ -1,0 +1,27 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.ckr.pagesnaphelper.view.OneFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.ckr.pagesnaphelper.widget.PageView
+        android:id="@+id/pageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:hide_indicator="false"
+        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
+        app:indicator_margin="@dimen/viewpager_indicator_margin"
+        app:orientation="horizontal"
+        app:page_column="two"
+        app:page_row="two"
+        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
+        app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
+        app:selected_indicator_drawable="@drawable/shape_point_selected"
+        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
+        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
+        app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
+
+</FrameLayout>

@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ckr.pagesnaphelper.utils.PosUtil.adjustPosition22;
+import static com.ckr.pagesnaphelper.utils.PosUtil.adjustPosition23;
+import static com.ckr.pagesnaphelper.utils.PosUtil.adjustPosition24;
+
 
 /**
  * Created by PC大佬 on 2018/1/15.
@@ -29,17 +33,17 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		data = new ArrayList<>();
 	}
 
-	public BasePageAdapter setRow(int mRow) {
+	public BasePageAdapter setRow(@PageRow int mRow) {
 		this.mRow = mRow;
 		return this;
 	}
 
-	public BasePageAdapter setColumn(int mColumn) {
+	public BasePageAdapter setColumn(@PageColumn int mColumn) {
 		this.mColumn = mColumn;
 		return this;
 	}
 
-	public BasePageAdapter setOrientation(int mOrientation) {
+	public BasePageAdapter setOrientation(@LayoutOrientation int mOrientation) {
 		this.mOrientation = mOrientation;
 		return this;
 	}
@@ -51,6 +55,37 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		data.addAll(list);
 		supplyData(data);
 		notifyDataSetChanged();
+	}
+
+	public void updateItem(T t) {
+		if (t == null) {
+			return;
+		}
+		int len = data.size();
+		data.add(t);
+		notifyItemRangeChanged(len, 1);
+	}
+
+	public void updateItem(int start, T t) {
+		if (t == null) {
+			return;
+		}
+		if (start < 0 && start > data.size()) {
+			throw new ArrayIndexOutOfBoundsException(start);
+		}
+		data.add(start, t);
+		int len = data.size() - start;
+		notifyItemRangeChanged(start, len);
+	}
+
+	public void removeItem(int position) {
+		if (position < 0 && position >= data.size()) {
+			throw new ArrayIndexOutOfBoundsException(position);
+		}
+		int size = data.size();
+		data.remove(position);
+		int len = size - position;
+		notifyItemRangeChanged(position, len);
 	}
 
 	private void supplyData(List<T> list) {
@@ -78,6 +113,28 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	@Override
 	public int getItemCount() {
 		return data.size();
+	}
+
+	protected int getAdjustedPosition(int position, int sum) {
+		if (mRow == OnPageDataListener.TWO) {
+			int index = position;
+			switch (mColumn) {
+				case OnPageDataListener.TWO:
+					index=adjustPosition22(position,sum);
+					break;
+				case OnPageDataListener.THREE:
+					index=adjustPosition23(position,sum);
+					break;
+				case OnPageDataListener.FOUR:
+					index=adjustPosition24(position,sum);
+					break;
+				default:
+					break;
+			}
+			return index;
+		} else {
+			return position;
+		}
 	}
 
 	@Override
