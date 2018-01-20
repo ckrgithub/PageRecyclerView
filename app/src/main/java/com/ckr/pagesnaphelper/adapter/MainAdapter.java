@@ -27,7 +27,6 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 		mLayoutId = itemLayoutId;
 	}
 
-
 	@Override
 	protected int getLayoutId(int viewType) {
 		return mLayoutId;
@@ -62,7 +61,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 				holder.itemView.setOnLongClickListener(null);
 				holder.imageButton.setOnClickListener(null);
 			} else {
-				holder.relativeLayout.setVisibility(View.VISIBLE);
+				holder.relativeLayout.setVisibility(View.INVISIBLE);
 				holder.textView.setText(item.getName());
 				holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
 				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition, position));

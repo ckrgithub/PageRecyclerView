@@ -20,8 +20,8 @@ import butterknife.BindView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OneFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
-	private static final String TAG = "OneFragment";
+public class PageFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
+	private static final String TAG = "PageFragment";
 	private static final String LAYOUT = "layoutId";
 	private static final String LAYOUT_ITEM = "itemLayoutId";
 	@BindView(R.id.pageView)
@@ -32,11 +32,11 @@ public class OneFragment extends BaseFragment implements PageRecyclerView.OnPage
 	private int layoutId;
 	private int itemLayoutId;
 
-	public static OneFragment newInstance(@LayoutRes int layoutId,@LayoutRes int itemLayoutId) {
+	public static PageFragment newInstance(@LayoutRes int layoutId, @LayoutRes int itemLayoutId) {
 		Bundle args = new Bundle();
 		args.putInt(LAYOUT, layoutId);
 		args.putInt(LAYOUT_ITEM, itemLayoutId);
-		OneFragment fragment = new OneFragment();
+		PageFragment fragment = new PageFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}

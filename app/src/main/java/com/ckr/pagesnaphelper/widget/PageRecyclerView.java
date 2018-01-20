@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
@@ -32,7 +31,13 @@ public class PageRecyclerView extends RecyclerView {
 	private int column;
 	private Method smoothScrollBy = null;
 	private Field mViewFlingerField = null;
-	protected final AccelerateDecelerateInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
+	private static final Interpolator mInterpolator = new Interpolator() {
+		@Override
+		public float getInterpolation(float t) {
+			t -= 1.0f;
+			return t * t * t * t * t + 1.0f;
+		}
+	};
 	private int mScrollX;//x轴滚动距离
 	private int mDeltaX;//拖动时x轴滚动偏移量
 	private int mScrollState;
@@ -169,7 +174,6 @@ public class PageRecyclerView extends RecyclerView {
 				isSliding = false;
 				break;
 			case SCROLL_STATE_DRAGGING://1
-				isInterrupt = false;
 				break;
 			case SCROLL_STATE_SETTLING://2
 				isSliding = true;
@@ -204,14 +208,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
 			Log.d(TAG, "move,moveX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForDeceleration(Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForViewPager(4000, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
 			int moveX = -(mWidth + deltaX);
 			Log.d(TAG, "move,moveX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForDeceleration(Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForViewPager(4000, Math.abs(moveX)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaX:" + deltaX);
-			smoothScrollBy(-deltaX, 0, calculateTimeForDeceleration(Math.abs(deltaX)));
+			smoothScrollBy(-deltaX, 0, calculateTimeForViewPager(4000, Math.abs(deltaX)));
 		}
 	}
 
@@ -250,7 +254,7 @@ public class PageRecyclerView extends RecyclerView {
 
 	@Override
 	public void setScrollX(@Px int value) {
-		mScrollX=value;
+		mScrollX = value;
 		super.setScrollX(value);
 	}
 
@@ -278,6 +282,8 @@ public class PageRecyclerView extends RecyclerView {
 				return false;
 			}
 			int minFlingVelocity = getMinFlingVelocity();
+			Log.d(TAG, "onFling: velocityX:"+velocityX+",minFlingVelocity:"+minFlingVelocity
+			);
 			boolean fling = (Math.abs(velocityY) > minFlingVelocity || Math.abs(velocityX) > minFlingVelocity)
 					&& snapFromFling(layoutManager, velocityX, velocityY);
 			return fling;
@@ -290,7 +296,7 @@ public class PageRecyclerView extends RecyclerView {
 		if (itemCount == 0) {
 			return false;
 		}
-		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",isInterrupt:" + isInterrupt);
+		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",velocityX:" + velocityX);
 		if (SCROLL_STATE_DRAGGING == this.mScrollState) {
 			Log.e(TAG, "snapFromFling: isSliding:" + isSliding);
 			int moveX = 0;
@@ -302,9 +308,9 @@ public class PageRecyclerView extends RecyclerView {
 				moveX = targetPage * mWidth - mScrollX;
 			}
 			Log.e(TAG, "snapFromFling: move:" + moveX + ",page:" + mCurrentPage + ",scrollX:"
-					+ mScrollX  + ",deltaX:" + mDeltaX+ ",direction:" + forwardDirection );
+					+ mScrollX + ",deltaX:" + mDeltaX + ",direction:" + forwardDirection);
 			if (Math.abs(moveX) != 0 && Math.abs(moveX) != mWidth) {
-				smoothScrollBy(moveX, 0, calculateTimeForDeceleration(Math.abs(moveX)));
+				smoothScrollBy(moveX, 0, calculateTimeForViewPager(velocityX, moveX));
 			}
 			return true;
 		} else {
@@ -312,7 +318,33 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
-	boolean isInterrupt;
+	private int calculateTimeForViewPager(int velocity, int dx) {
+		final int width = mWidth;
+		final int halfWidth = width / 2;
+		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dx) / width);
+		final float distance = halfWidth + halfWidth
+				* distanceInfluenceForSnapDuration(distanceRatio);
+		int duration;
+		velocity = Math.abs(velocity);
+		if (velocity > 0) {
+			duration = 4 * Math.round(1000 * Math.abs(distance / velocity));
+		} else {
+			final float pageWidth = width * 1.0f;
+			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
+			duration = (int) ((pageDelta + 1) * 100);
+		}
+		Log.d(TAG, "calculateTimeForViewPager: distance:"+distance+",duration:"+duration);
+		duration = Math.min(duration, MAX_SETTLE_DURATION);
+		return duration;
+	}
+
+	private static final int MAX_SETTLE_DURATION = 600; // ms
+
+	float distanceInfluenceForSnapDuration(float f) {
+		f -= 0.5f; // center the values about 0.
+		f *= 0.3f * Math.PI / 2.0f;
+		return (float) Math.sin(f);
+	}
 
 	public void addOnPageChangeListener(OnPageChangeListener listener) {
 		this.listener = listener;

@@ -8,9 +8,16 @@
              tools:context="com.ckr.pagesnaphelper.view.MainFragment">
 
     <com.ckr.pagesnaphelper.widget.MyViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/myViewPager"
         android:layout_width="match_parent"
         android:layout_height="260dp"></com.ckr.pagesnaphelper.widget.MyViewPager>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="100dp"></android.support.v4.view.ViewPager>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
