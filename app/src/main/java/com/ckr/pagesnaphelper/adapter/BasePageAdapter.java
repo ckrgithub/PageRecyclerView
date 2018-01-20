@@ -57,7 +57,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	}
 
 	public void updateAll(List<T> list) {
-		if (list == null || list.size() == 0 || mRawData == null)
+		if (list == null || mRawData == null)
 			return;
 		mRawData.clear();
 		mRawData.addAll(list);
@@ -96,17 +96,18 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		mTargetData.remove(adjustedPosition);
 		if (pageCount == this.mPageCount) {
 			mTargetData.add(null);
+			notifyDataSetChanged();
 		} else {
 			supplyData(mRawData);
+			notifyDataSetChanged();
 			if (mOnIndicatorListener != null) {
 				mOnIndicatorListener.updateIndicator();
 			}
 		}
-		notifyDataSetChanged();
 	}
 
 	private void supplyData(List<T> list) {
-		if (list == null || list.size() == 0) {
+		if (list == null) {
 			return;
 		}
 		Log.i(TAG, "dividePage-->size:" + list.size());

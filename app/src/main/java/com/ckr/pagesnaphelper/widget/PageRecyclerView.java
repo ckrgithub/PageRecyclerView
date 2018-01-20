@@ -2,6 +2,7 @@ package com.ckr.pagesnaphelper.widget;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Px;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -247,19 +248,10 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
-	private void limitScrollPage(int page) {
-		if (Math.abs(mCurrentPage - page) == 1 && isSliding) {//在滑动时，限制滑动一页
-			stopScroll();
-			int t = mScrollX / mWidth;
-			int deltaX = mScrollX - t * mWidth;
-			if (!forwardDirection) {//向右滑
-				deltaX = mWidth - deltaX;
-			} else {//向左滑
-				deltaX = -deltaX;
-			}
-			Log.e(TAG, "limitScrollPage: deltaX:" + deltaX);
-			scrollBy(deltaX, 0);
-		}
+	@Override
+	public void setScrollX(@Px int value) {
+		mScrollX=value;
+		super.setScrollX(value);
 	}
 
 	@Override

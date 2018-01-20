@@ -168,7 +168,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		int childCount = indicatorGroup.getChildCount();
 		int pageCount = mAdapter.getPageCount();
 		if (childCount > pageCount) {
-			for (int i = pageCount - 1; i < childCount - 1; i++) {
+			for (int i = pageCount; i < childCount; i++) {
 				indicatorGroup.removeViewAt(i);
 			}
 		} else if (childCount < pageCount) {
@@ -188,9 +188,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		Log.i(TAG, "createIndicator--->createIndicator,position:" + position);
 		View view = new View(getContext());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(unselectedIndicatorDiameter, unselectedIndicatorDiameter);
-		layoutParams.leftMargin = indicatorMargin;
+		layoutParams.rightMargin = indicatorMargin;
 		if (position == 0) {
-			layoutParams.rightMargin = indicatorMargin;
+			layoutParams.leftMargin = indicatorMargin;
 		}
 		view.setLayoutParams(layoutParams);
 		if (unselectedIndicatorDrawable == null) {
@@ -203,7 +203,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				view.setBackgroundDrawable(unselectedIndicatorDrawable);
 			}
 		}
-		indicatorGroup.addView(view, 0);
+		indicatorGroup.addView(view);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (page == 0) {
 			layoutParams.leftMargin = indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
 		} else {
-			layoutParams.leftMargin = page * (selectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			layoutParams.leftMargin = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
 		}
 		view.setLayoutParams(layoutParams);
 	}
