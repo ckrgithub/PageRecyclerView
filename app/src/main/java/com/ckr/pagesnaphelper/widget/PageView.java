@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.BasePageAdapter;
+import com.ckr.pagesnaphelper.adapter.OnIndicatorListener;
 import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * Created by PC大佬 on 2018/1/16.
  */
-public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener {
+public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
@@ -127,10 +128,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		view.setBackgroundDrawable(d);
 	}
 
-
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setOrientation(orientation).setColumn(pageColumn).setRow(pageRow);
+		mAdapter.setOrientation(orientation).setColumn(pageColumn).setRow(pageRow).setOnIndicatorListener(this);
 		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), pageRow, orientation, false));
 		recyclerView.setAdapter(mAdapter);
 	}
@@ -139,15 +139,31 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		mListener = listener;
 	}
 
-	public void updatePage(List list) {
+	/**
+	 * 更新数据源
+	 *
+	 * @param list
+	 */
+	public void updateAll(List list) {
 		if (null == mAdapter) {
 			return;
 		}
 		mAdapter.updateAll(list);
+		updateIndicator();
+	}
+
+	/**
+	 * 更新指示器
+	 */
+	@Override
+	public void updateIndicator() {
 		addIndicator();
 		updateMoveIndicator();
 	}
 
+	/**
+	 * 添加指示器
+	 */
 	private void addIndicator() {
 		int childCount = indicatorGroup.getChildCount();
 		int pageCount = mAdapter.getPageCount();
@@ -162,6 +178,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 	}
 
+	/**
+	 * 创建指示器
+	 *
+	 * @param indicatorGroup
+	 * @param position
+	 */
 	private void createIndicator(LinearLayout indicatorGroup, int position) {
 		Log.i(TAG, "createIndicator--->createIndicator,position:" + position);
 		View view = new View(getContext());
@@ -184,6 +206,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		indicatorGroup.addView(view, 0);
 	}
 
+	/**
+	 * 更新可移动的指示器
+	 */
 	private void updateMoveIndicator() {
 		int pageCount = mAdapter.getPageCount();
 		if (pageCount == 0) {
@@ -191,7 +216,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			moveIndicator.setVisibility(View.VISIBLE);
 			int lastPage = recyclerView.getCurrentPage();
-			if (pageCount < lastPages && lastPage >= pageCount) {//3,4,2/3
+			if (pageCount < lastPages && lastPage >= pageCount) {//2,3,1
 				resetRecycler();
 			} else {
 				moveIndicator(lastPage, moveIndicator);
@@ -204,6 +229,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		moveIndicator(0, moveIndicator);
 	}
 
+	/**
+	 * 移动指示器
+	 *
+	 * @param page
+	 * @param view
+	 */
 	private void moveIndicator(int page, View view) {
 		int pageCount = mAdapter.getPageCount();
 		if (lastPage == page && lastPages == pageCount) {

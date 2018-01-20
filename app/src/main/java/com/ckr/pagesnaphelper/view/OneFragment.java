@@ -66,7 +66,7 @@ public class OneFragment extends BaseFragment implements PageRecyclerView.OnPage
 		pageView.addOnPageChangeListener(this);
 		mainAdapter = new MainAdapter(getContext(),itemLayoutId);
 		pageView.setAdapter(mainAdapter);
-		pageView.updatePage(items);
+		pageView.updateAll(items);
 	}
 
 	private void initData() {

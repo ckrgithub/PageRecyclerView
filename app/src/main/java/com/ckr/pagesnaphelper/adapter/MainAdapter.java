@@ -22,7 +22,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
-	public MainAdapter(Context context,@LayoutRes int itemLayoutId) {
+	public MainAdapter(Context context, @LayoutRes int itemLayoutId) {
 		super(context);
 		mLayoutId = itemLayoutId;
 	}
@@ -41,17 +41,17 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	@Override
 	protected void convert(MainHolder holder, final int position, Item originItem) {
 		int adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
-		Item item = data.get(adjustedPosition);
-		int page=position%(mRow*mColumn*6);
+		Item item = mTargetData.get(adjustedPosition);
+		int page = position % (mRow * mColumn * 6);
 		if (page < mRow * mColumn) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
 		} else if (page < mRow * mColumn * 2) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color2));
-		}  else if (page < mRow * mColumn * 3) {
+		} else if (page < mRow * mColumn * 3) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color3));
-		}  else if (page < mRow * mColumn * 4) {
+		} else if (page < mRow * mColumn * 4) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color4));
-		}  else if (page < mRow * mColumn * 5) {
+		} else if (page < mRow * mColumn * 5) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color5));
 		} else {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color6));
@@ -65,7 +65,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 				holder.relativeLayout.setVisibility(View.VISIBLE);
 				holder.textView.setText(item.getName());
 				holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
-				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
+				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition, position));
 				holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
 			}
 		}
@@ -100,17 +100,19 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	}
 
 	class OnItemClickListener implements View.OnClickListener {
-		private int mPosition;
+		private int mTargetPos;
+		private int mRawPos;
 
-		public OnItemClickListener(int position) {
-			mPosition = position;
+		public OnItemClickListener(int adjustedPos, int rawPos) {
+			mTargetPos = adjustedPos;
+			mRawPos = rawPos;
 		}
 
 		@Override
 		public void onClick(View v) {
 			int id = v.getId();
 			if (id == R.id.imageButton) {
-				removeItem(mPosition);
+				removeItem(mTargetPos);
 			}
 		}
 	}

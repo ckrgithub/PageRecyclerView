@@ -33,11 +33,11 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_alignParentRight="true"
-            android:background="@null"
-            android:padding="2dp"
+            android:background="@drawable/bg_delete"
+            android:padding="4dp"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_delete"
             android:visibility="gone"

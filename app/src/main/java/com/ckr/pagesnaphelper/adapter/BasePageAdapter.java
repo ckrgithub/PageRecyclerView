@@ -22,15 +22,18 @@ import static com.ckr.pagesnaphelper.utils.PosUtil.adjustPosition24;
 public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener {
 	private static final String TAG = "BasePageAdapter";
 	protected Context mContext;
-	protected List<T> data;
+	protected List<T> mTargetData;
+	private List<T> mRawData;
 	protected int mRow;
 	protected int mColumn;
-	private int mPages;
+	private int mPageCount;
 	private int mOrientation;
+	private OnIndicatorListener mOnIndicatorListener;
 
 	public BasePageAdapter(Context context) {
 		mContext = context;
-		data = new ArrayList<>();
+		mRawData = new ArrayList<>();
+		mTargetData = new ArrayList<>();
 	}
 
 	public BasePageAdapter setRow(@PageRow int mRow) {
@@ -48,12 +51,17 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		return this;
 	}
 
-	public void updateAll(List list) {
-		if (list == null || data == null)
+	public BasePageAdapter setOnIndicatorListener(OnIndicatorListener listener) {
+		mOnIndicatorListener = listener;
+		return this;
+	}
+
+	public void updateAll(List<T> list) {
+		if (list == null || list.size() == 0 || mRawData == null)
 			return;
-		data.clear();
-		data.addAll(list);
-		supplyData(data);
+		mRawData.clear();
+		mRawData.addAll(list);
+		supplyData(mRawData);
 		notifyDataSetChanged();
 	}
 
@@ -61,8 +69,8 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (t == null) {
 			return;
 		}
-		int len = data.size();
-		data.add(t);
+		int len = mTargetData.size();
+		mTargetData.add(t);
 		notifyItemRangeChanged(len, 1);
 	}
 
@@ -70,22 +78,31 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (t == null) {
 			return;
 		}
-		if (start < 0 && start > data.size()) {
+		if (start < 0 && start > mTargetData.size()) {
 			throw new ArrayIndexOutOfBoundsException(start);
 		}
-		data.add(start, t);
-		int len = data.size() - start;
+		mTargetData.add(start, t);
+		int len = mTargetData.size() - start;
 		notifyItemRangeChanged(start, len);
 	}
 
-	public void removeItem(int position) {
-		if (position < 0 && position >= data.size()) {
-			throw new ArrayIndexOutOfBoundsException(position);
+	public void removeItem(int adjustedPosition) {
+		if (adjustedPosition < 0 && adjustedPosition >= mRawData.size()) {
+			throw new ArrayIndexOutOfBoundsException(adjustedPosition);
 		}
-		int size = data.size();
-		data.remove(position);
-		int len = size - position;
-		notifyItemRangeChanged(position, len);
+		Log.d(TAG, "removeItem: adjustedPosition:" + adjustedPosition);
+		mRawData.remove(adjustedPosition);
+		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
+		mTargetData.remove(adjustedPosition);
+		if (pageCount == this.mPageCount) {
+			mTargetData.add(null);
+		} else {
+			supplyData(mRawData);
+			if (mOnIndicatorListener != null) {
+				mOnIndicatorListener.updateIndicator();
+			}
+		}
+		notifyDataSetChanged();
 	}
 
 	private void supplyData(List<T> list) {
@@ -93,10 +110,12 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 			return;
 		}
 		Log.i(TAG, "dividePage-->size:" + list.size());
-		mPages = (int) Math.ceil(list.size() / (double) (mRow * mColumn));//多少页
-		Log.i(TAG, "dividePage-->pages:" + mPages);
-		for (int i = list.size(); i < mPages * mRow * mColumn; i++) {
-			list.add(null);
+		mTargetData.clear();
+		mTargetData.addAll(list);
+		mPageCount = (int) Math.ceil(list.size() / (double) (mRow * mColumn));//多少页
+		Log.i(TAG, "dividePage-->pages:" + mPageCount);
+		for (int i = list.size(); i < mPageCount * mRow * mColumn; i++) {
+			mTargetData.add(null);
 		}
 	}
 
@@ -107,12 +126,12 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
-		convert(holder, position, data.get(position));
+		convert(holder, position, mTargetData.get(position));
 	}
 
 	@Override
 	public int getItemCount() {
-		return data.size();
+		return mTargetData.size();
 	}
 
 	protected int getAdjustedPosition(int position, int sum) {
@@ -120,13 +139,13 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 			int index = position;
 			switch (mColumn) {
 				case OnPageDataListener.TWO:
-					index=adjustPosition22(position,sum);
+					index = adjustPosition22(position, sum);
 					break;
 				case OnPageDataListener.THREE:
-					index=adjustPosition23(position,sum);
+					index = adjustPosition23(position, sum);
 					break;
 				case OnPageDataListener.FOUR:
-					index=adjustPosition24(position,sum);
+					index = adjustPosition24(position, sum);
 					break;
 				default:
 					break;
@@ -154,7 +173,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	@Override
 	public int getPageCount() {
-		return mPages;
+		return mPageCount;
 	}
 
 	protected abstract int getLayoutId(int viewType);
