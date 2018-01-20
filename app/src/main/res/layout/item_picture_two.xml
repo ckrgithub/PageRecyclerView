@@ -8,18 +8,15 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_wifi"/>
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_picture"/>
 
         <TextView
             android:id="@+id/textView"
@@ -27,6 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text=""
             android:textColor="#a5a5a5"

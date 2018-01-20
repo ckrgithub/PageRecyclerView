@@ -185,10 +185,10 @@ public class PageRecyclerView extends RecyclerView {
 					deltaX = deltaX - mWidth;
 				} else {//向左滑
 				}
-				Log.d(TAG, "isSliding=true,deltaX:" + deltaX + ",mScrollX:" + mScrollX);
+				Log.d(TAG, "isSliding=true,move:" + deltaX + ",mScrollX:" + mScrollX);
 				move(deltaX);
 			} else {//用手拖动
-				Log.d(TAG, "isSliding=false,mDeltaX:" + mDeltaX);
+				Log.d(TAG, "isSliding=false,move:" + mDeltaX);
 				move(mDeltaX);
 			}
 		}
@@ -231,11 +231,9 @@ public class PageRecyclerView extends RecyclerView {
 		}
 		if (dx < 0 && mScrollX % mWidth != 0) {
 			int targetPage = mScrollX / mWidth + 1;
-			limitScrollPage(targetPage);
 			mCurrentPage = targetPage;
 		} else {
 			int targetPage = mScrollX / mWidth;
-			limitScrollPage(targetPage);
 			mCurrentPage = targetPage;
 		}
 		Log.d(TAG, "onScrolled,mScrollX:" + mScrollX + ",dx:" + dx + ",mCurrentPage:" + mCurrentPage);
@@ -302,43 +300,24 @@ public class PageRecyclerView extends RecyclerView {
 		}
 		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",isInterrupt:" + isInterrupt);
 		if (SCROLL_STATE_DRAGGING == this.mScrollState) {
-//			onScrollStateChanged(SCROLL_STATE_IDLE);
-			/*this.mScrollState = SCROLL_STATE_IDLE;
-			if (listener != null) {
-				listener.onPageScrollStateChanged(SCROLL_STATE_IDLE);
-			}*/
-			Log.e(TAG, "snapFromFling: isSliding:" + isSliding + ",page:" + mCurrentPage + ",scrollX:"
-					+ mScrollX + ",direction:" + forwardDirection+",deltaX:"+mDeltaX);
-//			idleHandle();
+			Log.e(TAG, "snapFromFling: isSliding:" + isSliding);
 			int moveX = 0;
 			if (forwardDirection) {
 				int targetPage = mScrollX / mWidth + 1;
 				moveX = targetPage * mWidth - mScrollX;
 			} else {
-//				int targetPage = mScrollX / mWidth;
-				moveX = mDeltaX;
+				int targetPage = mScrollX / mWidth;//1941
+				moveX = targetPage * mWidth - mScrollX;
 			}
+			Log.e(TAG, "snapFromFling: move:" + moveX + ",page:" + mCurrentPage + ",scrollX:"
+					+ mScrollX  + ",deltaX:" + mDeltaX+ ",direction:" + forwardDirection );
 			if (Math.abs(moveX) != 0 && Math.abs(moveX) != mWidth) {
 				smoothScrollBy(moveX, 0, calculateTimeForDeceleration(Math.abs(moveX)));
 			}
-			mDeltaX = 0;
-//			isSliding = false;
 			return true;
 		} else {
 			return false;
 		}
-		/*if (SCROLL_STATE_IDLE != this.mScrollState) {
-			if (isInterrupt) {
-				return false;
-			} else {
-
-				isInterrupt = true;
-			}
-		} else {
-			isInterrupt = false;
-		}
-		Log.d(TAG, "snapFromFling: isInterrupt:"+isInterrupt);
-		return isInterrupt;*/
 	}
 
 	boolean isInterrupt;

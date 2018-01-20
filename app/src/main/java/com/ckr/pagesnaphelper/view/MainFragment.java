@@ -28,7 +28,7 @@ public class MainFragment extends BaseFragment {
 	TabLayout tabLayout;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
-	private static final String[] TITLES = {"One", "Two", "Three"};
+	private static final String[] TITLES = {"One", "Two", "Three", "Four"};
 	private int currentPage;
 	private Bundle saveState;
 
@@ -63,6 +63,8 @@ public class MainFragment extends BaseFragment {
 					fragmentList.add(OneFragment.newInstance(R.layout.fragment_two,R.layout.item_picture_two));
 				} else if (i == 2) {
 					fragmentList.add(OneFragment.newInstance(R.layout.fragment_three,R.layout.item_picture_three));
+				}else if (i == 3) {
+					fragmentList.add(OneFragment.newInstance(R.layout.fragment_four,R.layout.item_picture_three));
 				}
 			} else {
 				fragmentList.add(fragment);

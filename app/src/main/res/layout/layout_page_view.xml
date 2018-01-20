@@ -2,22 +2,21 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#fff">
 
     <com.ckr.pagesnaphelper.widget.PageRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="#fff"/>
+        android:layout_centerHorizontal="true"/>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/recyclerView"
-        android:layout_centerInParent="true"
-        android:background="#fff">
+        android:layout_centerInParent="true">
 
         <LinearLayout
             android:id="@+id/indicatorGroup"
@@ -30,8 +29,8 @@
             android:id="@+id/moveIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </RelativeLayout>
