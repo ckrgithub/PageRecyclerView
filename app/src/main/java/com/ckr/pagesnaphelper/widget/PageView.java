@@ -150,7 +150,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		mAdapter.updateAll(list);
-		updateIndicator();
 	}
 
 	/**
@@ -259,6 +258,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			margin = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
 			layoutParams.leftMargin = margin;
 		}
+		Log.d(TAG, "moveIndicator: margin:"+margin);
 		view.post(new Runnable() {
 			@Override
 			public void run() {

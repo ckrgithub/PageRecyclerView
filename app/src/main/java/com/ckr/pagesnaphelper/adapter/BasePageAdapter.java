@@ -63,6 +63,9 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		mRawData.addAll(list);
 		supplyData(mRawData);
 		notifyDataSetChanged();
+		if (mOnIndicatorListener != null) {
+			mOnIndicatorListener.updateIndicator();
+		}
 	}
 
 	public void updateItem(T t) {

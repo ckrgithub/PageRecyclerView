@@ -17,7 +17,7 @@
         app:orientation="horizontal"
         app:page_column="two"
         app:page_row="two"
-        app:selected_indicator_color="#6c3d61"
+        app:selected_indicator_color="#25dc15"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:unselected_indicator_color="#666"
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"/>
