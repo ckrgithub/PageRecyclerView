@@ -18,7 +18,6 @@ import com.ckr.pagesnaphelper.model.Item;
  */
 
 public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
-	public static final String TAG = "MainAdapter";
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
@@ -64,7 +63,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 				holder.relativeLayout.setVisibility(View.VISIBLE);
 				holder.textView.setText(item.getName());
 				holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
-				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition, position));
+				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
 				holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
 			}
 		}
@@ -100,11 +99,9 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 
 	class OnItemClickListener implements View.OnClickListener {
 		private int mTargetPos;
-		private int mRawPos;
 
-		public OnItemClickListener(int adjustedPos, int rawPos) {
+		public OnItemClickListener(int adjustedPos) {
 			mTargetPos = adjustedPos;
-			mRawPos = rawPos;
 		}
 
 		@Override

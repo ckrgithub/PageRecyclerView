@@ -15,7 +15,6 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment extends Fragment {
-    private static final String TAG = "BaseFragment";
     private View view;
     private Unbinder unbinder;
 

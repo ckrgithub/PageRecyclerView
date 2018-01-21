@@ -22,8 +22,8 @@ import butterknife.BindView;
  */
 public class PageFragment extends BaseFragment implements PageRecyclerView.OnPageChangeListener {
 	private static final String TAG = "PageFragment";
-	private static final String LAYOUT = "layoutId";
-	private static final String LAYOUT_ITEM = "itemLayoutId";
+	private static final String ID_LAYOUT = "layoutId";
+	private static final String ID_LAYOUT_ITEM = "itemLayoutId";
 	@BindView(R.id.pageView)
 	PageView pageView;
 	private MainAdapter mainAdapter;
@@ -35,8 +35,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	public static PageFragment newInstance(@LayoutRes int layoutId, @LayoutRes int itemLayoutId) {
 		Bundle args = new Bundle();
-		args.putInt(LAYOUT, layoutId);
-		args.putInt(LAYOUT_ITEM, itemLayoutId);
+		args.putInt(ID_LAYOUT, layoutId);
+		args.putInt(ID_LAYOUT_ITEM, itemLayoutId);
 		PageFragment fragment = new PageFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -47,8 +47,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		super.onAttach(context);
 		Bundle arguments = getArguments();
 		if (arguments != null) {
-			layoutId = arguments.getInt(LAYOUT, R.layout.fragment_one);
-			itemLayoutId = arguments.getInt(LAYOUT_ITEM, R.layout.item_picture);
+			layoutId = arguments.getInt(ID_LAYOUT, R.layout.fragment_one);
+			itemLayoutId = arguments.getInt(ID_LAYOUT_ITEM, R.layout.item_picture);
 		}
 	}
 

@@ -6,17 +6,8 @@ package com.ckr.pagesnaphelper.model;
 
 public class Item implements Cloneable{
 	private String name;
-	private int position;
 
 	public Item() {
-	}
-
-	public int getPosition() {
-		return position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
 	}
 
 	public void setName(String name) {

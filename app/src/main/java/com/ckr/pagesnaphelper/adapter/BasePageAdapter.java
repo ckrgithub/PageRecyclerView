@@ -19,7 +19,7 @@ import static com.ckr.pagesnaphelper.utils.PosUtil.adjustPosition24;
  * Created by PC大佬 on 2018/1/15.
  */
 
-public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener {
+public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T> {
 	private static final String TAG = "BasePageAdapter";
 	protected Context mContext;
 	protected List<T> mTargetData;
@@ -74,7 +74,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
 		if (pageCount == this.mPageCount) {
 			mTargetData.add(index, t);
-			mTargetData.remove(mTargetData.size()-1);
+			mTargetData.remove(mTargetData.size() - 1);
 			notifyDataSetChanged();
 		} else {
 			supplyData(mRawData);
@@ -96,7 +96,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
 		if (pageCount == this.mPageCount) {
 			mTargetData.add(start, t);
-			mTargetData.remove(mTargetData.size()-1);
+			mTargetData.remove(mTargetData.size() - 1);
 			notifyDataSetChanged();
 		} else {
 			supplyData(mRawData);
@@ -111,7 +111,6 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (adjustedPosition < 0 && adjustedPosition >= mRawData.size()) {
 			throw new ArrayIndexOutOfBoundsException(adjustedPosition);
 		}
-		Log.d(TAG, "removeItem: adjustedPosition:" + adjustedPosition);
 		mRawData.remove(adjustedPosition);
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
 		if (pageCount == this.mPageCount) {
@@ -131,14 +130,19 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (list == null) {
 			return;
 		}
-		Log.i(TAG, "dividePage-->size:" + list.size());
+		Log.i(TAG, "supplyData,size:" + list.size());
 		mTargetData.clear();
 		mTargetData.addAll(list);
 		mPageCount = (int) Math.ceil(list.size() / (double) (mRow * mColumn));//多少页
-		Log.i(TAG, "dividePage-->pages:" + mPageCount);
+		Log.i(TAG, "supplyData,pages:" + mPageCount);
 		for (int i = list.size(); i < mPageCount * mRow * mColumn; i++) {
 			mTargetData.add(null);
 		}
+	}
+
+	@Override
+	public List<T> getRawData() {
+		return mRawData;
 	}
 
 	@Override

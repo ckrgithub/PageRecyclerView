@@ -24,8 +24,8 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
-	public static final String TAG = "MainFragment";
-	private static final String PAGE = "page";
+	private static final String TAG = "MainFragment";
+	private static final String ARGS_PAGE = "mCurrentPage";
 	@BindView(R.id.viewPager)
 	ViewPager viewPager;
 	@BindView(R.id.myViewPager)
@@ -37,7 +37,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
 	private static final String[] TITLES = {"One", "Two", "Three", "Four"};
-	private int currentPage;
+	private int mCurrentPage;
 	private Bundle saveState;
 
 	public static MainFragment newInstance() {
@@ -100,9 +100,9 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		Bundle bundle = restoreState();
 		if (bundle != null) {
-			currentPage = bundle.getInt(PAGE, currentPage);
+			mCurrentPage = bundle.getInt(ARGS_PAGE, mCurrentPage);
 		}
-		myViewPager.setCurrentItem(currentPage, false);
+		myViewPager.setCurrentItem(mCurrentPage, false);
 	}
 
 	private Bundle restoreState() {
@@ -124,7 +124,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 		if (saveState == null) {
 			saveState = new Bundle();
 		}
-		saveState.putInt(PAGE, currentPage);
+		saveState.putInt(ARGS_PAGE, mCurrentPage);
 		Bundle arguments = getArguments();
 		arguments.putBundle(MainFragment.class.getName(), saveState);
 	}
@@ -144,22 +144,20 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 		if (!TextUtils.isEmpty(text)) {
 			index = Integer.valueOf(text);
 		}
-		fragmentList.get(currentPage).addData(index);
+		fragmentList.get(mCurrentPage).addData(index);
 	}
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-		currentPage = position;
+		mCurrentPage = position;
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-
 	}
 }
 

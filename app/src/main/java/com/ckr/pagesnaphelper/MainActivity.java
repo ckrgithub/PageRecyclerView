@@ -10,7 +10,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String TAG = "MainActivity";
     private Unbinder unbinder;
 
     @Override

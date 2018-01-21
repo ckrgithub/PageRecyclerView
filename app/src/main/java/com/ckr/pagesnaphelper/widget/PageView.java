@@ -91,6 +91,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		layoutParams.height = indicatorGroupHeight;
 		view.setLayoutParams(layoutParams);
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
+		recyclerView.setColumn(pageColumn);
 		recyclerView.addOnPageChangeListener(this);
 		if (hideIndicator) {
 			view.setVisibility(GONE);
@@ -188,7 +189,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 * @param position
 	 */
 	private void createIndicator(LinearLayout indicatorGroup, int position) {
-		Log.i(TAG, "createIndicator--->createIndicator,position:" + position);
+		Log.i(TAG, "createIndicator,position:" + position);
 		View view = new View(getContext());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(unselectedIndicatorDiameter, unselectedIndicatorDiameter);
 		layoutParams.rightMargin = indicatorMargin;
@@ -243,23 +244,20 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		int pageCount = mAdapter.getPageCount();
-		Log.e(TAG, "onScrolled: lastPage:" + lastPage + ",page:" + page + ",lastPages:" + lastPages
-				+ ",pageCount:" + pageCount + ",pageColumn" + pageColumn);
 		if (lastPage == page && lastPages == pageCount) {
 			return;
 		}
 		lastPage = page;
 		lastPages = pageCount;
-
+		int margin = 0;
 		final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
 		layoutParams.topMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
 		if (page == 0) {
-			Log.e(TAG, "moveIndicator: page=0:");
-			layoutParams.leftMargin = indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			margin = indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			layoutParams.leftMargin = margin;
 		} else {
-			int i = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
-			Log.e(TAG, "moveIndicator: page:" + page + ",i:" + i);
-			layoutParams.leftMargin = i;
+			margin = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			layoutParams.leftMargin = margin;
 		}
 		view.post(new Runnable() {
 			@Override

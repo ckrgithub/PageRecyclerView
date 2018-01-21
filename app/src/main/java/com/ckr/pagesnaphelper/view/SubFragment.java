@@ -14,14 +14,14 @@ import butterknife.BindView;
  */
 
 public class SubFragment extends BaseFragment {
-	private static final String COLOR = "colorId";
+	private static final String ID_COLOR = "colorId";
 	@BindView(R.id.frameLayout)
 	View frameLayout;
 	private int colorId;
 
 	public static SubFragment newInstance(@ColorRes int colorId) {
 		Bundle args = new Bundle();
-		args.putInt(COLOR, colorId);
+		args.putInt(ID_COLOR, colorId);
 		SubFragment fragment = new SubFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -32,7 +32,7 @@ public class SubFragment extends BaseFragment {
 		super.onAttach(context);
 		Bundle arguments = getArguments();
 		if (arguments != null) {
-			colorId = arguments.getInt(COLOR, R.color.color1);
+			colorId = arguments.getInt(ID_COLOR, R.color.color1);
 		}
 	}
 

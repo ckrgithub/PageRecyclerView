@@ -5,15 +5,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Px;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
-
-import com.ckr.pagesnaphelper.adapter.OnPageDataListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,13 +22,11 @@ import java.text.DecimalFormat;
  */
 public class PageRecyclerView extends RecyclerView {
 	private static final String TAG = "PageRecyclerView";
-	public static final String SCROLLX = "scrollX";
-	public static final String PAGE = "page";
-	public static final String SUPER = "super";
-	public static final String WIDTH = "width";
-	private static final int MAX_SCROLL_ON_FLING_DURATION = 100; // 最大滚动毫秒
-	private final float MILLISECONDS_PER_PX;//每px滚动的毫秒
-	private static final float MILLISECONDS_PER_INCH = 25f;//每英寸滚动的毫秒
+	public static final String SCROLL_X = "mScrollX";
+	public static final String ARGS_PAGE = "mCurrentPage";
+	public static final String ARGS_SUPER = "super";
+	public static final String ARGS_WIDTH = "mWidth";
+	private static final int MAX_SETTLE_DURATION = 600; // ms
 	private int mWidth;
 	private int mColumn;
 	private Method smoothScrollBy = null;
@@ -52,7 +46,6 @@ public class PageRecyclerView extends RecyclerView {
 	private boolean forwardDirection;//滑动方向
 	private OnPageChangeListener listener;
 	private DecimalFormat decimalFormat;
-	private OnPageDataListener onPageDataListener;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -64,12 +57,7 @@ public class PageRecyclerView extends RecyclerView {
 
 	public PageRecyclerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		MILLISECONDS_PER_PX = calculateSpeedPerPixel(context.getResources().getDisplayMetrics());
 		init();
-	}
-
-	private float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-		return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
 	}
 
 	private void init() {
@@ -82,27 +70,16 @@ public class PageRecyclerView extends RecyclerView {
 			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 				removeOnLayoutChangeListener(this);
 				mWidth = getWidth();
-				Log.d(TAG, "onLayoutChange: width:" + mWidth);
 			}
 		});
-	}
-
-	@Override
-	protected void onMeasure(int widthSpec, int heightSpec) {
-		super.onMeasure(widthSpec, heightSpec);
 	}
 
 	public int getCurrentPage() {
 		return mCurrentPage;
 	}
 
-	@Override
-	public void setAdapter(Adapter adapter) {
-		if (adapter instanceof OnPageDataListener) {
-			onPageDataListener = (OnPageDataListener) adapter;
-			mColumn = onPageDataListener.getPageColumn();
-		}
-		super.setAdapter(adapter);
+	public void setColumn(int mColumn) {
+		this.mColumn = mColumn;
 	}
 
 	/**
@@ -142,30 +119,6 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
-	/**
-	 * {@link LinearSmoothScroller}
-	 *
-	 * @param dx
-	 * @return
-	 */
-	private int calculateTimeForDeceleration(int dx) {
-		int timeForScrolling = (int) Math.ceil(calculateTimeForScrolling(dx) / .3356);
-		Log.d(TAG, "calculateTimeForDeceleration: timeForScrolling:" + timeForScrolling);
-		return timeForScrolling;
-	}
-
-	/**
-	 * {@link LinearSmoothScroller}
-	 *
-	 * @param dx
-	 * @return
-	 */
-	protected int calculateTimeForScrolling(int dx) {
-		int timeForScrolling = (int) Math.ceil(Math.abs(dx) * MILLISECONDS_PER_PX);
-		Log.d(TAG, "calculateTimeForScrolling: timeForScrolling:" + timeForScrolling + ",MILLISECONDS_PER_PX:" + MILLISECONDS_PER_PX + ",dx:" + dx);
-		return Math.min(MAX_SCROLL_ON_FLING_DURATION, timeForScrolling);
-	}
-
 	@Override
 	public void onScrollStateChanged(int state) {
 		Log.d(TAG, "onScrollStateChanged,mScrollState:" + state);
@@ -175,7 +128,21 @@ public class PageRecyclerView extends RecyclerView {
 		}
 		switch (state) {
 			case SCROLL_STATE_IDLE://0
-				idleHandle();
+				if (mWidth != 0) {
+					if (isSliding) {//放手后的滑动
+						int t = mScrollX / mWidth;
+						int deltaX = mScrollX - t * mWidth;
+						if (!forwardDirection) {//向右滑
+							deltaX = deltaX - mWidth;
+						} else {//向左滑
+						}
+						Log.d(TAG, "isSliding=true,deltaX:" + deltaX + ",mScrollX:" + mScrollX);
+						move(deltaX);
+					} else {//用手拖动
+						Log.d(TAG, "isSliding=false,deltaX:" + mDeltaX);
+						move(mDeltaX);
+					}
+				}
 				mDeltaX = 0;
 				isSliding = false;
 				break;
@@ -187,24 +154,6 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
-	private void idleHandle() {
-		if (mWidth != 0) {
-			if (isSliding) {//放手后的滑动
-				int t = mScrollX / mWidth;
-				int deltaX = mScrollX - t * mWidth;
-				if (!forwardDirection) {//向右滑
-					deltaX = deltaX - mWidth;
-				} else {//向左滑
-				}
-				Log.d(TAG, "isSliding=true,move:" + deltaX + ",mScrollX:" + mScrollX);
-				move(deltaX);
-			} else {//用手拖动
-				Log.d(TAG, "isSliding=false,move:" + mDeltaX);
-				move(mDeltaX);
-			}
-		}
-	}
-
 	private void move(int deltaX) {
 		Log.d(TAG, "move,deltaX:" + deltaX + ",mCurrentPage:" + mCurrentPage);
 		if (Math.abs(deltaX) == 0 || Math.abs(deltaX) == mWidth) {
@@ -213,11 +162,11 @@ public class PageRecyclerView extends RecyclerView {
 		int itemWidth = mWidth / Math.max(2, mColumn);
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
-			Log.d(TAG, "move,moveX:" + moveX);
+			Log.d(TAG, "move,deltaX:" + moveX);
 			smoothScrollBy(moveX, 0, calculateTimeForViewPager(4000, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
 			int moveX = -(mWidth + deltaX);
-			Log.d(TAG, "move,moveX:" + moveX);
+			Log.d(TAG, "move,deltaX:" + moveX);
 			smoothScrollBy(moveX, 0, calculateTimeForViewPager(4000, Math.abs(moveX)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaX:" + deltaX);
@@ -236,8 +185,8 @@ public class PageRecyclerView extends RecyclerView {
 		} else {
 			forwardDirection = true;
 		}
-		Log.e(TAG, "onScrolled: mCurrentPage:" + mCurrentPage + ",mDeltaX:" + mDeltaX + ",mScrollX："
-				+ mScrollX + ",mColumn:" + mColumn + ",mWidth:" + mWidth);
+		Log.d(TAG, "onScrolled: mScrollX:" + mScrollX + ",mCurrentPage:" + mCurrentPage +
+				",mDeltaX:" + mDeltaX + ",forwardDirection:" + forwardDirection);
 		if (mWidth == 0) {
 			return;
 		}
@@ -248,13 +197,12 @@ public class PageRecyclerView extends RecyclerView {
 			int targetPage = mScrollX / mWidth;
 			mCurrentPage = targetPage;
 		}
-		Log.e(TAG, "onScrolled,mScrollX:" + mScrollX + ",dx:" + dx + ",mCurrentPage:" + mCurrentPage+",listener:"+listener);
+		Log.d(TAG, "onScrolled,mCurrentPage:" + mCurrentPage);
 		if (listener != null) {
 			int positionOffsetPixels = mScrollX % mWidth;
 			float positionOffset = Float.parseFloat(decimalFormat.format(mScrollX % mWidth / (double) mWidth));
 			listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 			if (positionOffsetPixels == 0) {
-				Log.e(TAG, "onScrolled: onPageSelected");
 				listener.onPageSelected(mCurrentPage);
 			}
 		}
@@ -264,11 +212,6 @@ public class PageRecyclerView extends RecyclerView {
 	public void setScrollX(@Px int value) {
 		mScrollX = value;
 		super.setScrollX(value);
-	}
-
-	@Override
-	public boolean fling(int velocityX, int velocityY) {
-		return super.fling(velocityX * 100 / 100, velocityY);
 	}
 
 	private class OnPageFlingListener extends OnFlingListener {
@@ -290,8 +233,6 @@ public class PageRecyclerView extends RecyclerView {
 				return false;
 			}
 			int minFlingVelocity = getMinFlingVelocity();
-			Log.d(TAG, "onFling: velocityX:" + velocityX + ",minFlingVelocity:" + minFlingVelocity
-			);
 			boolean fling = (Math.abs(velocityY) > minFlingVelocity || Math.abs(velocityX) > minFlingVelocity)
 					&& snapFromFling(layoutManager, velocityX, velocityY);
 			return fling;
@@ -306,7 +247,6 @@ public class PageRecyclerView extends RecyclerView {
 		}
 		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",velocityX:" + velocityX);
 		if (SCROLL_STATE_DRAGGING == this.mScrollState) {
-			Log.e(TAG, "snapFromFling: isSliding:" + isSliding);
 			int moveX = 0;
 			if (forwardDirection) {
 				int targetPage = mScrollX / mWidth + 1;
@@ -315,8 +255,7 @@ public class PageRecyclerView extends RecyclerView {
 				int targetPage = mScrollX / mWidth;//1941
 				moveX = targetPage * mWidth - mScrollX;
 			}
-			Log.e(TAG, "snapFromFling: move:" + moveX + ",page:" + mCurrentPage + ",scrollX:"
-					+ mScrollX + ",deltaX:" + mDeltaX + ",direction:" + forwardDirection);
+			Log.e(TAG, "snapFromFling: deltaX:" + moveX + ",mCurrentPage:" + mCurrentPage + ",mScrollX:" + mScrollX);
 			if (Math.abs(moveX) != 0 && Math.abs(moveX) != mWidth) {
 				smoothScrollBy(moveX, 0, calculateTimeForViewPager(velocityX, moveX));
 			}
@@ -326,6 +265,13 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
+	/**
+	 * {@link android.support.v4.view.ViewPager}的smoothScrollTo(int,int ,int)
+	 *
+	 * @param velocity
+	 * @param dx
+	 * @return
+	 */
 	private int calculateTimeForViewPager(int velocity, int dx) {
 		final int width = mWidth;
 		final int halfWidth = width / 2;
@@ -341,14 +287,11 @@ public class PageRecyclerView extends RecyclerView {
 			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		Log.d(TAG, "calculateTimeForViewPager: distance:" + distance + ",duration:" + duration);
 		duration = Math.min(duration, MAX_SETTLE_DURATION);
 		return duration;
 	}
 
-	private static final int MAX_SETTLE_DURATION = 600; // ms
-
-	float distanceInfluenceForSnapDuration(float f) {
+	private float distanceInfluenceForSnapDuration(float f) {
 		f -= 0.5f; // center the values about 0.
 		f *= 0.3f * Math.PI / 2.0f;
 		return (float) Math.sin(f);
@@ -356,23 +299,23 @@ public class PageRecyclerView extends RecyclerView {
 
 	@Override
 	protected void onRestoreInstanceState(Parcelable state) {
-		Log.e(TAG, "onRestoreInstanceState: " + mColumn);
+		Log.d(TAG, "onRestoreInstanceState: mColumn:" + mColumn);
 		Bundle bundle = (Bundle) state;
-		mScrollX = bundle.getInt(SCROLLX, 0);
-		mCurrentPage = bundle.getInt(PAGE, 0);
-		mWidth = bundle.getInt(WIDTH, 0);
-		Parcelable parcelable = bundle.getParcelable(SUPER);
+		mScrollX = bundle.getInt(SCROLL_X, 0);
+		mCurrentPage = bundle.getInt(ARGS_PAGE, 0);
+		mWidth = bundle.getInt(ARGS_WIDTH, 0);
+		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);
 		super.onRestoreInstanceState(parcelable);
 	}
 
 	@Override
 	protected Parcelable onSaveInstanceState() {
-		Log.e(TAG, "onSaveInstanceState: " + mColumn);
+		Log.d(TAG, "onSaveInstanceState: mColumn:" + mColumn);
 		Bundle bundle = new Bundle();
-		bundle.putInt(SCROLLX, mScrollX);
-		bundle.putInt(PAGE, mCurrentPage);
-		bundle.putInt(WIDTH, mWidth);
-		bundle.putParcelable(SUPER, super.onSaveInstanceState());
+		bundle.putInt(SCROLL_X, mScrollX);
+		bundle.putInt(ARGS_PAGE, mCurrentPage);
+		bundle.putInt(ARGS_WIDTH, mWidth);
+		bundle.putParcelable(ARGS_SUPER, super.onSaveInstanceState());
 		return bundle;
 	}
 
