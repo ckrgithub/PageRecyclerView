@@ -7,7 +7,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +32,8 @@ public class MainFragment extends BaseFragment {
 	ViewPager myViewPager;
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
+	@BindView(R.id.editText)
+	EditText editText;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
 	private static final String[] TITLES = {"One", "Two", "Three", "Four"};
@@ -129,6 +134,16 @@ public class MainFragment extends BaseFragment {
 		if (saveState == null) {
 			saveState();
 		}
+	}
+
+	@OnClick(R.id.add)
+	public void onViewClicked() {
+		String text = editText.getText().toString().trim();
+		int index = -1;
+		if (!TextUtils.isEmpty(text)) {
+			index = Integer.valueOf(text);
+		}
+		fragmentList.get(currentPage).addData(index);
 	}
 }
 

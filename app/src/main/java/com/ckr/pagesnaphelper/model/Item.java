@@ -4,7 +4,7 @@ package com.ckr.pagesnaphelper.model;
  * Created by PC大佬 on 2018/1/13.
  */
 
-public class Item {
+public class Item implements Cloneable{
 	private String name;
 	private int position;
 
@@ -25,5 +25,10 @@ public class Item {
 
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

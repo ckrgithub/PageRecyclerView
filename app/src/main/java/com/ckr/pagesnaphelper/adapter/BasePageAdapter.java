@@ -69,21 +69,40 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (t == null) {
 			return;
 		}
-		int len = mTargetData.size();
-		mTargetData.add(t);
-		notifyItemRangeChanged(len, 1);
+		int index = mRawData.size();
+		mRawData.add(t);
+		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
+		if (pageCount == this.mPageCount) {
+			mTargetData.add(index,t);
+			notifyDataSetChanged();
+		} else {
+			supplyData(mRawData);
+			notifyDataSetChanged();
+			if (mOnIndicatorListener != null) {
+				mOnIndicatorListener.updateIndicator();
+			}
+		}
 	}
 
 	public void updateItem(int start, T t) {
 		if (t == null) {
 			return;
 		}
-		if (start < 0 && start > mTargetData.size()) {
+		if (start < 0 && start > mRawData.size()) {
 			throw new ArrayIndexOutOfBoundsException(start);
 		}
-		mTargetData.add(start, t);
-		int len = mTargetData.size() - start;
-		notifyItemRangeChanged(start, len);
+		mRawData.add(start,t);
+		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
+		if (pageCount == this.mPageCount) {
+			mTargetData.add(start,t);
+			notifyDataSetChanged();
+		} else {
+			supplyData(mRawData);
+			notifyDataSetChanged();
+			if (mOnIndicatorListener != null) {
+				mOnIndicatorListener.updateIndicator();
+			}
+		}
 	}
 
 	public void removeItem(int adjustedPosition) {
@@ -175,6 +194,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	@Override
 	public int getPageCount() {
 		return mPageCount;
+	}
+
+	@Override
+	public int getRawItemCount() {
+		return mRawData.size();
 	}
 
 	protected abstract int getLayoutId(int viewType);

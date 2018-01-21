@@ -39,4 +39,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void init();
 
+    protected void addData(int index){};
+
 }

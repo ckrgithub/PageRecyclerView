@@ -41,4 +41,6 @@ public interface OnPageDataListener {
 	int getLayoutOrientation();
 
 	int getPageCount();
+
+	int getRawItemCount();
 }

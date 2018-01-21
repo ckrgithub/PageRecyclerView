@@ -31,6 +31,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	private final static int CAPACITY = 21;
 	private int layoutId;
 	private int itemLayoutId;
+	private int startCount = 100;
 
 	public static PageFragment newInstance(@LayoutRes int layoutId, @LayoutRes int itemLayoutId) {
 		Bundle args = new Bundle();
@@ -64,18 +65,35 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	private void initView() {
 		pageView.addOnPageChangeListener(this);
-		mainAdapter = new MainAdapter(getContext(),itemLayoutId);
+		mainAdapter = new MainAdapter(getContext(), itemLayoutId);
 		pageView.setAdapter(mainAdapter);
 		pageView.updateAll(items);
 	}
 
 	private void initData() {
 		items = new ArrayList<>(CAPACITY);
-		for (int i = 0; i < CAPACITY; i++) {
-			Item item = new Item();
-			item.setName("item  " + i);
-			item.setPosition(i);
-			items.add(item);
+		Item item = new Item();
+		try {
+			for (int i = 0; i < CAPACITY; i++) {
+				Item clone = (Item) item.clone();
+				clone.setName("item  " + i);
+				items.add(clone);
+			}
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void addData(int index) {
+		int itemCount = mainAdapter.getRawItemCount();
+		Item item = new Item();
+		item.setName("item  "+startCount);
+		startCount++;
+		if (index == -1 || index >= itemCount) {
+			mainAdapter.updateItem(item);
+		} else {
+			mainAdapter.updateItem(index, item);
 		}
 	}
 
