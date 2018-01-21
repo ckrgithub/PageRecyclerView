@@ -17,11 +17,9 @@
         app:orientation="horizontal"
         app:page_column="two"
         app:page_row="two"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
+        app:selected_indicator_color="#6c3d61"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
-        app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
-        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
-        app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
+        app:unselected_indicator_color="#666"
+        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"/>
 
 </FrameLayout>

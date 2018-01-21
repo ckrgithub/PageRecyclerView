@@ -12,7 +12,7 @@
         <attr name="unselected_indicator_drawable" format="color|reference"/>
         <attr name="orientation" format="integer">
             <enum name="horizontal" value="0"></enum>
-            <enum name="vertical" value="1"></enum>
+            <!--<enum name="vertical" value="1"></enum>-->
         </attr>
         <attr name="page_row" format="integer">
             <enum name="one" value="1"></enum>
