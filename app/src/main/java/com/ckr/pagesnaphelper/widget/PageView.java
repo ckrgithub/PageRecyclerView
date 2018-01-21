@@ -87,14 +87,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private void initView() {
 		View inflate = View.inflate(getContext(), R.layout.layout_page_view, null);
 		View view = inflate.findViewById(R.id.relativeLayout);
+		RelativeLayout.LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+		layoutParams.height = indicatorGroupHeight;
+		view.setLayoutParams(layoutParams);
+		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
+		recyclerView.addOnPageChangeListener(this);
 		if (hideIndicator) {
 			view.setVisibility(GONE);
 		} else {
-			RelativeLayout.LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-			layoutParams.height = indicatorGroupHeight;
-			view.setLayoutParams(layoutParams);
-			recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
-			recyclerView.addOnPageChangeListener(this);
 			indicatorGroup = (LinearLayout) inflate.findViewById(R.id.indicatorGroup);
 			moveIndicator = inflate.findViewById(R.id.moveIndicator);
 			layoutParams = (LayoutParams) moveIndicator.getLayoutParams();
@@ -157,6 +157,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 */
 	@Override
 	public void updateIndicator() {
+		if (hideIndicator) {
+			return;
+		}
 		addIndicator();
 		updateMoveIndicator();
 	}
@@ -235,22 +238,35 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 * @param page
 	 * @param view
 	 */
-	private void moveIndicator(int page, View view) {
+	private void moveIndicator(int page, final View view) {
+		if (hideIndicator) {
+			return;
+		}
 		int pageCount = mAdapter.getPageCount();
+		Log.e(TAG, "onScrolled: lastPage:" + lastPage + ",page:" + page + ",lastPages:" + lastPages
+				+ ",pageCount:" + pageCount + ",pageColumn" + pageColumn);
 		if (lastPage == page && lastPages == pageCount) {
 			return;
 		}
 		lastPage = page;
 		lastPages = pageCount;
 
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+		final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
 		layoutParams.topMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
 		if (page == 0) {
+			Log.e(TAG, "moveIndicator: page=0:");
 			layoutParams.leftMargin = indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
 		} else {
-			layoutParams.leftMargin = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			int i = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
+			Log.e(TAG, "moveIndicator: page:" + page + ",i:" + i);
+			layoutParams.leftMargin = i;
 		}
-		view.setLayoutParams(layoutParams);
+		view.post(new Runnable() {
+			@Override
+			public void run() {
+				view.setLayoutParams(layoutParams);
+			}
+		});
 	}
 
 	@Override
@@ -262,10 +278,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageSelected(int position) {
+		moveIndicator(position, moveIndicator);
 		if (mListener != null) {
 			mListener.onPageSelected(position);
 		}
-		moveIndicator(position, moveIndicator);
 	}
 
 	@Override

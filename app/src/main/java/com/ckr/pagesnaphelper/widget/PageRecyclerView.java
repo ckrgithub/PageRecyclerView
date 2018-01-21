@@ -1,6 +1,8 @@
 package com.ckr.pagesnaphelper.widget;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Px;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -23,12 +25,16 @@ import java.text.DecimalFormat;
  * Created by PC大佬 on 2018/1/14.
  */
 public class PageRecyclerView extends RecyclerView {
-	public static final String TAG = "PageRecyclerView";
+	private static final String TAG = "PageRecyclerView";
+	public static final String SCROLLX = "scrollX";
+	public static final String PAGE = "page";
+	public static final String SUPER = "super";
+	public static final String WIDTH = "width";
 	private static final int MAX_SCROLL_ON_FLING_DURATION = 100; // 最大滚动毫秒
 	private final float MILLISECONDS_PER_PX;//每px滚动的毫秒
 	private static final float MILLISECONDS_PER_INCH = 25f;//每英寸滚动的毫秒
 	private int mWidth;
-	private int column;
+	private int mColumn;
 	private Method smoothScrollBy = null;
 	private Field mViewFlingerField = null;
 	private static final Interpolator mInterpolator = new Interpolator() {
@@ -94,7 +100,7 @@ public class PageRecyclerView extends RecyclerView {
 	public void setAdapter(Adapter adapter) {
 		if (adapter instanceof OnPageDataListener) {
 			onPageDataListener = (OnPageDataListener) adapter;
-			column = onPageDataListener.getPageColumn();
+			mColumn = onPageDataListener.getPageColumn();
 		}
 		super.setAdapter(adapter);
 	}
@@ -204,7 +210,7 @@ public class PageRecyclerView extends RecyclerView {
 		if (Math.abs(deltaX) == 0 || Math.abs(deltaX) == mWidth) {
 			return;
 		}
-		int itemWidth = mWidth / column;
+		int itemWidth = mWidth / Math.max(2, mColumn);
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
 			Log.d(TAG, "move,moveX:" + moveX);
@@ -230,7 +236,8 @@ public class PageRecyclerView extends RecyclerView {
 		} else {
 			forwardDirection = true;
 		}
-		Log.d(TAG, "onScrolled: mCurrentPage:" + mCurrentPage + ",mDeltaX:" + mDeltaX);
+		Log.e(TAG, "onScrolled: mCurrentPage:" + mCurrentPage + ",mDeltaX:" + mDeltaX + ",mScrollX："
+				+ mScrollX + ",mColumn:" + mColumn + ",mWidth:" + mWidth);
 		if (mWidth == 0) {
 			return;
 		}
@@ -241,12 +248,13 @@ public class PageRecyclerView extends RecyclerView {
 			int targetPage = mScrollX / mWidth;
 			mCurrentPage = targetPage;
 		}
-		Log.d(TAG, "onScrolled,mScrollX:" + mScrollX + ",dx:" + dx + ",mCurrentPage:" + mCurrentPage);
+		Log.e(TAG, "onScrolled,mScrollX:" + mScrollX + ",dx:" + dx + ",mCurrentPage:" + mCurrentPage+",listener:"+listener);
 		if (listener != null) {
 			int positionOffsetPixels = mScrollX % mWidth;
 			float positionOffset = Float.parseFloat(decimalFormat.format(mScrollX % mWidth / (double) mWidth));
 			listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 			if (positionOffsetPixels == 0) {
+				Log.e(TAG, "onScrolled: onPageSelected");
 				listener.onPageSelected(mCurrentPage);
 			}
 		}
@@ -282,7 +290,7 @@ public class PageRecyclerView extends RecyclerView {
 				return false;
 			}
 			int minFlingVelocity = getMinFlingVelocity();
-			Log.d(TAG, "onFling: velocityX:"+velocityX+",minFlingVelocity:"+minFlingVelocity
+			Log.d(TAG, "onFling: velocityX:" + velocityX + ",minFlingVelocity:" + minFlingVelocity
 			);
 			boolean fling = (Math.abs(velocityY) > minFlingVelocity || Math.abs(velocityX) > minFlingVelocity)
 					&& snapFromFling(layoutManager, velocityX, velocityY);
@@ -333,7 +341,7 @@ public class PageRecyclerView extends RecyclerView {
 			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		Log.d(TAG, "calculateTimeForViewPager: distance:"+distance+",duration:"+duration);
+		Log.d(TAG, "calculateTimeForViewPager: distance:" + distance + ",duration:" + duration);
 		duration = Math.min(duration, MAX_SETTLE_DURATION);
 		return duration;
 	}
@@ -344,6 +352,28 @@ public class PageRecyclerView extends RecyclerView {
 		f -= 0.5f; // center the values about 0.
 		f *= 0.3f * Math.PI / 2.0f;
 		return (float) Math.sin(f);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Parcelable state) {
+		Log.e(TAG, "onRestoreInstanceState: " + mColumn);
+		Bundle bundle = (Bundle) state;
+		mScrollX = bundle.getInt(SCROLLX, 0);
+		mCurrentPage = bundle.getInt(PAGE, 0);
+		mWidth = bundle.getInt(WIDTH, 0);
+		Parcelable parcelable = bundle.getParcelable(SUPER);
+		super.onRestoreInstanceState(parcelable);
+	}
+
+	@Override
+	protected Parcelable onSaveInstanceState() {
+		Log.e(TAG, "onSaveInstanceState: " + mColumn);
+		Bundle bundle = new Bundle();
+		bundle.putInt(SCROLLX, mScrollX);
+		bundle.putInt(PAGE, mCurrentPage);
+		bundle.putInt(WIDTH, mWidth);
+		bundle.putParcelable(SUPER, super.onSaveInstanceState());
+		return bundle;
 	}
 
 	public void addOnPageChangeListener(OnPageChangeListener listener) {
