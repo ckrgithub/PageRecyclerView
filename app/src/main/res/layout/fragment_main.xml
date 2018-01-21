@@ -10,14 +10,41 @@
     <com.ckr.pagesnaphelper.widget.MyViewPager
         android:id="@+id/myViewPager"
         android:layout_width="match_parent"
-        android:layout_height="260dp"></com.ckr.pagesnaphelper.widget.MyViewPager>
+        android:layout_height="220dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="220dp">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:inputType="number"
+            android:gravity="center"
+            android:hint="指定位置"
+            android:maxLength="3"
+            android:textColorHint="#c9c9c9"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/add"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/editText"
+            android:gravity="center"
+            android:text="添加"/>
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="100dp"></android.support.v4.view.ViewPager>
+        android:layout_marginBottom="70dp"></android.support.v4.view.ViewPager>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
