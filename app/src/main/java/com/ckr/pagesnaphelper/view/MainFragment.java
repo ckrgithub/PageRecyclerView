@@ -23,7 +23,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 	public static final String TAG = "MainFragment";
 	private static final String PAGE = "page";
 	@BindView(R.id.viewPager)
@@ -91,6 +91,7 @@ public class MainFragment extends BaseFragment {
 	}
 
 	private void initView() {
+		myViewPager.addOnPageChangeListener(this);
 		myViewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, fragmentList, TITLES));
 		tabLayout.setupWithViewPager(myViewPager);
 	}
@@ -144,6 +145,21 @@ public class MainFragment extends BaseFragment {
 			index = Integer.valueOf(text);
 		}
 		fragmentList.get(currentPage).addData(index);
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		currentPage = position;
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
+
 	}
 }
 
