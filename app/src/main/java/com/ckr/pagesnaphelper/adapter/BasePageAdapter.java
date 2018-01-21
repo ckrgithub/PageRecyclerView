@@ -73,7 +73,8 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		mRawData.add(t);
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
 		if (pageCount == this.mPageCount) {
-			mTargetData.add(index,t);
+			mTargetData.add(index, t);
+			mTargetData.remove(mTargetData.size()-1);
 			notifyDataSetChanged();
 		} else {
 			supplyData(mRawData);
@@ -91,10 +92,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (start < 0 && start > mRawData.size()) {
 			throw new ArrayIndexOutOfBoundsException(start);
 		}
-		mRawData.add(start,t);
+		mRawData.add(start, t);
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
 		if (pageCount == this.mPageCount) {
-			mTargetData.add(start,t);
+			mTargetData.add(start, t);
+			mTargetData.remove(mTargetData.size()-1);
 			notifyDataSetChanged();
 		} else {
 			supplyData(mRawData);
@@ -112,8 +114,8 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		Log.d(TAG, "removeItem: adjustedPosition:" + adjustedPosition);
 		mRawData.remove(adjustedPosition);
 		int pageCount = (int) Math.ceil(mRawData.size() / (double) (mRow * mColumn));
-		mTargetData.remove(adjustedPosition);
 		if (pageCount == this.mPageCount) {
+			mTargetData.remove(adjustedPosition);
 			mTargetData.add(null);
 			notifyDataSetChanged();
 		} else {
