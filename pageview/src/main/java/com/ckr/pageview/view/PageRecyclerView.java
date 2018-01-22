@@ -159,7 +159,7 @@ public class PageRecyclerView extends RecyclerView {
         if (Math.abs(deltaX) == 0 || Math.abs(deltaX) == mWidth) {
             return;
         }
-        int itemWidth = mWidth / Math.max(2, mColumn);
+        int itemWidth = mWidth /2;
         if (deltaX >= itemWidth) {//下一页
             int moveX = mWidth - deltaX;
             Log.d(TAG, "move,deltaX:" + moveX);
