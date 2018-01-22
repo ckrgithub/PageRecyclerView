@@ -92,7 +92,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
         layoutParams.height = indicatorGroupHeight;
         view.setLayoutParams(layoutParams);
         recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
-        recyclerView.setColumn(pageColumn);
+        recyclerView.setOrientation(orientation);
         recyclerView.addOnPageChangeListener(this);
         if (hideIndicator) {
             view.setVisibility(GONE);

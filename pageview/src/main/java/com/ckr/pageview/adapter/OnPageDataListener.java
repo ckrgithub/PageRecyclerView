@@ -1,7 +1,6 @@
 package com.ckr.pageview.adapter;
 
 import android.support.annotation.IntDef;
-import android.support.v7.widget.OrientationHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,7 +27,7 @@ public interface OnPageDataListener<T> {
 	}
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({OrientationHelper.HORIZONTAL, OrientationHelper.VERTICAL})
+	@IntDef({0, 1})
 	@interface LayoutOrientation {
 	}
 
