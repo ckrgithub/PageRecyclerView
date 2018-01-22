@@ -10,7 +10,7 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 ## 依赖
 #### 添加依赖：
 ```
-	dependencies {
+	dependencies {//明天才生效
 		implementation 'ckrjfrog.Page:PageView:1.0.1'//gradle plugin 3.0(包含)以上使用
 		//compile 'ckrjfrog.Page:PageView:1.0.1'//gradle plugin 3.0一下使用
 	}
