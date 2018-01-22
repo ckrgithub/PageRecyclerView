@@ -6,7 +6,7 @@
              tools:context="com.ckr.pagesnaphelper.view.PageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.ckr.pagesnaphelper.widget.PageView
+    <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

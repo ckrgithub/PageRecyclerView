@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#fff">
 
-    <com.ckr.pagesnaphelper.widget.PageRecyclerView
+    <com.ckr.pageview.view.PageRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

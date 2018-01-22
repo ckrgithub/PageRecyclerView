@@ -10,8 +10,8 @@ import android.util.Log;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
 import com.ckr.pagesnaphelper.model.Item;
-import com.ckr.pagesnaphelper.widget.PageRecyclerView;
-import com.ckr.pagesnaphelper.widget.PageView;
+import com.ckr.pageview.view.PageRecyclerView;
+import com.ckr.pageview.view.PageView;
 
 import java.util.ArrayList;
 

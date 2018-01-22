@@ -6,7 +6,7 @@
              tools:context="com.ckr.pagesnaphelper.view.PageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.ckr.pagesnaphelper.widget.PageView
+    <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
         app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"

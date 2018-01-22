@@ -1,4 +1,4 @@
-package com.ckr.pagesnaphelper.utils;
+package com.ckr.pageview.utils;
 
 import android.util.Log;
 

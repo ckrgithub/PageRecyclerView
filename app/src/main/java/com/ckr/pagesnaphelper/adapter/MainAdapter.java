@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
+import com.ckr.pageview.adapter.BasePageAdapter;
 
 
 /**

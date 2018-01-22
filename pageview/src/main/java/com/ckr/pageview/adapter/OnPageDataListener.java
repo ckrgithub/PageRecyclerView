@@ -1,4 +1,4 @@
-package com.ckr.pagesnaphelper.adapter;
+package com.ckr.pageview.adapter;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.OrientationHelper;
