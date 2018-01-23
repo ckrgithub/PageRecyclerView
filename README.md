@@ -1,5 +1,5 @@
 # PageRecyclerView
-recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器(不过竖直方向的分页还未实现)。
+recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器。
 
 ## 效果演示
 ![](screenRecorder/Screenshot_1.gif)  ![](screenRecorder/Screenshot_2.gif)  ![](screenRecorder/Screenshot_3.gif)
@@ -35,9 +35,14 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
         app:page_column="four"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    //其中，selected_indicator_color：指示器颜色，indicator_margin：指示器圆点间的间距，hide_indicator：是否显示指示器,
-    //selected_indicator_drawable：指示器drawble(注：优先级高于颜色)，indicator_group_height：指示器的父布局的高度,
-    //orientation：分页控件的布局方向，page_row：每页的行数，page_column：每页的列数，
+    //其中，selected_indicator_color：指示器颜色
+    //indicator_margin：指示器圆点间的间距
+    //hide_indicator：是否显示指示器
+    //selected_indicator_drawable：指示器drawble(注：优先级高于颜色)
+    //indicator_group_height：指示器的父布局的高度
+    //orientation：分页控件的布局方向
+    //page_row：每页的行数
+    //page_column：每页的列数
 ```
 #### 2.代码使用
 ```
