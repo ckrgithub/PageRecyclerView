@@ -27,7 +27,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
     protected int mRow;
     protected int mColumn;
     private int mPageCount;
-    private int mOrientation;
+    protected int mOrientation;
     private OnIndicatorListener mOnIndicatorListener;
 
     public BasePageAdapter(Context context) {

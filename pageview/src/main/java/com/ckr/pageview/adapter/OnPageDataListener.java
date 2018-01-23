@@ -15,6 +15,8 @@ public interface OnPageDataListener<T> {
 	int TWO = 2;
 	int THREE = 3;
 	int FOUR = 4;
+	int HORIZONTAL = 0;
+	int VERTICAL = 1;
 
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({ONE, TWO})
@@ -27,7 +29,7 @@ public interface OnPageDataListener<T> {
 	}
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({0, 1})
+	@IntDef({HORIZONTAL, VERTICAL})
 	@interface LayoutOrientation {
 	}
 

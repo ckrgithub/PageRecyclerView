@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/recyclerView"
-        android:layout_centerInParent="true">
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:id="@+id/indicatorGroup"

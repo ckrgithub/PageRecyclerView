@@ -13,16 +13,16 @@ import butterknife.BindView;
  * Created by PC大佬 on 2018/1/20.
  */
 
-public class SubFragment extends BaseFragment {
+public class VerticalFragment extends BaseFragment {
 	private static final String ID_COLOR = "colorId";
 	@BindView(R.id.frameLayout)
 	View frameLayout;
 	private int colorId;
 
-	public static SubFragment newInstance(@ColorRes int colorId) {
+	public static VerticalFragment newInstance(@ColorRes int colorId) {
 		Bundle args = new Bundle();
 		args.putInt(ID_COLOR, colorId);
-		SubFragment fragment = new SubFragment();
+		VerticalFragment fragment = new VerticalFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -38,7 +38,7 @@ public class SubFragment extends BaseFragment {
 
 	@Override
 	protected int getContentLayoutId() {
-		return R.layout.fragment_sub;
+		return R.layout.fragment_vertical;
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	EditText editText;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
-	private static final String[] TITLES = {"One", "Two", "Three", "Four"};
+	private static final String[] TITLES = {"One", "Two", "Three", "Four", "FIVE"};
 	private int mCurrentPage;
 	private Bundle saveState;
 
@@ -71,6 +71,8 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_three, R.layout.item_picture_three));
 				} else if (i == 3) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_four, R.layout.item_picture_four));
+				}else if (i == 4) {
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical, R.layout.item_vertical));
 				}
 			} else {
 				fragmentList.add(fragment);
