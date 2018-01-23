@@ -15,7 +15,6 @@ import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,8 +25,6 @@ import butterknife.OnClick;
 public class MainFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 	private static final String TAG = "MainFragment";
 	private static final String ARGS_PAGE = "mCurrentPage";
-	@BindView(R.id.viewPager)
-	ViewPager viewPager;
 	@BindView(R.id.myViewPager)
 	ViewPager myViewPager;
 	@BindView(R.id.tabLayout)
@@ -56,11 +53,6 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	protected void init() {
 		initFragment();
 		initView();
-		List<BaseFragment> fragments = new ArrayList<>(3);
-		fragments.add(SubFragment.newInstance(R.color.color1));
-		fragments.add(SubFragment.newInstance(R.color.color2));
-		fragments.add(SubFragment.newInstance(R.color.color3));
-		viewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragments, null));
 	}
 
 	private void initFragment() {
