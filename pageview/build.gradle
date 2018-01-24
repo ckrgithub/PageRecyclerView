@@ -8,7 +8,7 @@ publish {
     userOrg = 'ckrjfrog'
     groupId = 'ckrjfrog.Page'
     artifactId = 'PageView'
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     desc = '自定义recyclerView实现分页功能'
     website = siteUrl
 }
