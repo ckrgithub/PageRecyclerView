@@ -18,7 +18,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 /**
  * Created by PC大佬 on 2018/1/14.
@@ -31,7 +30,7 @@ public class PageRecyclerView extends RecyclerView {
 	public static final String ARGS_WIDTH = "mWidth";
 	public static final String ARGS_HEIGHT = "mHeight";
 	private static final int MAX_SETTLE_DURATION = 600; // ms
-	
+
 	private int mWidth;
 	private int mHeight;
 	private int mOrientation;
@@ -44,8 +43,8 @@ public class PageRecyclerView extends RecyclerView {
 			return t * t * t * t * t + 1.0f;
 		}
 	};
-	private int[] mScrollOffset = new int[2];//滚动偏移量
-	private final int[] mDragOffset = new int[2];//拖动时偏移量
+	private int mScrollOffset;//滚动偏移量
+	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
 	private int mCurrentPage;
 	private boolean isSliding;//是否是滑动
@@ -136,38 +135,37 @@ public class PageRecyclerView extends RecyclerView {
 				if (mOrientation == OnPageDataListener.HORIZONTAL) {
 					if (mWidth != 0) {
 						if (isSliding) {//放手后的滑动
-							int t = mScrollOffset[0] / mWidth;
-							int deltaX = mScrollOffset[0] - t * mWidth;
+							int t = mScrollOffset / mWidth;
+							int deltaX = mScrollOffset - t * mWidth;
 							if (!forwardDirection) {//向前
 								deltaX = deltaX - mWidth;
 							} else {//向后
 							}
-							Log.d(TAG, "isSliding=true,deltaX:" + deltaX + ",mScrollDistance:" + mScrollOffset[0]);
+							Log.d(TAG, "isSliding=true,deltaX:" + deltaX + ",mScrollOffset:" + mScrollOffset);
 							moveX(deltaX);
 						} else {//用手拖动
-							Log.d(TAG, "isSliding=false,deltaX:" + Arrays.toString(mDragOffset));
-							moveX(mDragOffset[0]);
+							Log.d(TAG, "isSliding=false,mDragOffset:" + mDragOffset);
+							moveX(mDragOffset);
 						}
 					}
-				} else if (mOrientation == OnPageDataListener.VERTICAL) {
+				} else {
 					if (mHeight != 0) {
 						if (isSliding) {//放手后的滑动
-							int t = mScrollOffset[1] / mHeight;
-							int deltaY = mScrollOffset[1] - t * mHeight;
+							int t = mScrollOffset / mHeight;
+							int deltaY = mScrollOffset - t * mHeight;
 							if (!forwardDirection) {
 								deltaY = deltaY - mHeight;
 							} else {
 							}
-							Log.d(TAG, "isSliding=true,deltaY:" + deltaY + ",mScrollDistance:" + mScrollOffset[1]);
+							Log.d(TAG, "isSliding=true,deltaY:" + deltaY + ",mScrollOffset:" + mScrollOffset);
 							moveY(deltaY);
 						} else {//用手拖动
-							Log.d(TAG, "isSliding=false,deltaX:" + Arrays.toString(mDragOffset));
-							moveY(mDragOffset[1]);
+							Log.d(TAG, "isSliding=false,mDragOffset:" + mDragOffset);
+							moveY(mDragOffset);
 						}
 					}
 				}
-				mDragOffset[0] = 0;
-				mDragOffset[1] = 0;
+				mDragOffset = 0;
 				isSliding = false;
 				break;
 			case SCROLL_STATE_DRAGGING://1
@@ -187,14 +185,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontal(4000, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
 			int moveX = -(mWidth + deltaX);
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontal(4000, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(moveX)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaX:" + deltaX);
-			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontal(4000, Math.abs(deltaX)));
+			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(deltaX)));
 		}
 	}
 
@@ -207,50 +205,62 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaY >= itemHeight) {//下一页
 			int moveY = mHeight - deltaY;
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVertical(4000, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(4000, Math.abs(moveY)));
 		} else if (deltaY <= -itemHeight) {//上一页
 			int moveY = -(mHeight + deltaY);
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVertical(4000, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(4000, Math.abs(moveY)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaY:" + deltaY);
-			smoothScrollBy(0, -deltaY, calculateTimeForVertical(4000, Math.abs(deltaY)));
+			smoothScrollBy(0, -deltaY, calculateTimeForVerticalScrolling(4000, Math.abs(deltaY)));
 		}
 	}
 
 	@Override
 	public void onScrolled(int dx, int dy) {
-		mScrollOffset[0] += dx;
-		mScrollOffset[1] += dy;
-		if (mScrollState == SCROLL_STATE_DRAGGING) {
-			mDragOffset[0] += dx;
-			mDragOffset[1] += dy;
-		}
-		if (dx < 0 || dy < 0) {
-			forwardDirection = false;
-		} else {
-			forwardDirection = true;
-		}
-		Log.d(TAG, "onScrolled: mScrollOffset:" + Arrays.toString(mScrollOffset) + ",mCurrentPage:" + mCurrentPage +
-				",mDragOffset:" + Arrays.toString(mDragOffset) + ",forwardDirection:" + forwardDirection);
-		if (mWidth == 0 || mHeight == 0) {
-			return;
-		}
 		if (mOrientation == OnPageDataListener.HORIZONTAL) {
-			calculateCurrentPage(dx, mScrollOffset[0], mWidth);
+			mScrollOffset += dx;
+			if (mScrollState == SCROLL_STATE_DRAGGING) {
+				mDragOffset += dx;
+			}
+			if (dx < 0) {
+				forwardDirection = false;
+			} else {
+				forwardDirection = true;
+			}
+			Log.d(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection);
+			if (mWidth == 0) {
+				return;
+			}
+			calculateCurrentPage(dx, mScrollOffset, mWidth);
 			if (listener != null) {
-				int positionOffsetPixels = mScrollOffset[0] % mWidth;
-				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset[0] % mWidth / (double) mWidth));
+				int positionOffsetPixels = mScrollOffset % mWidth;
+				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mWidth / (double) mWidth));
 				listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
 					listener.onPageSelected(mCurrentPage);
 				}
 			}
-		} else if (mOrientation == OnPageDataListener.VERTICAL){
-			calculateCurrentPage(dy, mScrollOffset[1], mHeight);
+		} else {
+			mScrollOffset += dy;
+			if (mScrollState == SCROLL_STATE_DRAGGING) {
+				mDragOffset += dy;
+			}
+			if (dy < 0) {
+				forwardDirection = false;
+			} else {
+				forwardDirection = true;
+			}
+			Log.d(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection);
+			if (mHeight == 0) {
+				return;
+			}
+			calculateCurrentPage(dy, mScrollOffset, mHeight);
 			if (listener != null) {
-				int positionOffsetPixels = mScrollOffset[1] % mHeight;
-				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset[1] % mHeight / (double) mHeight));
+				int positionOffsetPixels = mScrollOffset % mHeight;
+				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mHeight / (double) mHeight));
 				listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
 					listener.onPageSelected(mCurrentPage);
@@ -272,13 +282,13 @@ public class PageRecyclerView extends RecyclerView {
 
 	@Override
 	public void setScrollX(@Px int value) {
-		mScrollOffset[0] = value;
+		mScrollOffset = value;
 		super.setScrollX(value);
 	}
 
 	@Override
 	public void setScrollY(@Px int value) {
-		mScrollOffset[1] = value;
+		mScrollOffset = value;
 		super.setScrollY(value);
 	}
 
@@ -313,22 +323,21 @@ public class PageRecyclerView extends RecyclerView {
 		if (itemCount == 0) {
 			return false;
 		}
-		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",velocityX:" + velocityX+ ",velocityY:" + velocityY);
+		Log.d(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",velocityX:" + velocityX + ",velocityY:" + velocityY);
 		if (SCROLL_STATE_DRAGGING == this.mScrollState) {
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
-				int moveX = getMoveDistance(mScrollOffset[0], mWidth);
+				int moveX = getMoveDistance(mScrollOffset, mWidth);
 				Log.e(TAG, "snapFromFling: deltaX:" + moveX + ",mCurrentPage:" + mCurrentPage);
 				if (Math.abs(moveX) != 0 && Math.abs(moveX) != mWidth) {
-					smoothScrollBy(moveX, 0, calculateTimeForHorizontal(velocityX, moveX));
+					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocityX, moveX));
 				}
 			} else {
-				int moveY = getMoveDistance(mScrollOffset[1], mHeight);
+				int moveY = getMoveDistance(mScrollOffset, mHeight);
 				Log.e(TAG, "snapFromFling: deltaY:" + moveY + ",mCurrentPage:" + mCurrentPage);
 				if (Math.abs(moveY) != 0 && Math.abs(moveY) != mHeight) {
-					smoothScrollBy(0, moveY, calculateTimeForVertical(velocityY, moveY));
+					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocityY, moveY));
 				}
 			}
-
 			return true;
 		} else {
 			return false;
@@ -354,7 +363,7 @@ public class PageRecyclerView extends RecyclerView {
 	 * @param dx
 	 * @return
 	 */
-	private int calculateTimeForHorizontal(int velocity, int dx) {
+	private int calculateTimeForHorizontalScrolling(int velocity, int dx) {
 		final int width = mWidth;
 		final int halfWidth = width / 2;
 		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dx) / width);
@@ -372,7 +381,8 @@ public class PageRecyclerView extends RecyclerView {
 		duration = Math.min(duration, MAX_SETTLE_DURATION);
 		return duration;
 	}
-	private int calculateTimeForVertical(int velocity, int dx) {
+
+	private int calculateTimeForVerticalScrolling(int velocity, int dx) {
 		final int width = mHeight;
 		final int halfWidth = width / 2;
 		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dx) / width);
@@ -401,7 +411,7 @@ public class PageRecyclerView extends RecyclerView {
 	protected void onRestoreInstanceState(Parcelable state) {
 		Log.d(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation);
 		Bundle bundle = (Bundle) state;
-		mScrollOffset = bundle.getIntArray(ARGS_SCROLL_OFFSET);
+		mScrollOffset = bundle.getInt(ARGS_SCROLL_OFFSET,0);
 		mCurrentPage = bundle.getInt(ARGS_PAGE, 0);
 		mWidth = bundle.getInt(ARGS_WIDTH, 0);
 		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);
@@ -412,7 +422,7 @@ public class PageRecyclerView extends RecyclerView {
 	protected Parcelable onSaveInstanceState() {
 		Log.d(TAG, "onSaveInstanceState: mOrientation:" + mOrientation);
 		Bundle bundle = new Bundle();
-		bundle.putIntArray(ARGS_SCROLL_OFFSET, mScrollOffset);
+		bundle.putInt(ARGS_SCROLL_OFFSET, mScrollOffset);
 		bundle.putInt(ARGS_PAGE, mCurrentPage);
 		bundle.putInt(ARGS_WIDTH, mWidth);
 		bundle.putInt(ARGS_HEIGHT, mHeight);
