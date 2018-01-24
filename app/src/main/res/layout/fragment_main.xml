@@ -10,7 +10,7 @@
     <com.ckr.pagesnaphelper.widget.MyViewPager
         android:id="@+id/myViewPager"
         android:layout_width="match_parent"
-        android:layout_height="360dp"/>
+        android:layout_height="300dp"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
@@ -18,9 +18,9 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_tablayout"
-        app:tabGravity="fill"
+        app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
-        app:tabMode="fixed"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="#f00"
         app:tabTextColor="#333"/>
 

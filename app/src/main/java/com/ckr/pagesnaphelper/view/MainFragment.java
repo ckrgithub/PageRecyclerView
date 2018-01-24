@@ -33,7 +33,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	EditText editText;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
-	private static final String[] TITLES = {"One", "Two", "Three", "Four", "FIVE"};
+	private static final String[] TITLES = {"水平网格", "水平网格2", "水平线性", "竖直线性", "竖直网格"};
 	private int mCurrentPage;
 	private Bundle saveState;
 
@@ -70,9 +70,9 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 				} else if (i == 2) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
 				} else if (i == 3) {
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_four, R.layout.item_picture_four));
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_linear, R.layout.item_vertical_linear));
 				}else if (i == 4) {
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical, R.layout.item_vertical));
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_grid, R.layout.item_vertical_grid));
 				}
 			} else {
 				fragmentList.add(fragment);

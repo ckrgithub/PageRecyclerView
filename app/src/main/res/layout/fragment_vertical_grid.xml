@@ -15,7 +15,7 @@
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:orientation="vertical"
-        app:page_column="two"
+        app:page_column="one"
         app:page_row="two"
         app:layout_flag="grid"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"

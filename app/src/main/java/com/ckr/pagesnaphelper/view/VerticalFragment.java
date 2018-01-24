@@ -38,7 +38,7 @@ public class VerticalFragment extends BaseFragment {
 
 	@Override
 	protected int getContentLayoutId() {
-		return R.layout.fragment_vertical;
+		return R.layout.fragment_vertical_grid;
 	}
 
 	@Override
