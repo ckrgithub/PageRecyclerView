@@ -48,7 +48,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private BasePageAdapter mAdapter;
 	private int lastPage;//上一页
 	private int lastPages;//上一次的页数
-	private PageRecyclerView.OnPageChangeListener mListener;
+	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
+	private OnIndicatorListener mOnIndicatorListener;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -154,7 +155,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
-		mListener = listener;
+		mOnPageChangeListener = listener;
+	}
+	public void addOnIndicatorListener(OnIndicatorListener listener) {
+		mOnIndicatorListener = listener;
 	}
 
 	/**
@@ -174,6 +178,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 */
 	@Override
 	public void updateIndicator() {
+		if (mOnIndicatorListener != null) {
+			mOnIndicatorListener.updateIndicator();
+		}
 		if (hideIndicator) {
 			return;
 		}
@@ -300,23 +307,23 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		if (mListener != null) {
-			mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+		if (mOnPageChangeListener != null) {
+			mOnPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
 		}
 	}
 
 	@Override
 	public void onPageSelected(int position) {
 		moveIndicator(position, moveIndicator);
-		if (mListener != null) {
-			mListener.onPageSelected(position);
+		if (mOnPageChangeListener != null) {
+			mOnPageChangeListener.onPageSelected(position);
 		}
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-		if (mListener != null) {
-			mListener.onPageScrollStateChanged(state);
+		if (mOnPageChangeListener != null) {
+			mOnPageChangeListener.onPageScrollStateChanged(state);
 		}
 	}
 }

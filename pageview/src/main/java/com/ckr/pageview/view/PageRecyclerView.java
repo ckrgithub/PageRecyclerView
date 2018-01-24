@@ -24,13 +24,14 @@ import java.text.DecimalFormat;
  */
 public class PageRecyclerView extends RecyclerView {
 	private static final String TAG = "PageRecyclerView";
-	public static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
-	public static final String ARGS_PAGE = "mCurrentPage";
-	public static final String ARGS_SUPER = "super";
-	public static final String ARGS_WIDTH = "mWidth";
-	public static final String ARGS_HEIGHT = "mHeight";
+	private static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
+	private static final String ARGS_PAGE = "mCurrentPage";
+	private static final String ARGS_SUPER = "super";
+	private static final String ARGS_WIDTH = "mWidth";
+	private static final String ARGS_HEIGHT = "mHeight";
 	private static final int MAX_SETTLE_DURATION = 600; // ms
-
+	private static final int DEFAULT_VELOCITY = 4000;
+	private int mVelocity =DEFAULT_VELOCITY;
 	private int mWidth;
 	private int mHeight;
 	private int mOrientation;
@@ -43,7 +44,6 @@ public class PageRecyclerView extends RecyclerView {
 			return t * t * t * t * t + 1.0f;
 		}
 	};
-	private int velocity=4000;
 	private int mScrollOffset;//滚动偏移量
 	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
@@ -88,6 +88,10 @@ public class PageRecyclerView extends RecyclerView {
 
 	public void setOrientation(@OnPageDataListener.LayoutOrientation int mOrientation) {
 		this.mOrientation = mOrientation;
+	}
+
+	public void setVelocity(int mVelocity) {
+		this.mVelocity = mVelocity;
 	}
 
 	/**
@@ -186,14 +190,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
 			int moveX = -(mWidth + deltaX);
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaX:" + deltaX);
-			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(deltaX)));
+			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(deltaX)));
 		}
 	}
 
@@ -206,14 +210,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaY >= itemHeight) {//下一页
 			int moveY = mHeight - deltaY;
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocity, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
 		} else if (deltaY <= -itemHeight) {//上一页
 			int moveY = -(mHeight + deltaY);
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocity, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaY:" + deltaY);
-			smoothScrollBy(0, -deltaY, calculateTimeForVerticalScrolling(velocity, Math.abs(deltaY)));
+			smoothScrollBy(0, -deltaY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(deltaY)));
 		}
 	}
 
