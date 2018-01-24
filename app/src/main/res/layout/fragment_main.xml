@@ -10,7 +10,7 @@
     <com.ckr.pagesnaphelper.widget.MyViewPager
         android:id="@+id/myViewPager"
         android:layout_width="match_parent"
-        android:layout_height="220dp"/>
+        android:layout_height="360dp"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"

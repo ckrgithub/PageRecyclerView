@@ -24,5 +24,9 @@
             <enum name="three" value="3"></enum>
             <enum name="four" value="4"></enum>
         </attr>
+        <attr name="layout_flag" format="integer">
+            <enum name="linear" value="0"/>
+            <enum name="grid" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>

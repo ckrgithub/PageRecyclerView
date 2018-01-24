@@ -43,6 +43,7 @@ public class PageRecyclerView extends RecyclerView {
 			return t * t * t * t * t + 1.0f;
 		}
 	};
+	private int velocity=4000;
 	private int mScrollOffset;//滚动偏移量
 	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
@@ -185,14 +186,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaX >= itemWidth) {//下一页
 			int moveX = mWidth - deltaX;
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
 			int moveX = -(mWidth + deltaX);
 			Log.d(TAG, "move,deltaX:" + moveX);
-			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(moveX)));
+			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(moveX)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaX:" + deltaX);
-			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontalScrolling(4000, Math.abs(deltaX)));
+			smoothScrollBy(-deltaX, 0, calculateTimeForHorizontalScrolling(velocity, Math.abs(deltaX)));
 		}
 	}
 
@@ -205,14 +206,14 @@ public class PageRecyclerView extends RecyclerView {
 		if (deltaY >= itemHeight) {//下一页
 			int moveY = mHeight - deltaY;
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(4000, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocity, Math.abs(moveY)));
 		} else if (deltaY <= -itemHeight) {//上一页
 			int moveY = -(mHeight + deltaY);
 			Log.d(TAG, "move,deltaY:" + moveY);
-			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(4000, Math.abs(moveY)));
+			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocity, Math.abs(moveY)));
 		} else {//回弹
 			Log.d(TAG, "move,deltaY:" + deltaY);
-			smoothScrollBy(0, -deltaY, calculateTimeForVerticalScrolling(4000, Math.abs(deltaY)));
+			smoothScrollBy(0, -deltaY, calculateTimeForVerticalScrolling(velocity, Math.abs(deltaY)));
 		}
 	}
 

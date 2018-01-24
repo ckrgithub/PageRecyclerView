@@ -2,12 +2,14 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="120dp"
+    android:minHeight="200dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_width="100dp"
         android:layout_height="wrap_content">
 
         <ImageView

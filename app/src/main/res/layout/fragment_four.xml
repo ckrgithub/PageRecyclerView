@@ -17,6 +17,7 @@
         app:orientation="horizontal"
         app:page_column="one"
         app:page_row="one"
+        app:layout_flag="grid"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"

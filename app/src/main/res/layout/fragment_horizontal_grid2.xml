@@ -15,13 +15,12 @@
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:orientation="horizontal"
-        app:page_column="three"
+        app:page_column="two"
         app:page_row="two"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
+        app:layout_flag="grid"
+        app:selected_indicator_color="#00ff00"
         app:selected_indicator_diameter="5.8dp"
-        app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
-        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
-        app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
+        app:unselected_indicator_color="#666"
+        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"/>
 
 </FrameLayout>

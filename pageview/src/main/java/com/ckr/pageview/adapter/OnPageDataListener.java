@@ -17,6 +17,8 @@ public interface OnPageDataListener<T> {
 	int FOUR = 4;
 	int HORIZONTAL = 0;
 	int VERTICAL = 1;
+	int LINEAR = 0;
+	int GRID = 1;
 
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({ONE, TWO})
@@ -32,6 +34,10 @@ public interface OnPageDataListener<T> {
 	@IntDef({HORIZONTAL, VERTICAL})
 	@interface LayoutOrientation {
 	}
+	@Retention(RetentionPolicy.SOURCE)
+	@IntDef({LINEAR, GRID})
+	@interface LayoutFlag {
+	}
 
 	@PageRow
 	int getPageColumn();
@@ -41,6 +47,9 @@ public interface OnPageDataListener<T> {
 
 	@LayoutOrientation
 	int getLayoutOrientation();
+
+	@LayoutFlag
+	int getLayoutFlag();
 
 	int getPageCount();
 

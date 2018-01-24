@@ -28,7 +28,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	PageView pageView;
 	private MainAdapter mainAdapter;
 	private ArrayList<Item> items;
-	private final static int CAPACITY = 21;
+	private final static int CAPACITY = 10;
 	private int layoutId;
 	private int itemLayoutId;
 	private int startCount = 100;
@@ -47,8 +47,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		super.onAttach(context);
 		Bundle arguments = getArguments();
 		if (arguments != null) {
-			layoutId = arguments.getInt(ID_LAYOUT, R.layout.fragment_one);
-			itemLayoutId = arguments.getInt(ID_LAYOUT_ITEM, R.layout.item_picture);
+			layoutId = arguments.getInt(ID_LAYOUT, R.layout.fragment_horizontal_grid);
+			itemLayoutId = arguments.getInt(ID_LAYOUT_ITEM, R.layout.item_horizontal_grid);
 		}
 	}
 

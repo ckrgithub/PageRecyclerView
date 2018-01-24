@@ -28,6 +28,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
     protected int mColumn;
     private int mPageCount;
     protected int mOrientation;
+    protected int mLayoutFlag;
     private OnIndicatorListener mOnIndicatorListener;
 
     public BasePageAdapter(Context context) {
@@ -48,6 +49,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
     public BasePageAdapter setOrientation(@LayoutOrientation int mOrientation) {
         this.mOrientation = mOrientation;
+        return this;
+    }
+
+    public BasePageAdapter setLayoutFlag(@LayoutFlag int mLayoutFlag) {
+        this.mLayoutFlag = mLayoutFlag;
         return this;
     }
 
@@ -198,6 +204,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
     @Override
     public int getLayoutOrientation() {
         return mOrientation;
+    }
+
+    @Override
+    public int getLayoutFlag() {
+        return mLayoutFlag;
     }
 
     @Override

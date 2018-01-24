@@ -10,6 +10,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -38,8 +39,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean hideIndicator = false;
 	private int indicatorGroupHeight = 90;
 	private int orientation = OnPageDataListener.HORIZONTAL;
-	private int pageRow = OnPageDataListener.TWO;
-	private int pageColumn = OnPageDataListener.FOUR;
+	private int pageRow = OnPageDataListener.ONE;
+	private int pageColumn = OnPageDataListener.ONE;
+	private int layoutFlag = OnPageDataListener.LINEAR;
 	private LinearLayout indicatorGroup;
 	private View moveIndicator;//可移动的指示器
 	private PageRecyclerView recyclerView;
@@ -80,6 +82,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
+		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		typedArray.recycle();
 	}
 
@@ -92,9 +95,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 		View view = inflate.findViewById(R.id.relativeLayout);
 		LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-		if (orientation ==OnPageDataListener.HORIZONTAL) {
+		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.height = indicatorGroupHeight;
-		} else if (orientation ==OnPageDataListener.VERTICAL) {
+		} else if (orientation == OnPageDataListener.VERTICAL) {
 			layoutParams.width = indicatorGroupHeight;
 		}
 		view.setLayoutParams(layoutParams);
@@ -139,8 +142,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setOrientation(orientation).setColumn(pageColumn).setRow(pageRow).setOnIndicatorListener(this);
-		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == 0 ? pageRow : pageColumn, orientation, false));
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setOnIndicatorListener(this);
+		if (layoutFlag == OnPageDataListener.LINEAR) {
+			mAdapter.setColumn(OnPageDataListener.ONE).setRow(OnPageDataListener.ONE);
+			recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), orientation, false));
+		} else {
+			mAdapter.setColumn(pageColumn).setRow(pageRow);
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == 0 ? pageRow : pageColumn, orientation, false));
+		}
 		recyclerView.setAdapter(mAdapter);
 	}
 
@@ -199,12 +208,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		Log.i(TAG, "createIndicator,position:" + position);
 		View view = new View(getContext());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(unselectedIndicatorDiameter, unselectedIndicatorDiameter);
-		if (orientation ==OnPageDataListener.HORIZONTAL) {
+		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.rightMargin = indicatorMargin;
 			if (position == 0) {
 				layoutParams.leftMargin = indicatorMargin;
 			}
-		} else if (orientation ==OnPageDataListener.VERTICAL) {
+		} else if (orientation == OnPageDataListener.VERTICAL) {
 			layoutParams.bottomMargin = indicatorMargin;
 			if (position == 0) {
 				layoutParams.topMargin = indicatorMargin;
@@ -265,9 +274,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		lastPages = pageCount;
 		int margin = 0;
 		final LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-		if (orientation ==OnPageDataListener.HORIZONTAL) {
+		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.topMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
-		} else if (orientation ==OnPageDataListener.VERTICAL) {
+		} else if (orientation == OnPageDataListener.VERTICAL) {
 			layoutParams.leftMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
 		}
 		if (page == 0) {
@@ -275,9 +284,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			margin = page * (unselectedIndicatorDiameter + indicatorMargin) + indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
 		}
-		if (orientation ==OnPageDataListener.HORIZONTAL) {
+		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.leftMargin = margin;
-		} else if (orientation ==OnPageDataListener.VERTICAL) {
+		} else if (orientation == OnPageDataListener.VERTICAL) {
 			layoutParams.topMargin = margin;
 		}
 		Log.d(TAG, "moveIndicator: margin:" + margin);

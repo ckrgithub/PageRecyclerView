@@ -41,7 +41,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	@Override
 	protected void convert(MainHolder holder, final int position, Item originItem) {
 		int adjustedPosition = position;
-		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+		if (mOrientation == OnPageDataListener.HORIZONTAL&&mRow*mColumn>1) {
 			adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
 		}
 		Item item = mTargetData.get(adjustedPosition);
