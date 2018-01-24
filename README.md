@@ -19,25 +19,26 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 ## 功能及使用
 #### 1.布局引用
 ```
-     <com.ckr.pagesnaphelper.widget.PageView
+     <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
-        app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
-        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
-        app:indicator_margin="@dimen/viewpager_indicator_margin"
-        app:hide_indicator="false"
-        app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_drawable="@drawable/shape_point_unselected"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
-        app:orientation="horizontal"
-        app:page_row="two"
-        app:page_column="four"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:hide_indicator="false"
+        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
+        app:indicator_margin="@dimen/viewpager_indicator_margin"
+        app:layout_flag="grid"
+        app:orientation="horizontal"
+        app:page_column="two"
+        app:page_row="two"
+        app:selected_indicator_color="#ec04f9"
+        app:selected_indicator_diameter="5.8dp"
+        app:unselected_indicator_color="#666"
+        app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"/>
     //其中，selected_indicator_color：指示器颜色
     //indicator_margin：指示器圆点间的间距
     //hide_indicator：是否显示指示器
+    //layout_flag:标记线性或网格布局
     //selected_indicator_drawable：指示器drawble(注：优先级高于颜色)
     //indicator_group_height：指示器的父布局的高度
     //orientation：分页控件的布局方向
