@@ -157,6 +157,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
 		mOnPageChangeListener = listener;
 	}
+
 	public void addOnIndicatorListener(OnIndicatorListener listener) {
 		mOnIndicatorListener = listener;
 	}
@@ -259,7 +260,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	private void resetRecycler() {
-		recyclerView.setScrollX(0);
+		if (orientation == OnPageDataListener.HORIZONTAL) {
+			recyclerView.setScrollX(0);
+		} else {
+			recyclerView.setScrollY(0);
+		}
 		moveIndicator(0, moveIndicator);
 	}
 
