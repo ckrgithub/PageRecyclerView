@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int lastPages;//上一次的页数
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private OnIndicatorListener mOnIndicatorListener;
+	private boolean isScrollToBeginPage = false;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -141,6 +143,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		view.setBackgroundDrawable(d);
 	}
 
+	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
+		mOnPageChangeListener = listener;
+	}
+
+	public void addOnIndicatorListener(OnIndicatorListener listener) {
+		mOnIndicatorListener = listener;
+	}
+
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
 		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setOnIndicatorListener(this);
@@ -152,14 +162,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == 0 ? pageRow : pageColumn, orientation, false));
 		}
 		recyclerView.setAdapter(mAdapter);
-	}
-
-	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
-		mOnPageChangeListener = listener;
-	}
-
-	public void addOnIndicatorListener(OnIndicatorListener listener) {
-		mOnIndicatorListener = listener;
 	}
 
 	/**
@@ -252,20 +254,38 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			moveIndicator.setVisibility(View.VISIBLE);
 			int lastPage = recyclerView.getCurrentPage();
 			if (pageCount < lastPages && lastPage >= pageCount) {//2,3,1
-				resetRecycler();
+				if (isScrollToBeginPage) {
+					scrollToBeginPage();
+				} else {
+					scrollToEndPage(pageCount - 1);
+				}
 			} else {
 				moveIndicator(lastPage, moveIndicator);
 			}
 		}
 	}
 
-	private void resetRecycler() {
-		if (orientation == OnPageDataListener.HORIZONTAL) {
-			recyclerView.setScrollX(0);
-		} else {
-			recyclerView.setScrollY(0);
-		}
+	public void setScrollToBeginPage(boolean scrollToBeginPage) {
+		isScrollToBeginPage = scrollToBeginPage;
+	}
+
+	public void setCurrentItem(@IntRange(from = 0) int page) {
+		setCurrentItem(page, true);
+	}
+
+	public void setCurrentItem(@IntRange(from = 0) int page, boolean smoothScroll) {
+		recyclerView.scrollToPage(page, smoothScroll);
+		moveIndicator(page, moveIndicator);
+	}
+
+	private void scrollToBeginPage() {
+		recyclerView.scrollToBeginPage();
 		moveIndicator(0, moveIndicator);
+	}
+
+	private void scrollToEndPage(@IntRange(from = 0) int page) {
+		recyclerView.scrollToEndPage(page);
+		moveIndicator(page, moveIndicator);
 	}
 
 	/**

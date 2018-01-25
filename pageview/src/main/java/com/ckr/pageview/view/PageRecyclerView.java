@@ -3,8 +3,8 @@ package com.ckr.pageview.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Px;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,7 +31,7 @@ public class PageRecyclerView extends RecyclerView {
 	private static final String ARGS_HEIGHT = "mHeight";
 	private static final int MAX_SETTLE_DURATION = 600; // ms
 	private static final int DEFAULT_VELOCITY = 4000;
-	private int mVelocity =DEFAULT_VELOCITY;
+	private int mVelocity = DEFAULT_VELOCITY;
 	private int mWidth;
 	private int mHeight;
 	private int mOrientation;
@@ -285,16 +285,43 @@ public class PageRecyclerView extends RecyclerView {
 		}
 	}
 
-	@Override
-	public void setScrollX(@Px int value) {
-		mScrollOffset = value;
-		super.setScrollX(value);
+	void scrollToEndPage(@IntRange(from = 0) int page) {
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			mScrollOffset = page * mWidth;
+		} else {
+			mScrollOffset = page * mHeight;
+		}
+		super.scrollToPosition(getAdapter().getItemCount() - 1);
 	}
 
-	@Override
-	public void setScrollY(@Px int value) {
-		mScrollOffset = value;
-		super.setScrollY(value);
+	void scrollToBeginPage() {
+		mScrollOffset = 0;
+		super.scrollToPosition(0);
+	}
+
+	void scrollToPage(@IntRange(from = 0) int page, boolean smoothScroll) {
+		if (mCurrentPage == page) {
+			return;
+		}
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			int scrollX = page * mWidth;
+			int moveX = scrollX - mScrollOffset;
+			Log.d(TAG, "scrollToPage: moveX:" + moveX);
+			if (smoothScroll) {
+				smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
+			} else {
+				smoothScrollBy(moveX, 0, 0);
+			}
+		} else {
+			int scrollY = page * mHeight;
+			int moveY = scrollY - mScrollOffset;
+			Log.d(TAG, "scrollToPage: moveY:" + moveY);
+			if (smoothScroll) {
+				smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
+			} else {
+				smoothScrollBy(0, moveY, 0);
+			}
+		}
 	}
 
 	private class OnPageFlingListener extends OnFlingListener {
@@ -416,7 +443,7 @@ public class PageRecyclerView extends RecyclerView {
 	protected void onRestoreInstanceState(Parcelable state) {
 		Log.d(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation);
 		Bundle bundle = (Bundle) state;
-		mScrollOffset = bundle.getInt(ARGS_SCROLL_OFFSET,0);
+		mScrollOffset = bundle.getInt(ARGS_SCROLL_OFFSET, 0);
 		mCurrentPage = bundle.getInt(ARGS_PAGE, 0);
 		mWidth = bundle.getInt(ARGS_WIDTH, 0);
 		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);

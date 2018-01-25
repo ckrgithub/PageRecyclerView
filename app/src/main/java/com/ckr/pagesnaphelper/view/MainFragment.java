@@ -18,6 +18,9 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Unbinder;
+
+import static com.ckr.pagesnaphelper.R.id.editText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,8 +32,11 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	ViewPager myViewPager;
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
-	@BindView(R.id.editText)
-	EditText editText;
+	@BindView(editText)
+	EditText addText;
+	@BindView(R.id.editText2)
+	EditText jumpText;
+	Unbinder unbinder;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
 	private static final String[] TITLES = {"水平网格", "水平网格2", "水平线性", "竖直线性", "竖直网格"};
@@ -71,7 +77,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
 				} else if (i == 3) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_linear, R.layout.item_vertical_linear));
-				}else if (i == 4) {
+				} else if (i == 4) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_grid, R.layout.item_vertical_grid));
 				}
 			} else {
@@ -131,14 +137,27 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 		}
 	}
 
-	@OnClick(R.id.add)
-	public void onViewClicked() {
-		String text = editText.getText().toString().trim();
-		int index = -1;
-		if (!TextUtils.isEmpty(text)) {
-			index = Integer.valueOf(text);
+
+	@OnClick({R.id.add, R.id.jump})
+	public void onViewClicked(View view) {
+		switch (view.getId()) {
+			case R.id.add:
+				String text = addText.getText().toString().trim();
+				int index = -1;
+				if (!TextUtils.isEmpty(text)) {
+					index = Integer.valueOf(text);
+				}
+				fragmentList.get(mCurrentPage).addData(index);
+				break;
+			case R.id.jump:
+				text = jumpText.getText().toString().trim();
+				int page = 0;
+				if (!TextUtils.isEmpty(text)) {
+					page = Integer.valueOf(text);
+				}
+				fragmentList.get(mCurrentPage).jumpToPage(page);
+				break;
 		}
-		fragmentList.get(mCurrentPage).addData(index);
 	}
 
 	@Override
@@ -153,5 +172,6 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	@Override
 	public void onPageScrollStateChanged(int state) {
 	}
+
 }
 

@@ -32,7 +32,7 @@
 
         <EditText
             android:id="@+id/editText"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:background="#fff"
             android:gravity="center"
@@ -44,11 +44,34 @@
 
         <TextView
             android:id="@+id/add"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/editText"
             android:background="@drawable/bg_textview"
             android:gravity="center"
             android:text="添加"/>
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:layout_toRightOf="@+id/add"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:hint="指定位置"
+            android:inputType="number"
+            android:maxLength="3"
+            android:textColorHint="#c9c9c9"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/jump"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/editText2"
+            android:background="@drawable/bg_textview"
+            android:gravity="center"
+            android:text="跳转到"/>
     </RelativeLayout>
 </FrameLayout>

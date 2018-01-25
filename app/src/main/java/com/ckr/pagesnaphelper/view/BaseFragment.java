@@ -40,4 +40,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected void addData(int index){};
 
+    protected void jumpToPage(int page){};
+
 }

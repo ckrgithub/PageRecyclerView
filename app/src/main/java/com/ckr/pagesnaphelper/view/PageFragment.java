@@ -98,6 +98,15 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	}
 
 	@Override
+	protected void jumpToPage(int page) {
+		int pageCount = mainAdapter.getPageCount();
+		if (page>pageCount-1){
+			page=pageCount-1;
+		}
+		pageView.setCurrentItem(page);
+	}
+
+	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		Log.d(TAG, "onPageScrolled() called with: position = [" + position + "], positionOffset = [" + positionOffset + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
 	}
