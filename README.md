@@ -10,9 +10,9 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 ## 依赖
 ### 添加依赖：
 ```
-	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.0.2'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.0.2'//gradle plugin 3.0一下使用
+	dependencies {//明天生效
+		implementation 'ckrjfrog.Page:PageView:1.0.3'//gradle plugin 3.0(包含)以上使用
+		//compile 'ckrjfrog.Page:PageView:1.0.3'//gradle plugin 3.0一下使用
 	}
 ```
 
@@ -57,7 +57,7 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 ### 3.代码使用
 ```
     pageView.addOnPageChangeListener(this);//分页监听器
-    pageView.addOnIndicatorListener(this);//指示器更新监听器，可自定义指示器
+    pageView.addOnIndicatorListener(this);//指示器更新监听器，可用来自定义指示器
     mainAdapter = new MainAdapter(getContext(), itemLayoutId);//该MainAdapter需继承BasePageAdapter<T,ViewHolder>
     pageView.setAdapter(mainAdapter);//设置adapter
     pageView.updateAll(items);//更新数据
