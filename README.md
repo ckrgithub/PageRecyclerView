@@ -2,7 +2,7 @@
 recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器。
 
 ## 效果演示
-![](screenRecorder/Screenshot_1.gif)  ![](screenRecorder/Screenshot_2.gif)  ![](screenRecorder/Screenshot_3.gif)
+![](screenRecorder/Screenshot_1.gif)  ![](screenRecorder/Screenshot_2.gif)  ![](screenRecorder/Screenshot_3.gif)  ![](screenRecorder/Screenshot_4.gif)
 
 ## Demo
 [下载 APK](apk/app-debug.apk)
