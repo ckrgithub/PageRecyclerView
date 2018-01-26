@@ -1,6 +1,6 @@
 package com.ckr.pageview.utils;
 
-import android.util.Log;
+import static com.ckr.pageview.utils.PageLog.Logd;
 
 /**
  * Created by PC大佬 on 2018/1/19.
@@ -18,7 +18,7 @@ public class PosUtil {
 	public static int adjustPosition22(int position, int sum) {
 		int pos = -1;
 		int page = position / sum;
-		Log.i(TAG, "getRealPosition-->下标：" + position + "，每页的总个数：" + sum);
+		Logd(TAG, "adjustPosition22,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 3:
@@ -42,7 +42,7 @@ public class PosUtil {
 	public static int adjustPosition23(int position, int sum) {
 		int pos = -1;
 		int page = position / sum;
-		Log.i(TAG, "getRealPosition-->下标：" + position + "，每页的总个数：" + sum);
+		Logd(TAG, "adjustPosition23,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 5:
@@ -73,7 +73,7 @@ public class PosUtil {
 	public static int adjustPosition24(int position, int sum) {
 		int pos = -1;
 		int page = position / sum;
-		Log.i(TAG, "getRealPosition-->下标：" + position + "，每页的总个数：" + sum);
+		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 7:

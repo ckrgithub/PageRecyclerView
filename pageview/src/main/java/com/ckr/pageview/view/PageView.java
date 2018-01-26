@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +23,8 @@ import com.ckr.pageview.adapter.OnIndicatorListener;
 import com.ckr.pageview.adapter.OnPageDataListener;
 
 import java.util.List;
+
+import static com.ckr.pageview.utils.PageLog.Logd;
 
 /**
  * Created by PC大佬 on 2018/1/16.
@@ -215,7 +216,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 * @param position
 	 */
 	private void createIndicator(LinearLayout indicatorGroup, int position) {
-		Log.i(TAG, "createIndicator,position:" + position);
+		Logd(TAG, "createIndicator,position:" + position);
 		View view = new View(getContext());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(unselectedIndicatorDiameter, unselectedIndicatorDiameter);
 		if (orientation == OnPageDataListener.HORIZONTAL) {
@@ -321,7 +322,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else if (orientation == OnPageDataListener.VERTICAL) {
 			layoutParams.topMargin = margin;
 		}
-		Log.d(TAG, "moveIndicator: margin:" + margin);
+		Logd(TAG, "moveIndicator: margin:" + margin);
 		view.post(new Runnable() {
 			@Override
 			public void run() {

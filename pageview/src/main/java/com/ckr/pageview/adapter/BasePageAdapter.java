@@ -2,7 +2,6 @@ package com.ckr.pageview.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ckr.pageview.utils.PageLog.Logd;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition22;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition23;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition24;
@@ -139,11 +139,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
         if (list == null) {
             return;
         }
-        Log.i(TAG, "supplyData,size:" + list.size());
+        Logd(TAG, "supplyData,size:" + list.size());
         mTargetData.clear();
         mTargetData.addAll(list);
         mPageCount = (int) Math.ceil(list.size() / (double) (mRow * mColumn));//多少页
-        Log.i(TAG, "supplyData,pages:" + mPageCount);
+        Logd(TAG, "supplyData,pages:" + mPageCount);
         for (int i = list.size(); i < mPageCount * mRow * mColumn; i++) {
             mTargetData.add(null);
         }
