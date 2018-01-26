@@ -1,5 +1,7 @@
 package com.ckr.pageview.utils;
 
+import android.support.annotation.IntRange;
+
 import static com.ckr.pageview.utils.PageLog.Logd;
 
 /**
@@ -15,7 +17,7 @@ public class PosUtil {
 	 * @param sum
 	 * @return
 	 */
-	public static int adjustPosition22(int position, int sum) {
+	public static int adjustPosition22(int position, @IntRange(from = 1) int sum) {
 		int pos = -1;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition22,下标：" + position + "，每页的总个数：" + sum);
@@ -39,7 +41,7 @@ public class PosUtil {
 	 * @param sum
 	 * @return
 	 */
-	public static int adjustPosition23(int position, int sum) {
+	public static int adjustPosition23(int position, @IntRange(from = 1) int sum) {
 		int pos = -1;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition23,下标：" + position + "，每页的总个数：" + sum);
@@ -70,7 +72,7 @@ public class PosUtil {
 	 * @param sum
 	 * @return
 	 */
-	public static int adjustPosition24(int position, int sum) {
+	public static int adjustPosition24(int position, @IntRange(from = 1) int sum) {
 		int pos = -1;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);

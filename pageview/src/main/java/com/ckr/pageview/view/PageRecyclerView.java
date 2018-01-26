@@ -92,7 +92,7 @@ public class PageRecyclerView extends RecyclerView {
 		this.mOrientation = mOrientation;
 	}
 
-	public void setVelocity(int mVelocity) {
+	public void setVelocity(@IntRange(from = 0) int mVelocity) {
 		this.mVelocity = mVelocity;
 	}
 
@@ -240,7 +240,13 @@ public class PageRecyclerView extends RecyclerView {
 			if (mWidth == 0) {
 				return;
 			}
-			calculateCurrentPage(dx, mScrollOffset, mWidth);
+			if (dx < 0 && mScrollOffset % mWidth != 0) {
+				int targetPage = mScrollOffset / mWidth + 1;
+				mCurrentPage = targetPage;
+			} else {
+				int targetPage = mScrollOffset / mWidth;
+				mCurrentPage = targetPage;
+			}
 			if (listener != null) {
 				int positionOffsetPixels = mScrollOffset % mWidth;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mWidth / (double) mWidth));
@@ -264,7 +270,13 @@ public class PageRecyclerView extends RecyclerView {
 			if (mHeight == 0) {
 				return;
 			}
-			calculateCurrentPage(dy, mScrollOffset, mHeight);
+			if (dy < 0 && mScrollOffset % mHeight != 0) {
+				int targetPage = mScrollOffset / mHeight + 1;
+				mCurrentPage = targetPage;
+			} else {
+				int targetPage = mScrollOffset / mHeight;
+				mCurrentPage = targetPage;
+			}
 			if (listener != null) {
 				int positionOffsetPixels = mScrollOffset % mHeight;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mHeight / (double) mHeight));
@@ -275,16 +287,6 @@ public class PageRecyclerView extends RecyclerView {
 			}
 		}
 		Logd(TAG, "onScrolled,mCurrentPage:" + mCurrentPage);
-	}
-
-	private void calculateCurrentPage(int offset, int scrollDistance, int length) {
-		if (offset < 0 && scrollDistance % length != 0) {
-			int targetPage = scrollDistance / length + 1;
-			mCurrentPage = targetPage;
-		} else {
-			int targetPage = scrollDistance / length;
-			mCurrentPage = targetPage;
-		}
 	}
 
 	void scrollToEndPage(@IntRange(from = 0) int page) {
@@ -416,19 +418,19 @@ public class PageRecyclerView extends RecyclerView {
 		return duration;
 	}
 
-	private int calculateTimeForVerticalScrolling(int velocity, int dx) {
-		final int width = mHeight;
-		final int halfWidth = width / 2;
-		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dx) / width);
-		final float distance = halfWidth + halfWidth
+	private int calculateTimeForVerticalScrolling(int velocity, int dy) {
+		final int height = mHeight;
+		final int halfHeight = height / 2;
+		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dy) / height);
+		final float distance = halfHeight + halfHeight
 				* distanceInfluenceForSnapDuration(distanceRatio);
 		int duration;
 		velocity = Math.abs(velocity);
 		if (velocity > 0) {
 			duration = 4 * Math.round(1000 * Math.abs(distance / velocity));
 		} else {
-			final float pageWidth = width * 1.0f;
-			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
+			final float pageWidth = height * 1.0f;
+			final float pageDelta = (float) Math.abs(dy) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
 		duration = Math.min(duration, MAX_SETTLE_DURATION);
