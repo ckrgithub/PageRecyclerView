@@ -88,7 +88,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping);
+		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping)&&pageColumn*pageRow==1;
 		typedArray.recycle();
 	}
 
@@ -109,7 +109,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		view.setLayoutParams(layoutParams);
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		recyclerView.setOrientation(orientation);
-		recyclerView.setLooping(isLooping&&pageRow*pageColumn==1);
+		recyclerView.setLooping(isLooping);
 		recyclerView.addOnPageChangeListener(this);
 		if (hideIndicator) {
 			view.setVisibility(GONE);

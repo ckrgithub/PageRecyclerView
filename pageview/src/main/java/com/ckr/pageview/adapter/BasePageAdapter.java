@@ -169,7 +169,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		Logd(TAG, "onBindViewHolder: position:" + position + ",size:" + mTargetData.size());
 		int index = position;
-		if (mIsLooping && mRow * mColumn == 1) {
+		if (mIsLooping) {
 			index = position % mTargetData.size();
 		}
 		convert(holder, index, mTargetData.get(index));
