@@ -12,7 +12,9 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,9 +24,11 @@ import com.ckr.pageview.adapter.BasePageAdapter;
 import com.ckr.pageview.adapter.OnIndicatorListener;
 import com.ckr.pageview.adapter.OnPageDataListener;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
+import static com.ckr.pageview.utils.PageLog.Loge;
 
 /**
  * Created by PC大佬 on 2018/1/16.
@@ -54,6 +58,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private OnIndicatorListener mOnIndicatorListener;
 	private boolean isScrollToBeginPage = false;
+	private PageHandler mHandler;
+	private boolean firstEnter = true;
+
 
 	public PageView(Context context) {
 		this(context, null);
@@ -67,6 +74,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		super(context, attrs, defStyleAttr);
 		initAttr(context, attrs, defStyleAttr);
 		initView();
+		if (isLooping) {
+			mHandler = new PageHandler(new WeakReference<PageView>(this));
+		}
 	}
 
 	private void initAttr(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -88,7 +98,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping)&&pageColumn*pageRow==1;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
 		typedArray.recycle();
 	}
 
@@ -145,6 +155,35 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		Canvas canvas = new Canvas();
 		d.draw(canvas);
 		view.setBackgroundDrawable(d);
+	}
+
+	public PageHandler getHandler() {
+		return mHandler;
+	}
+
+	public void stopLooping() {
+		Loge(TAG, "stopLooping: ");
+		if (mHandler != null) {
+			mHandler.removeMessages(PageHandler.MSG_START_LOOPING);
+			mHandler.removeMessages(PageHandler.MSG_STOP_LOOPING);
+			isLooping = false;
+		}
+	}
+
+	public void restartLooping() {
+		Log.d(TAG, "restartLooping: ");
+		if (mHandler != null) {
+			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+			isLooping = true;
+		}
+	}
+
+	public void release() {
+		stopLooping();
+		mHandler = null;
+		mAdapter = null;
+		mOnPageChangeListener = null;
+		mOnIndicatorListener = null;
 	}
 
 	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
@@ -276,6 +315,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		isScrollToBeginPage = scrollToBeginPage;
 	}
 
+
+	public int getCurrentItem() {
+		return recyclerView == null ? 0 : recyclerView.getCurrentPage();
+	}
+
 	public void setCurrentItem(@IntRange(from = 0) int page) {
 		setCurrentItem(page, true);
 	}
@@ -350,6 +394,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	@Override
 	public void onPageSelected(int position) {
 		moveIndicator(position, moveIndicator);
+		if (isLooping) {
+			if (firstEnter) {
+				firstEnter = false;
+				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+			}
+		}
 		if (mOnPageChangeListener != null) {
 			mOnPageChangeListener.onPageSelected(position);
 		}
@@ -357,6 +407,17 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
+		Logd(TAG, "onPageScrollStateChanged: state:"+state);
+		if (isLooping) {
+			switch (state) {
+				case RecyclerView.SCROLL_STATE_DRAGGING://1
+					mHandler.sendEmptyMessage(PageHandler.MSG_STOP_LOOPING);
+					break;
+				case RecyclerView.SCROLL_STATE_IDLE://0
+					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+					break;
+			}
+		}
 		if (mOnPageChangeListener != null) {
 			mOnPageChangeListener.onPageScrollStateChanged(state);
 		}

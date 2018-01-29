@@ -15,31 +15,53 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment extends Fragment {
-    private View view;
-    private Unbinder unbinder;
+	private View view;
+	private Unbinder unbinder;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(getContentLayoutId(), container, false);
-        unbinder = ButterKnife.bind(this, view);
-        init();
-        return view;
-    }
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		view = inflater.inflate(getContentLayoutId(), container, false);
+		unbinder = ButterKnife.bind(this, view);
+		init();
+		return view;
+	}
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		unbinder.unbind();
+	}
 
-    protected abstract int getContentLayoutId();
+	protected abstract int getContentLayoutId();
 
-    protected abstract void init();
+	protected abstract void init();
 
-    protected void addData(int index){};
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser) {
+			onVisible();
+		} else {
+			onInvisible();
+		}
+	}
 
-    protected void jumpToPage(int page){};
+	protected void onVisible() {
+	}
+
+	protected void onInvisible() {
+	}
+
+	protected void addData(int index) {
+	}
+
+	;
+
+	protected void jumpToPage(int page) {
+	}
+
+	;
 
 }

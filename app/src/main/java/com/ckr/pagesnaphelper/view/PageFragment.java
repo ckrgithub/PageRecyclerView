@@ -34,6 +34,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	private int layoutId;
 	private int itemLayoutId;
 	private int startCount = 100;
+	private boolean isVisible = false;
+	private boolean isLooping;
 
 	public static PageFragment newInstance(@LayoutRes int layoutId, @LayoutRes int itemLayoutId) {
 		Bundle args = new Bundle();
@@ -69,9 +71,11 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		pageView.addOnPageChangeListener(this);
 		mainAdapter = new MainAdapter(getContext(), itemLayoutId);
 		pageView.setAdapter(mainAdapter);
-		if (mainAdapter.isLooping()) {
-			pageView.updateAll(items.subList(0,4));
-			pageView.setCurrentItem(MAX_VALUE/2,false);
+		isLooping = mainAdapter.isLooping();
+		if (isLooping) {
+			pageView.updateAll(items.subList(0, 4));
+			pageView.setCurrentItem(MAX_VALUE / 2, false);
+			Log.d(TAG, "initView: " + isVisible);
 		} else {
 			pageView.updateAll(items);
 		}
@@ -92,7 +96,51 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	}
 
 	@Override
+	protected void onVisible() {
+		if (isLooping) {
+			Log.d(TAG, "onVisible: " + isVisible);
+		}
+		isVisible = true;
+		if (pageView != null) {
+			pageView.restartLooping();
+		}
+	}
+
+	@Override
+	protected void onInvisible() {
+		if (isLooping) {
+			Log.d(TAG, "onInvisible: " + isVisible);
+		}
+		isVisible = false;
+		if (pageView != null) {
+			pageView.stopLooping();
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (isLooping) {
+			Log.d(TAG, "onResume: " + isVisible);
+		}
+		if (pageView != null && isVisible) {
+			pageView.restartLooping();
+		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		if (pageView != null) {
+			pageView.stopLooping();
+		}
+	}
+
+	@Override
 	protected void addData(int index) {
+		if (mainAdapter.isLooping()) {
+			return;
+		}
 		int itemCount = mainAdapter.getRawItemCount();
 		Item item = new Item();
 		item.setName("item  " + startCount);
@@ -106,6 +154,9 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	@Override
 	protected void jumpToPage(int page) {
+		if (mainAdapter.isLooping()) {
+			return;
+		}
 		int pageCount = mainAdapter.getPageCount();
 		if (page > pageCount - 1) {
 			page = pageCount - 1;
