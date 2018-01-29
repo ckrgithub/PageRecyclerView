@@ -43,9 +43,9 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 | ------------------------------| ----------------------------- | ----------------- | ----------------|
 | endless_loop                  | 是否启动无限轮播(在每页只有一个item时有效) | boolean  | false		|
 | hide_indicator                | 是否隐藏指示器  |			      boolean | false		 |
-| indicator_group_heigt         | 指示器父容器的高度 |                        int     | 90		|
-| indicator_margin		| 指示器间的间距  |			      int      |  15              |
-| layout_flag			| 标记线性布局或网格布局  |		   int      |  0(linear)       |
+| indicator_group_heigt         | 指示器父容器的高度 |			    int     | 90		|
+| indicator_margin		| 指示器间的间距  |			      int      |  15              |
+| layout_flag			| 标记线性布局或网格布局  |		   int      |  0(linear)       |
 | orientation			| 布局方向  |				 int      |  0(horizontal)   |
 | page_column			| 每页的列数  |			        int       |  1		    |
 | page_row			| 每页的行数  |				int       |  1		    |
