@@ -79,7 +79,13 @@ public class PageRecyclerView extends RecyclerView {
 				removeOnLayoutChangeListener(this);
 				mWidth = getWidth();
 				mHeight = getHeight();
-				Logd(TAG, "onLayoutChange: mWidth:" + mWidth + ",mHeight:" + mHeight);
+				Logd(TAG, "onLayoutChange: mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
+				if (mOrientation == OnPageDataListener.HORIZONTAL) {
+					mScrollOffset = mCurrentPage * mWidth;
+				} else {
+					mScrollOffset = mCurrentPage * mHeight;
+				}
+				Logd(TAG, "onLayoutChange: mScrollOffset:"+mScrollOffset);
 			}
 		});
 	}
@@ -236,7 +242,7 @@ public class PageRecyclerView extends RecyclerView {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
-					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection+",mWidth："+mWidth);
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mWidth：" + mWidth);
 			if (mWidth == 0) {
 				return;
 			}
@@ -266,7 +272,7 @@ public class PageRecyclerView extends RecyclerView {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
-					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection+",mHeight："+mHeight);
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mHeight：" + mHeight);
 			if (mHeight == 0) {
 				return;
 			}
@@ -451,13 +457,13 @@ public class PageRecyclerView extends RecyclerView {
 		mWidth = bundle.getInt(ARGS_WIDTH, 0);
 		mHeight = bundle.getInt(ARGS_HEIGHT, 0);
 		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);
-		Logd(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation+",mScrollOffset:"+mScrollOffset+",mWidth:"+mWidth+",mHeight:"+mHeight+",mCurrentPage:"+mCurrentPage);
+		Logd(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
 		super.onRestoreInstanceState(parcelable);
 	}
 
 	@Override
 	protected Parcelable onSaveInstanceState() {
-		Logd(TAG, "onSaveInstanceState: mOrientation:" + mOrientation+",mScrollOffset:"+mScrollOffset+",mWidth:"+mWidth+",mHeight:"+mHeight+",mCurrentPage:"+mCurrentPage);
+		Logd(TAG, "onSaveInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
 		Bundle bundle = new Bundle();
 		bundle.putInt(ARGS_SCROLL_OFFSET, mScrollOffset);
 		bundle.putInt(ARGS_PAGE, mCurrentPage);
