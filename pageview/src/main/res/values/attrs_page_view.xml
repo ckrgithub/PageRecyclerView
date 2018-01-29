@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PageView">
+        <attr name="selected_indicator_drawable" format="color|reference"/>
         <attr name="selected_indicator_color" format="color"/>
-        <attr name="unselected_indicator_color" format="color"/>
         <attr name="selected_indicator_diameter" format="dimension"/>
+        <attr name="unselected_indicator_drawable" format="color|reference"/>
+        <attr name="unselected_indicator_color" format="color"/>
         <attr name="unselected_indicator_diameter" format="dimension"/>
         <attr name="indicator_group_height" format="dimension"/>
         <attr name="indicator_margin" format="dimension"/>
         <attr name="hide_indicator" format="boolean"/>
-        <attr name="selected_indicator_drawable" format="color|reference"/>
-        <attr name="unselected_indicator_drawable" format="color|reference"/>
+        <attr name="endless_loop" format="boolean"/>
         <attr name="orientation" format="integer">
             <enum name="horizontal" value="0"></enum>
             <enum name="vertical" value="1"></enum>

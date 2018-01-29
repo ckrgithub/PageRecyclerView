@@ -51,6 +51,8 @@ public interface OnPageDataListener<T> {
 	@LayoutFlag
 	int getLayoutFlag();
 
+	boolean isLooping();
+
 	int getPageCount();
 
 	int getRawItemCount();

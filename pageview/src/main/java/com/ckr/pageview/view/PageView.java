@@ -44,12 +44,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
 	private int layoutFlag = OnPageDataListener.LINEAR;
+	private boolean isLooping = false;
 	private LinearLayout indicatorGroup;
 	private View moveIndicator;//可移动的指示器
 	private PageRecyclerView recyclerView;
 	private BasePageAdapter mAdapter;
 	private int lastPage;//上一页
-	private int lastPages;//上一次的页数
+	private int lastPageCount;//上一次的页数
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private OnIndicatorListener mOnIndicatorListener;
 	private boolean isScrollToBeginPage = false;
@@ -87,6 +88,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
+		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping);
 		typedArray.recycle();
 	}
 
@@ -107,6 +109,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		view.setLayoutParams(layoutParams);
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		recyclerView.setOrientation(orientation);
+		recyclerView.setLooping(isLooping&&pageRow*pageColumn==1);
 		recyclerView.addOnPageChangeListener(this);
 		if (hideIndicator) {
 			view.setVisibility(GONE);
@@ -154,7 +157,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setOnIndicatorListener(this);
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping).setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {
 			mAdapter.setColumn(OnPageDataListener.ONE).setRow(OnPageDataListener.ONE);
 			recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), orientation, false));
@@ -254,7 +257,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			moveIndicator.setVisibility(View.VISIBLE);
 			int lastPage = recyclerView.getCurrentPage();
-			if (pageCount < lastPages && lastPage >= pageCount) {//2,3,1
+			if (isLooping) {
+				lastPage %= pageCount;
+			}
+			if (pageCount < lastPageCount && lastPage >= pageCount) {//2,3,1
 				if (isScrollToBeginPage) {
 					scrollToBeginPage();
 				} else {
@@ -300,11 +306,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		int pageCount = mAdapter.getPageCount();
-		if (lastPage == page && lastPages == pageCount) {
+		if (isLooping) {
+			page %= pageCount;
+		}
+		if (lastPage == page && lastPageCount == pageCount) {
 			return;
 		}
 		lastPage = page;
-		lastPages = pageCount;
+		lastPageCount = pageCount;
 		int margin = 0;
 		final LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
 		if (orientation == OnPageDataListener.HORIZONTAL) {

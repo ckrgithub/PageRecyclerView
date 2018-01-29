@@ -1,6 +1,7 @@
 package com.ckr.pageview.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
@@ -50,6 +51,8 @@ public class PageRecyclerView extends RecyclerView {
 	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
 	private int mCurrentPage;
+	private boolean mFirstLayout = true;
+	private boolean mIsLooping = false;
 	private boolean isSliding;//是否是滑动
 	private boolean forwardDirection;//滑动方向
 	private OnPageChangeListener listener;
@@ -79,15 +82,27 @@ public class PageRecyclerView extends RecyclerView {
 				removeOnLayoutChangeListener(this);
 				mWidth = getWidth();
 				mHeight = getHeight();
-				Logd(TAG, "onLayoutChange: mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
-				if (mOrientation == OnPageDataListener.HORIZONTAL) {
-					mScrollOffset = mCurrentPage * mWidth;
-				} else {
-					mScrollOffset = mCurrentPage * mHeight;
+				Logd(TAG, "onLayoutChange: mWidth:" + mWidth + ",mHeight:" + mHeight
+						+ ",mCurrentPage:" + mCurrentPage + ",mFirstLayout:" + mFirstLayout);
+				if (mFirstLayout) {
+					if (mOrientation == OnPageDataListener.HORIZONTAL) {
+						mScrollOffset = mCurrentPage * mWidth;
+					} else {
+						mScrollOffset = mCurrentPage * mHeight;
+					}
+					if (mIsLooping) {
+						PageRecyclerView.super.scrollToPosition(mCurrentPage);
+					}
 				}
-				Logd(TAG, "onLayoutChange: mScrollOffset:"+mScrollOffset);
+				mFirstLayout = false;
+				Logd(TAG, "onLayoutChange: mScrollOffset:" + mScrollOffset);
 			}
 		});
+	}
+
+	@Override
+	protected void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 
 	public int getCurrentPage() {
@@ -96,6 +111,10 @@ public class PageRecyclerView extends RecyclerView {
 
 	public void setOrientation(@OnPageDataListener.LayoutOrientation int mOrientation) {
 		this.mOrientation = mOrientation;
+	}
+
+	public void setLooping(boolean isLooping) {
+		this.mIsLooping = isLooping;
 	}
 
 	public void setVelocity(@IntRange(from = 0) int mVelocity) {
@@ -314,22 +333,30 @@ public class PageRecyclerView extends RecyclerView {
 			return;
 		}
 		if (mOrientation == OnPageDataListener.HORIZONTAL) {
-			int scrollX = page * mWidth;
-			int moveX = scrollX - mScrollOffset;
-			Logd(TAG, "scrollToPage: moveX:" + moveX);
-			if (smoothScroll) {
-				smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
+			if (mFirstLayout) {
+				mCurrentPage = page;
 			} else {
-				smoothScrollBy(moveX, 0, 0);
+				int scrollX = page * mWidth;
+				int moveX = scrollX - mScrollOffset;
+				Loge(TAG, "scrollToHorizontalPageInternal: moveX:" + moveX);
+				if (smoothScroll) {
+					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
+				} else {
+					smoothScrollBy(moveX, 0, 0);
+				}
 			}
 		} else {
-			int scrollY = page * mHeight;
-			int moveY = scrollY - mScrollOffset;
-			Logd(TAG, "scrollToPage: moveY:" + moveY);
-			if (smoothScroll) {
-				smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
+			if (mFirstLayout) {
+				mCurrentPage = page;
 			} else {
-				smoothScrollBy(0, moveY, 0);
+				int scrollY = page * mHeight;
+				int moveY = scrollY - mScrollOffset;
+				Loge(TAG, "scrollToVerticalPageInternal: moveY:" + moveY);
+				if (smoothScroll) {
+					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
+				} else {
+					smoothScrollBy(0, moveY, 0);
+				}
 			}
 		}
 	}

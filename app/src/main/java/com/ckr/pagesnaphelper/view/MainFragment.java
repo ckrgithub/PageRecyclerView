@@ -70,6 +70,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 			BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
 			if (fragment == null) {
 				if (i == 0) {
+//					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
 				} else if (i == 1) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid2, R.layout.item_horizontal_grid2));

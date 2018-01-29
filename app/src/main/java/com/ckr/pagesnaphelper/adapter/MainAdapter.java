@@ -20,12 +20,21 @@ import com.ckr.pageview.adapter.OnPageDataListener;
  */
 
 public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
+	public static final int MAX_VALUE=28800;
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
 	public MainAdapter(Context context, @LayoutRes int itemLayoutId) {
 		super(context);
 		mLayoutId = itemLayoutId;
+	}
+
+	@Override
+	public int getItemCount() {
+		if (mIsLooping) {
+			return MAX_VALUE;
+		}
+		return super.getItemCount();
 	}
 
 	@Override
@@ -41,7 +50,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	@Override
 	protected void convert(MainHolder holder, final int position, Item originItem) {
 		int adjustedPosition = position;
-		if (mOrientation == OnPageDataListener.HORIZONTAL&&mRow*mColumn>1) {
+		if (mOrientation == OnPageDataListener.HORIZONTAL && mRow * mColumn > 1) {
 			adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
 		}
 		Item item = mTargetData.get(adjustedPosition);

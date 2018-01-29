@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 
+import static com.ckr.pagesnaphelper.adapter.MainAdapter.MAX_VALUE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -67,7 +69,12 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		pageView.addOnPageChangeListener(this);
 		mainAdapter = new MainAdapter(getContext(), itemLayoutId);
 		pageView.setAdapter(mainAdapter);
-		pageView.updateAll(items);
+		if (mainAdapter.isLooping()) {
+			pageView.updateAll(items.subList(0,4));
+			pageView.setCurrentItem(MAX_VALUE/2,false);
+		} else {
+			pageView.updateAll(items);
+		}
 	}
 
 	private void initData() {
@@ -88,7 +95,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	protected void addData(int index) {
 		int itemCount = mainAdapter.getRawItemCount();
 		Item item = new Item();
-		item.setName("item  "+startCount);
+		item.setName("item  " + startCount);
 		startCount++;
 		if (index == -1 || index >= itemCount) {
 			mainAdapter.updateItem(item);
@@ -100,8 +107,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	@Override
 	protected void jumpToPage(int page) {
 		int pageCount = mainAdapter.getPageCount();
-		if (page>pageCount-1){
-			page=pageCount-1;
+		if (page > pageCount - 1) {
+			page = pageCount - 1;
 		}
 		pageView.setCurrentItem(page);
 	}
