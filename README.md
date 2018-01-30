@@ -1,5 +1,5 @@
 # PageRecyclerView
-recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器。
+recyclerView实现翻页功能及无限轮播。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器。
 
 ## 效果演示
 ![](screenRecorder/Screenshot_1.gif)  ![](screenRecorder/Screenshot_2.gif)  ![](screenRecorder/Screenshot_3.gif)  ![](screenRecorder/Screenshot_4.gif)  ![](screenRecorder/Screenshot_5.gif)
@@ -11,8 +11,8 @@ recyclerView实现翻页功能。相对于Viewpager，recyclerView数据操作�
 ### 添加依赖：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.0.4'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.0.4'//gradle plugin 3.0一下使用
+		implementation 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0(包含)以上使用
+		//compile 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0一下使用
 	}
 ```
 
