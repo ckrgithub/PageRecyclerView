@@ -1,23 +1,23 @@
 # PageRecyclerView
-recyclerView实现翻页功能及无限轮播。相对于Viewpager，recyclerView数据操作更灵活,还可以添加指示器。
+Custom recyclerView achieves page turning function and unlimited carousel[中文文档](README-ZH.md)。
 
-## 效果演示
+## Effect
 ![](screenRecorder/Screenshot_1.gif)  ![](screenRecorder/Screenshot_2.gif)  ![](screenRecorder/Screenshot_3.gif)  ![](screenRecorder/Screenshot_4.gif)  ![](screenRecorder/Screenshot_5.gif)
 
 ## Demo
-[下载 APK](apk/app-debug.apk)
+[Download APK](apk/app-debug.apk)
 
-## 依赖
-### 添加依赖：
+## Dependencies
+### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0一下使用
+		implementation 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0 (inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0 below used
 	}
 ```
 
-## 功能及使用
-### 1.布局引用
+## Function and Use
+### 1.layout reference
 ```
      <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
@@ -38,32 +38,29 @@ recyclerView实现翻页功能及无限轮播。相对于Viewpager，recyclerVie
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
-### 2.属性说明
-| 属性                           | 描述                         | 类型            | 默认值        |
+### 2.Attributes Description
+| Attributes                     | Description                     | Type            | Defaults        |
 | ---------------------------- | ----------------------------- | ----------------- | ---------------- |
-| endless_loop                  | 是否启动无限轮播(当每页只有一个item时有效) | boolean  | false		|
-| hide_indicator                | 是否隐藏指示器  |			      boolean | false		 |
-| indicator_group_heigt         | 指示器父容器的高度 |			    int     | 90		|
-| indicator_margin		| 指示器间的间距  |			      int      |  15              |
-| layout_flag			| 标记线性布局或网格布局  |		   int      |  0(linear)       |
-| orientation			| 布局方向  |				 int      |  0(horizontal)   |
-| page_column			| 每页的列数  |			        int       |  1		    |
-| page_row			| 每页的行数  |				int       |  1		    |
-| selected_indicator_color      | 当前页的指示器颜色  |		             int       |  Color.RED	 |
-| selected_indicator_diameter   | 当前页的指示器直径  |			     int       |  15		 |
-| selected_indicator_drawable   | 当前页的指示器drawable(优先级高于颜色) |     drawable  |  null	     |
-| unselected_indicator_color	| 非当前页的指示器颜色  |			     int      | Color.BLACK      |
-| unselected_indicator_diameter	| 非当前页的指示器直径  |			     int      |  15 		 |
-| selected_indicator_drawable   | 非当前页的指示器drawable(优先级高于颜色) |    drawable |  null	     |
+| endless_loop                  | start an unlimited carousel(valid when there is only one item per page) | boolean  | false		|
+| hide_indicator                | hide indicator  |			      boolean | false		 |
+| indicator_group_heigt         | indicator parent container height |			    int     | 90		|
+| indicator_margin		| indicator spacing  |			      int      |  15              |
+| layout_flag			| mark linear layout or grid layout  |		   int      |  0(linear layout)       |
+| orientation			| layout orientation  |				 int      |  0(horizontal)   |
+| page_column			| the number of columns per page  |			        int       |  1		    |
+| page_row			| the number of rows per page  |				int       |  1		    |
+| selected_indicator_color      | indicator color for the current page  |		             int       |  Color.RED	 |
+| selected_indicator_diameter   | indicator diameter for the current page  |			     int       |  15		 |
+| selected_indicator_drawable   | indicator drawable for the current page(priority is higher than color) |     drawable  |  null	     |
+| unselected_indicator_color	| indicator color for the non-current page  |			     int      | Color.BLACK      |
+| unselected_indicator_diameter	| indicator diameter for the non-current page  |			     int      |  15 		 |
+| selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) |    drawable |  null	     |
 
-### 3.代码使用
+### 3.Code To Use
 ```
-    pageView.addOnPageChangeListener(this);//分页监听器
-    pageView.addOnIndicatorListener(this);//指示器更新监听器，可用来自定义指示器
-    mainAdapter = new MainAdapter(getContext(), itemLayoutId);//该MainAdapter需继承BasePageAdapter<T,ViewHolder>
-    pageView.setAdapter(mainAdapter);//设置adapter
-    pageView.updateAll(items);//更新数据
-    //pageView.setCurrentItem(page);//跳转到page页
+    mainAdapter = new MainAdapter(getContext(), itemLayoutId);//MainAdapter extend BasePageAdapter<T,ViewHolder>
+    pageView.setAdapter(mainAdapter);
+    pageView.updateAll(items);
 ```
 
 License
