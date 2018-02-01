@@ -16,9 +16,9 @@ import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 import static com.ckr.pagesnaphelper.R.id.editText;
 
@@ -36,10 +36,10 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	EditText addText;
 	@BindView(R.id.editText2)
 	EditText jumpText;
-	Unbinder unbinder;
+	@BindArray(R.array.tab_title)
+	String[] TITLES;
 	private FragmentManager fragmentManager;
 	private ArrayList<BaseFragment> fragmentList;
-	private static final String[] TITLES = {"水平网格", "水平网格2", "水平线性", "竖直线性", "竖直网格"};
 	private int mCurrentPage;
 	private Bundle saveState;
 
@@ -70,12 +70,11 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 			BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
 			if (fragment == null) {
 				if (i == 0) {
-//					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
-				} else if (i == 1) {
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid2, R.layout.item_horizontal_grid2));
-				} else if (i == 2) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
+				} else if (i == 1) {
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
+				} else if (i == 2) {
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid2, R.layout.item_horizontal_grid2));
 				} else if (i == 3) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_linear, R.layout.item_vertical_linear));
 				} else if (i == 4) {

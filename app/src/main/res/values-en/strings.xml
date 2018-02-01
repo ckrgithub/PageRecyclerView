@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PageSnapHelper</string>
+
+    <string-array name="tab_title">
+        <item>CAROUSEL</item>
+        <item>HG</item>
+        <item>HG</item>
+        <item>VL</item>
+        <item>VG</item>
+    </string-array>
+</resources>
