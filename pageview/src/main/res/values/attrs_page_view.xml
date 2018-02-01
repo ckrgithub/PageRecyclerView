@@ -8,6 +8,7 @@
         <attr name="unselected_indicator_color" format="color"/>
         <attr name="unselected_indicator_diameter" format="dimension"/>
         <attr name="indicator_group_height" format="dimension"/>
+        <attr name="indicator_group_width" format="dimension"/>
         <attr name="indicator_margin" format="dimension"/>
         <attr name="hide_indicator" format="boolean"/>
         <attr name="endless_loop" format="boolean"/>

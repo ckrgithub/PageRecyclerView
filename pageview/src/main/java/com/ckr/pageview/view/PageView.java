@@ -44,6 +44,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private Drawable unselectedIndicatorDrawable = null;
 	private boolean hideIndicator = false;
 	private int indicatorGroupHeight = 90;
+	private int indicatorGroupWidth = 90;
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
@@ -60,7 +61,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean isScrollToBeginPage = false;
 	private PageHandler mHandler;
 	private boolean firstEnter = true;
-
 
 	public PageView(Context context) {
 		this(context, null);
@@ -86,6 +86,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		selectedIndicatorDiameter = typedArray.getDimensionPixelSize(R.styleable.PageView_selected_indicator_diameter, selectedIndicatorDiameter);
 		unselectedIndicatorDiameter = typedArray.getDimensionPixelSize(R.styleable.PageView_unselected_indicator_diameter, unselectedIndicatorDiameter);
 		indicatorGroupHeight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_height, indicatorGroupHeight);
+		indicatorGroupWidth = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_width, indicatorGroupWidth);
 		indicatorMargin = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_margin, indicatorMargin);
 		hideIndicator = typedArray.getBoolean(R.styleable.PageView_hide_indicator, hideIndicator);
 		if (typedArray.hasValue(R.styleable.PageView_selected_indicator_drawable)) {
@@ -114,7 +115,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.height = indicatorGroupHeight;
 		} else if (orientation == OnPageDataListener.VERTICAL) {
-			layoutParams.width = indicatorGroupHeight;
+			layoutParams.width = indicatorGroupWidth;
 		}
 		view.setLayoutParams(layoutParams);
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
@@ -315,7 +316,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		isScrollToBeginPage = scrollToBeginPage;
 	}
 
-
 	public int getCurrentItem() {
 		return recyclerView == null ? 0 : recyclerView.getCurrentPage();
 	}
@@ -363,7 +363,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (orientation == OnPageDataListener.HORIZONTAL) {
 			layoutParams.topMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
 		} else if (orientation == OnPageDataListener.VERTICAL) {
-			layoutParams.leftMargin = indicatorGroupHeight / 2 - unselectedIndicatorDiameter / 2;
+			layoutParams.leftMargin = indicatorGroupWidth / 2 - unselectedIndicatorDiameter / 2;
 		}
 		if (page == 0) {
 			margin = indicatorMargin - (selectedIndicatorDiameter - unselectedIndicatorDiameter) / 2;
