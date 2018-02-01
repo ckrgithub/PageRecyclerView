@@ -1,5 +1,5 @@
 # PageRecyclerView
-Custom recyclerView achieves page turning function and unlimited carousel[中文文档](README-ZH.md)。
+Custom recyclerView achieves page turning function and unlimited carousel [中文文档](README-ZH.md)。
 
 ## Effect
 | carousel     | horizontal-grid-paging    | add-data    | remove-data  | vertical-linear-paging |
