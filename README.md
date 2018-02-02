@@ -22,7 +22,7 @@ Custom recyclerView achieves page turning function and unlimited carousel [中�
 	}
 ```
 
-## Function and Use
+## Function And Use
 ### 1.layout reference
 ```
      <com.ckr.pageview.view.PageView
@@ -45,8 +45,8 @@ Custom recyclerView achieves page turning function and unlimited carousel [中�
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
-### 2.Attributes Description
-| Attributes                    | Description                   | Type              | Defaults         |
+### 2.attributes description
+| attributes                    | description                   | type              | defaults         |
 | ----------------------------- | ----------------------------- | ----------------- | ---------------- |
 | endless_loop                  | start an unlimited carousel(valid when there is only one item per page) | boolean  | false		|
 | hide_indicator                | hide indicator  														  | boolean  | false	|
@@ -64,7 +64,7 @@ Custom recyclerView achieves page turning function and unlimited carousel [中�
 | unselected_indicator_diameter	| indicator diameter for the non-current page  							  | int      | 15 		|
 | selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable | null	   |
 
-### 3.Code To Use
+### 3.code to use
 ```
     mainAdapter = new MainAdapter(getContext(), itemLayoutId);//MainAdapter extend BasePageAdapter<T,ViewHolder>
     pageView.setAdapter(mainAdapter);
