@@ -17,8 +17,8 @@ Custom recyclerView achieves page turning function and unlimited carousel [中�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0 (inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.0.5'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.0.6'//gradle plugin 3.0 (inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.0.6'//gradle plugin 3.0 below used
 	}
 ```
 
