@@ -2,9 +2,13 @@
 recyclerView实现翻页功能及无限轮播。
 
 ## 效果演示
-| 无限轮播     | 水平网格分页    | 添加数据    | 移除数据  | 竖直线性分页 |
+| 无限轮播     | 水平网格分页    | 添加数据    |
 | ------------ | ------------------------- | ----------- | ------------ | -------------------- |
-| ![](screenRecorder/Screenshot_1.gif) | ![](screenRecorder/Screenshot_2.gif) | ![](screenRecorder/Screenshot_3.gif) | ![](screenRecorder/Screenshot_4.gif) | ![](screenRecorder/Screenshot_5.gif) |
+| ![](screenRecorder/Screenshot_1.gif) | ![](screenRecorder/Screenshot_2.gif) | ![](screenRecorder/Screenshot_3.gif) |
+
+| 移除数据  | 竖直线性分页 |
+| ------------ | ------------------------- | ----------- | ------------ | -------------------- |
+| ![](screenRecorder/Screenshot_4.gif) | ![](screenRecorder/Screenshot_5.gif) |
 
 ## Demo
 [下载 APK](apk/app-debug.apk)
