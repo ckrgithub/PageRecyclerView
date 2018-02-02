@@ -2,9 +2,13 @@
 Custom recyclerView achieves page turning function and unlimited carousel [中文文档](README-ZH.md)。
 
 ## Effect
-| carousel     | horizontal-grid-paging    | add-data    | remove-data  | vertical-linear-paging |
-| ------------ | ------------------------- | ----------- | ------------ | -------------------- |
-| ![](screenRecorder/Screenshot_1.gif) | ![](screenRecorder/Screenshot_2.gif) | ![](screenRecorder/Screenshot_3.gif) | ![](screenRecorder/Screenshot_4.gif) | ![](screenRecorder/Screenshot_5.gif) |
+| carousel     | horizontal-grid-paging    | add-data    |
+| ------------ | ------------------------- | ----------- |
+| ![](screenRecorder/Screenshot_1.gif) | ![](screenRecorder/Screenshot_2.gif) | ![](screenRecorder/Screenshot_3.gif)
+
+| remove-data  | vertical-linear-paging |
+| ------------ | ------------------------- |
+| ![](screenRecorder/Screenshot_4.gif) | ![](screenRecorder/Screenshot_5.gif) |
 
 ## Demo
 [Download APK](apk/app-debug.apk)
