@@ -35,6 +35,7 @@ import static com.ckr.pageview.utils.PageLog.Loge;
  */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
+	private static final int INTERVAL=3000;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -51,6 +52,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int pageColumn = OnPageDataListener.ONE;
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
+	private int interval;
 	private LinearLayout indicatorGroup;
 	private View moveIndicator;//可移动的指示器
 	private PageRecyclerView recyclerView;
@@ -104,6 +106,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
+		interval=Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval,INTERVAL));
 		typedArray.recycle();
 	}
 
@@ -169,6 +172,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		view.setBackgroundDrawable(d);
 	}
 
+	public int getLoopingInterval() {
+		return interval;
+	}
+
 	public PageHandler getHandler() {
 		return mHandler;
 	}
@@ -185,7 +192,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	public void restartLooping() {
 		Log.d(TAG, "restartLooping: ");
 		if (mHandler != null) {
-			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 			isLooping = true;
 		}
 	}
@@ -408,7 +415,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (isLooping) {
 			if (firstEnter) {
 				firstEnter = false;
-				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 			}
 		}
 		if (mOnPageChangeListener != null) {
@@ -425,7 +432,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 					mHandler.sendEmptyMessage(PageHandler.MSG_STOP_LOOPING);
 					break;
 				case RecyclerView.SCROLL_STATE_IDLE://0
-					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, PageHandler.MSG_DELAY);
+					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 					break;
 			}
 		}

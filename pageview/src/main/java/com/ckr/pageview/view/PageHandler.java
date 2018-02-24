@@ -11,7 +11,6 @@ import java.lang.ref.WeakReference;
 public class PageHandler extends Handler {
 	public static final int MSG_START_LOOPING = 0;
 	public static final int MSG_STOP_LOOPING = 1;
-	public static final long MSG_DELAY = 3000;
 	private WeakReference<PageView> weakReference;
 
 	public PageHandler(WeakReference<PageView> wk) {
@@ -31,7 +30,7 @@ public class PageHandler extends Handler {
 		switch (msg.what) {
 			case MSG_START_LOOPING:
 				mPageView.setCurrentItem(mPageView.getCurrentItem() + 1);
-				mPageView.getHandler().sendEmptyMessageDelayed(MSG_START_LOOPING, MSG_DELAY);
+				mPageView.getHandler().sendEmptyMessageDelayed(MSG_START_LOOPING, mPageView.getLoopingInterval());
 				break;
 			case MSG_STOP_LOOPING:
 				break;
