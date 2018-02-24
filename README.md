@@ -56,7 +56,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | indicator_group_heigt         | indicator parent container height(valid in the vertical orientation) 	     | int          | 90		        |
 | indicator_group_width         | indicator parent container width(valid in the horizontal orientation)      | int          | 90		            |
 | indicator_margin				| indicator spacing  													     | int          | 15                |
-| layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
+| layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
 | orientation					| layout orientation  													     | int          | 0(horizontal)     |
 | page_column					| the number of columns per page  										     | int          | 1		            |
 | page_row						| the number of rows per page  											     | int          | 1		            |

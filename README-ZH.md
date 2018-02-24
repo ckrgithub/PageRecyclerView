@@ -29,9 +29,9 @@ PageRecyclerView实现翻页功能及无限轮播。
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		app:page_background="#80000000"
+        app:page_background="#80000000"
         app:endless_loop="true"
-		app:loop_interval="3000"
+        app:loop_interval="3000"
         app:hide_indicator="false"
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_group_width="@dimen/viewpager_indicator_group_height"
@@ -56,7 +56,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 | indicator_group_heigt         | 指示器父容器的高度 						 | int     		| 90			|
 | indicator_group_width         | 指示器父容器的高度 						 | int     		| 90			|
 | indicator_margin				| 指示器间的间距  						 | int      	| 15            |
-| layout_flag					| 标记线性布局或网格布局  					 | int      		| 0(线性)     	|
+| layout_flag					| 标记线性布局或网格布局  					 | int      		| 0(线性)     	|
 | orientation					| 布局方向  								 | int      	| 0(horizontal) |
 | page_column					| 每页的列数  							 | int       	| 1		    	|
 | page_row						| 每页的行数  							 | int       	| 1		    	|
