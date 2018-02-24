@@ -8,7 +8,7 @@ publish {
     userOrg = 'ckrjfrog'
     groupId = 'ckrjfrog.Page'
     artifactId = 'PageView'
-    publishVersion = '1.0.6'
+    publishVersion = '1.0.7'
     desc = '自定义recyclerView实现分页功能'
     website = siteUrl
 }
@@ -25,8 +25,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.androidConfig.minSdkVersion
         targetSdkVersion rootProject.ext.androidConfig.targetSdkVersion
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 7
+        versionName "1.0.7"
     }
 
     buildTypes {
