@@ -29,7 +29,9 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+		app:page_background="#80000000"
         app:endless_loop="true"
+		app:loop_interval="3000"
         app:hide_indicator="false"
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_group_width="@dimen/viewpager_indicator_group_height"
@@ -48,21 +50,23 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### 2.attributes description
 | attributes                    | description                   | type              | defaults         |
 | ----------------------------- | ----------------------------- | ----------------- | ---------------- |
-| endless_loop                  | start an unlimited carousel(valid when there is only one item per page) | boolean  | false		|
-| hide_indicator                | hide indicator  														  | boolean  | false	|
-| indicator_group_heigt         | indicator parent container height(valid in the vertical orientation) 	  |	 int     | 90		|
-| indicator_group_width         | indicator parent container width(valid in the horizontal orientation)   | int      | 90		|
-| indicator_margin				| indicator spacing  													  |  int     | 15       |
-| layout_flag					| mark linear layout or grid layout                                       | int      | 0(linear layout)  |
-| orientation					| layout orientation  													  | int      | 0(horizontal)     |
-| page_column					| the number of columns per page  										  | int      | 1		|
-| page_row						| the number of rows per page  											  |	int      | 1		|
-| selected_indicator_color      | indicator color for the current page  									  | int      | Color.RED   |
-| selected_indicator_diameter   | indicator diameter for the current page  								  |	int      | 15       |
-| selected_indicator_drawable   | indicator drawable for the current page(priority is higher than color)  | drawable | null	    |
-| unselected_indicator_color	| indicator color for the non-current page  								  | int      | Color.BLACK |
-| unselected_indicator_diameter	| indicator diameter for the non-current page  							  | int      | 15 		|
-| selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable | null	   |
+| endless_loop                  | start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
+| loop_interval                 | loop interval								  							     | int		    | 3000		        |
+| hide_indicator                | hide indicator  														     | boolean      | false	            |
+| indicator_group_heigt         | indicator parent container height(valid in the vertical orientation) 	     | int          | 90		        |
+| indicator_group_width         | indicator parent container width(valid in the horizontal orientation)      | int          | 90		            |
+| indicator_margin				| indicator spacing  													     | int          | 15                |
+| layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
+| orientation					| layout orientation  													     | int          | 0(horizontal)     |
+| page_column					| the number of columns per page  										     | int          | 1		            |
+| page_row						| the number of rows per page  											     | int          | 1		            |
+| selected_indicator_color      | indicator color for the current page  									     | int          | Color.RED         |
+| selected_indicator_diameter   | indicator diameter for the current page  								     | int          | 15                |
+| selected_indicator_drawable   | indicator drawable for the current page(priority is higher than color)     | drawable     | null	            |
+| unselected_indicator_color	| indicator color for the non-current page  								     | int          | Color.BLACK       |
+| unselected_indicator_diameter	| indicator diameter for the non-current page  							     | int          | 15 		        |
+| selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable     | null	            |
+| page_background				| the background of the current page									     | drawable		| null		        |
 
 ### 3.code to use
 ```

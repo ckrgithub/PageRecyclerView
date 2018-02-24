@@ -29,7 +29,9 @@ PageRecyclerView实现翻页功能及无限轮播。
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+		app:page_background="#80000000"
         app:endless_loop="true"
+		app:loop_interval="3000"
         app:hide_indicator="false"
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_group_width="@dimen/viewpager_indicator_group_height"
@@ -49,6 +51,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 | 属性							| 描述									 | 类型			| 默认值			|
 | ----------------------------- | -------------------------------------- | ----------   | ------------- |
 | endless_loop                  | 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
+| loop_interval                 | 轮询时间间隔							 | int			| 3000			|
 | hide_indicator                | 是否隐藏指示器  						 | boolean 		| false		 	|
 | indicator_group_heigt         | 指示器父容器的高度 						 | int     		| 90			|
 | indicator_group_width         | 指示器父容器的高度 						 | int     		| 90			|
@@ -63,6 +66,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 | unselected_indicator_color	| 非当前页的指示器颜色  					 | int      	| Color.BLACK   |
 | unselected_indicator_diameter	| 非当前页的指示器直径  					 | int      	| 15 		 	|
 | selected_indicator_drawable   | 非当前页的指示器drawable(优先级高于颜色) 	 | drawable 	| null	     	|
+| page_background				| 当前页的背景							 | drawable		| null			|
 
 ### 3.代码使用
 ```
