@@ -42,6 +42,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int indicatorMargin = 15;
 	private Drawable selectedIndicatorDrawable = null;
 	private Drawable unselectedIndicatorDrawable = null;
+	private Drawable pageBackground = null;
 	private boolean hideIndicator = false;
 	private int indicatorGroupHeight = 90;
 	private int indicatorGroupWidth = 90;
@@ -95,6 +96,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (typedArray.hasValue(R.styleable.PageView_unselected_indicator_drawable)) {
 			unselectedIndicatorDrawable = typedArray.getDrawable(R.styleable.PageView_unselected_indicator_drawable);
 		}
+		if (typedArray.hasValue(R.styleable.PageView_page_background)) {
+			pageBackground = typedArray.getDrawable(R.styleable.PageView_page_background);
+		}
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
@@ -140,6 +144,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				} else {
 					moveIndicator.setBackgroundDrawable(selectedIndicatorDrawable);
 				}
+			}
+		}
+		if (pageBackground != null) {
+			if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
+				recyclerView.setBackground(pageBackground);
+			} else {
+				recyclerView.setBackgroundDrawable(pageBackground);
 			}
 		}
 		addView(inflate);

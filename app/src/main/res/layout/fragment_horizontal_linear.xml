@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        app:page_background="#80000000"
         app:endless_loop="true"
         app:hide_indicator="false"
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"

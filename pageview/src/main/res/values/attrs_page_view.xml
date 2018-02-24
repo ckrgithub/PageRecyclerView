@@ -12,6 +12,7 @@
         <attr name="indicator_margin" format="dimension"/>
         <attr name="hide_indicator" format="boolean"/>
         <attr name="endless_loop" format="boolean"/>
+        <attr name="page_background" format="color|reference"/>
         <attr name="orientation" format="integer">
             <enum name="horizontal" value="0"></enum>
             <enum name="vertical" value="1"></enum>
