@@ -48,7 +48,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
 ### 2.attributes description
-| attributes                    | description                   | type               | defaults         |
+| attributes                    | description                   | type               | defaults         |
 | ----------------------------- | ----------------------------- | ------------------ | ---------------- |
 | endless_loop                  | start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
 | loop_interval                 | loop interval								  							     | int		    | 3000		        |
