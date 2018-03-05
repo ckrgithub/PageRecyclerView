@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class PageLog {
 	private static final String TAG = "PageLog";
-	private static boolean isDebug = true;
+	private static boolean isDebug = false;
 
 	public static void debug() {
 		PageLog.isDebug = true;
