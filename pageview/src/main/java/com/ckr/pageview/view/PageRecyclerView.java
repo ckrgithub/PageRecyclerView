@@ -338,7 +338,7 @@ public class PageRecyclerView extends RecyclerView {
 			} else {
 				int scrollX = page * mWidth;
 				int moveX = scrollX - mScrollOffset;
-				Loge(TAG, "scrollToHorizontalPageInternal: moveX:" + moveX);
+				Loge(TAG, "scrollToPage: moveX:" + moveX);
 				if (smoothScroll) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
@@ -351,7 +351,7 @@ public class PageRecyclerView extends RecyclerView {
 			} else {
 				int scrollY = page * mHeight;
 				int moveY = scrollY - mScrollOffset;
-				Loge(TAG, "scrollToVerticalPageInternal: moveY:" + moveY);
+				Loge(TAG, "scrollToPage: moveY:" + moveY);
 				if (smoothScroll) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
 				} else {
@@ -359,6 +359,7 @@ public class PageRecyclerView extends RecyclerView {
 				}
 			}
 		}
+		Logd(TAG, "scrollToPage: mCurrentPage:" + mCurrentPage + ",page:" + page);
 	}
 
 	private class OnPageFlingListener extends OnFlingListener {

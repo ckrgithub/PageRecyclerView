@@ -35,7 +35,7 @@ import static com.ckr.pageview.utils.PageLog.Loge;
  */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
-	private static final int INTERVAL=3000;
+	private static final int INTERVAL = 3000;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -106,7 +106,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
-		interval=Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval,INTERVAL));
+		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		typedArray.recycle();
 	}
 
@@ -180,6 +180,19 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		return mHandler;
 	}
 
+	public void pauseLooping() {
+		if (mHandler != null) {
+			mHandler.removeMessages(PageHandler.MSG_START_LOOPING);
+			mHandler.removeMessages(PageHandler.MSG_STOP_LOOPING);
+		}
+	}
+
+	public void resumeLooping() {
+		if (mHandler != null) {
+			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+		}
+	}
+
 	public void stopLooping() {
 		Loge(TAG, "stopLooping: ");
 		if (mHandler != null) {
@@ -249,6 +262,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (hideIndicator) {
 			return;
 		}
+		if (isLooping) {
+			pauseLooping();
+		}
 		addIndicator();
 		updateMoveIndicator();
 	}
@@ -260,7 +276,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		int childCount = indicatorGroup.getChildCount();
 		int pageCount = mAdapter.getPageCount();
 		if (childCount > pageCount) {
-			for (int i = pageCount; i < childCount; i++) {
+			for (int i = childCount - 1; i >= pageCount; i--) {
 				indicatorGroup.removeViewAt(i);
 			}
 		} else if (childCount < pageCount) {
@@ -316,16 +332,57 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			moveIndicator.setVisibility(View.VISIBLE);
 			int lastPage = recyclerView.getCurrentPage();
 			if (isLooping) {
-				lastPage %= pageCount;
+				if (lastPageCount != 0) {
+					lastPage %= lastPageCount;
+				}
 			}
 			if (pageCount < lastPageCount && lastPage >= pageCount) {//2,3,1
 				if (isScrollToBeginPage) {
-					scrollToBeginPage();
+					if (isLooping) {
+						if (lastPageCount != 0) {
+							int currentPage = recyclerView.getCurrentPage();
+							int mod = currentPage % pageCount;
+							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
+							int targetPage = quotient * pageCount;
+							setCurrentItem(targetPage, false);
+							if (currentPage == targetPage) {
+								if (targetPage == currentPage) {
+									resumeLooping();
+								}
+							}
+						}
+					} else {
+						scrollToBeginPage();
+					}
 				} else {
-					scrollToEndPage(pageCount - 1);
+					if (isLooping) {
+						if (lastPageCount != 0) {
+							int currentPage = recyclerView.getCurrentPage();
+							int mod = currentPage % pageCount;
+							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
+							int targetPage = quotient * pageCount - 1;
+							setCurrentItem(targetPage, false);
+							if (currentPage == targetPage) {
+								if (targetPage == currentPage) {
+									resumeLooping();
+								}
+							}
+						}
+					} else {
+						scrollToEndPage(pageCount - 1);
+					}
 				}
 			} else {
-				moveIndicator(lastPage, moveIndicator);
+				if (isLooping) {
+					int currentPage = recyclerView.getCurrentPage();
+					int targetPage = currentPage / pageCount * pageCount + lastPage;
+					setCurrentItem(targetPage, false);
+					if (targetPage == currentPage) {
+						resumeLooping();
+					}
+				} else {
+					moveIndicator(lastPage, moveIndicator);
+				}
 			}
 		}
 	}
@@ -415,7 +472,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (isLooping) {
 			if (firstEnter) {
 				firstEnter = false;
-				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+				if (mHandler != null) {
+					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+				}
 			}
 		}
 		if (mOnPageChangeListener != null) {
@@ -425,14 +484,18 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-		Logd(TAG, "onPageScrollStateChanged: state:"+state);
+		Logd(TAG, "onPageScrollStateChanged: state:" + state);
 		if (isLooping) {
 			switch (state) {
 				case RecyclerView.SCROLL_STATE_DRAGGING://1
-					mHandler.sendEmptyMessage(PageHandler.MSG_STOP_LOOPING);
+					if (mHandler != null) {
+						mHandler.sendEmptyMessage(PageHandler.MSG_STOP_LOOPING);
+					}
 					break;
 				case RecyclerView.SCROLL_STATE_IDLE://0
-					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+					if (mHandler != null) {
+						mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+					}
 					break;
 			}
 		}
