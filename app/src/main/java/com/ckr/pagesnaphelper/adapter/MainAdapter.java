@@ -32,7 +32,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	@Override
 	public int getItemCount() {
 		if (mIsLooping) {
-			return MAX_VALUE;
+			return super.getItemCount()==0?0:MAX_VALUE;
 		}
 		return super.getItemCount();
 	}
