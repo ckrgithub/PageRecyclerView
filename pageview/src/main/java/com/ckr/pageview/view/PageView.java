@@ -426,7 +426,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 		int pageCount = mAdapter.getPageCount();
 		if (isLooping) {
-			page %= pageCount;
+			if (pageCount != 0) {
+				page %= pageCount;
+			}
 		}
 		if (lastPage == page && lastPageCount == pageCount) {
 			return;

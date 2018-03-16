@@ -117,7 +117,7 @@ public class PageRecyclerView extends RecyclerView {
 		this.mIsLooping = isLooping;
 	}
 
-	public void setVelocity(@IntRange(from = 0) int mVelocity) {
+	public void setVelocity(@IntRange(from = 1) int mVelocity) {
 		this.mVelocity = mVelocity;
 	}
 
