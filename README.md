@@ -74,6 +74,9 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
     pageView.setAdapter(mainAdapter);
     pageView.updateAll(items);
 ```
+## Version Tracking
+* **1.0.9-release**
+  * repair: When the carousel is broadcast, the data source changes to cause confusion in the indicator point.
 
 License
 -------

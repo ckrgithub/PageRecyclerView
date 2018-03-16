@@ -74,6 +74,9 @@ PageRecyclerView实现翻页功能及无限轮播。
     pageView.setAdapter(mainAdapter);//设置adapter
     pageView.updateAll(items);//更新数据
 ```
+## 版本更新
+* **1.0.9-release**
+  * 修复：轮播时，数据源发生变化引起指示点错乱的问题
 
 License
 -------
