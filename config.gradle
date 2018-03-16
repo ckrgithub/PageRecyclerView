@@ -1,8 +1,8 @@
 //全局参数
 ext {
     appConfig = [
-            versionCode  : 8,
-            versionName  : "1.0.8",
+            versionCode  : 9,
+            versionName  : "1.0.9",
             applicationId: "com.ckr.pagesnaphelper",
     ]
 
