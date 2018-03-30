@@ -19,7 +19,7 @@ import com.ckr.pageview.adapter.BasePageAdapter;
  */
 
 public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
-	public static final int MAX_VALUE=28800;
+	public static final int MAX_VALUE = 28800;
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
@@ -31,7 +31,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	@Override
 	public int getItemCount() {
 		if (mIsLooping) {
-			return super.getItemCount()==0?0:MAX_VALUE;
+			return super.getItemCount() == 0 ? 0 : MAX_VALUE;
 		}
 		return super.getItemCount();
 	}
@@ -48,7 +48,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 
 	@Override
 	protected void convert(MainHolder holder, final int position, Item originItem, final int adjustedPosition, Item item) {
-		int page = position % (mRow * mColumn * 6);
+		int page = adjustedPosition % (mRow * mColumn * 6);
 		if (page < mRow * mColumn) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
 		} else if (page < mRow * mColumn * 2) {
@@ -62,18 +62,16 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 		} else {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color6));
 		}
-		if (adjustedPosition != -1) {
-			if (item == null) {
-				holder.relativeLayout.setVisibility(View.INVISIBLE);
-				holder.itemView.setOnLongClickListener(null);
-				holder.imageButton.setOnClickListener(null);
-			} else {
-				holder.relativeLayout.setVisibility(View.VISIBLE);
-				holder.textView.setText(item.getName());
-				holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
-				holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
-				holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
-			}
+		if (item == null) {
+			holder.relativeLayout.setVisibility(View.INVISIBLE);
+			holder.itemView.setOnLongClickListener(null);
+			holder.imageButton.setOnClickListener(null);
+		} else {
+			holder.relativeLayout.setVisibility(View.VISIBLE);
+			holder.textView.setText(item.getName());
+			holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
+			holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
+			holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
 		}
 	}
 

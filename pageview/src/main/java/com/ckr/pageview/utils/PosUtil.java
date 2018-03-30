@@ -18,13 +18,12 @@ public class PosUtil {
 	 * @return
 	 */
 	public static int adjustPosition22(int position, @IntRange(from = 1) int sum) {
-		int pos = -1;
+		int pos = position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition22,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 3:
-				pos = position;
 				break;
 			case 1:
 				pos = 2 + page * sum;
@@ -42,13 +41,12 @@ public class PosUtil {
 	 * @return
 	 */
 	public static int adjustPosition23(int position, @IntRange(from = 1) int sum) {
-		int pos = -1;
+		int pos =position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition23,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 5:
-				pos = position;
 				break;
 			case 1:
 				pos = 3 + page * sum;
@@ -73,13 +71,12 @@ public class PosUtil {
 	 * @return
 	 */
 	public static int adjustPosition24(int position, @IntRange(from = 1) int sum) {
-		int pos = -1;
+		int pos =position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 7:
-				pos = position;
 				break;
 			case 1:
 				pos = 4 + page * sum;
@@ -109,13 +106,12 @@ public class PosUtil {
 	 * @return
 	 */
 	public static int adjustPosition25(int position, @IntRange(from = 1) int sum) {
-		int pos = -1;
+		int pos =position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
 			case 0:
 			case 9:
-				pos = position;
 				break;
 			case 1:
 				pos = 5 + page * sum;
