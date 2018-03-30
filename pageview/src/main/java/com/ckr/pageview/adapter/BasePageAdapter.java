@@ -176,9 +176,10 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (mIsLooping) {
 			index = position % mTargetData.size();
 		}
+		Logd(TAG, "onBindViewHolder: VERSION_CODE:" + BuildConfig.VERSION_CODE);
 		if (BuildConfig.VERSION_CODE >= 10) {
 			int adjustedPosition = position;
-			if (mOrientation == OnPageDataListener.GRID) {
+			if (mLayoutFlag == OnPageDataListener.GRID) {
 				adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
 			}
 			convert(holder, index, mTargetData.get(index),adjustedPosition,mTargetData.get(adjustedPosition));
