@@ -73,11 +73,9 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		pageView.setAdapter(mainAdapter);
 		isLooping = mainAdapter.isLooping();
 		if (isLooping) {
-			pageView.updateAll(items.subList(0, 4));
 			Log.d(TAG, "initView: " + isVisible);
-			if (isVisible) {
-				pageView.setCurrentItem(MAX_VALUE / 2, false);
-			}
+			pageView.updateAll(items.subList(0, 4));
+			pageView.setCurrentItem(MAX_VALUE / 2, false);
 		} else {
 			pageView.updateAll(items);
 		}
