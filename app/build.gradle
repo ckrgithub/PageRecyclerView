@@ -11,10 +11,21 @@ android {
         versionCode rootProject.ext.appConfig.versionCode
         versionName rootProject.ext.appConfig.versionName
     }
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('./android.jks')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {
@@ -30,5 +41,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     apt 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':pageview')
-//    compile 'ckrjfrog.Page:PageView:1.0.9'
+    //    compile 'ckrjfrog.Page:PageView:1.0.9'
 }
