@@ -64,6 +64,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean isScrollToBeginPage = false;
 	private PageHandler mHandler;
 	private boolean firstEnter = true;
+	private boolean isPaused = false;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -244,9 +245,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	 *
 	 * @param list
 	 */
-	public void updateAll(List list) {
+	public void updateAll(@NonNull List list) {
 		if (null == mAdapter) {
 			return;
+		}
+		if (isLooping) {
+			isPaused = true;//标记已暂停轮询状态
+			pauseLooping();
 		}
 		mAdapter.updateAll(list);
 	}
@@ -263,7 +268,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		if (isLooping) {
-			pauseLooping();
+			if (isPaused) {
+				isPaused = false;//解除已暂停轮询状态
+			} else {
+				pauseLooping();
+			}
 		}
 		addIndicator();
 		updateMoveIndicator();
