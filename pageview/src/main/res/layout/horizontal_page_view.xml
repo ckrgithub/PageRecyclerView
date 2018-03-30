@@ -12,25 +12,32 @@
         android:layout_centerHorizontal="true"/>
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
+        android:id="@+id/indicatorContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recyclerView"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@+id/recyclerView">
 
-        <LinearLayout
-            android:id="@+id/indicatorGroup"
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"/>
+            android:layout_centerInParent="true">
 
-        <View
-            android:id="@+id/moveIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/indicatorGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"/>
+
+            <View
+                android:id="@+id/moveIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </RelativeLayout>
+
 
 </RelativeLayout>

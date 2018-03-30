@@ -43,9 +43,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private Drawable selectedIndicatorDrawable = null;
 	private Drawable unselectedIndicatorDrawable = null;
 	private Drawable pageBackground = null;
+	private Drawable indicatorContainerBackground = null;
 	private boolean hideIndicator = false;
 	private int indicatorGroupHeight = 90;
 	private int indicatorGroupWidth = 90;
+	private int indicatorGroupAlignment = RelativeLayout.CENTER_IN_PARENT;
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
@@ -101,6 +103,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (typedArray.hasValue(R.styleable.PageView_page_background)) {
 			pageBackground = typedArray.getDrawable(R.styleable.PageView_page_background);
 		}
+		if (typedArray.hasValue(R.styleable.PageView_indicator_container_background)) {
+			indicatorContainerBackground = typedArray.getDrawable(R.styleable.PageView_indicator_container_background);
+		}
+		indicatorGroupAlignment = typedArray.getInteger(R.styleable.PageView_indicator_group_alignment, indicatorGroupAlignment);
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
@@ -117,21 +123,41 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			inflate = View.inflate(getContext(), R.layout.vertical_page_view, null);
 		}
-		View view = inflate.findViewById(R.id.relativeLayout);
-		LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-		if (orientation == OnPageDataListener.HORIZONTAL) {
-			layoutParams.height = indicatorGroupHeight;
-		} else if (orientation == OnPageDataListener.VERTICAL) {
-			layoutParams.width = indicatorGroupWidth;
-		}
-		view.setLayoutParams(layoutParams);
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		recyclerView.setOrientation(orientation);
 		recyclerView.setLooping(isLooping);
 		recyclerView.addOnPageChangeListener(this);
+		if (pageBackground != null) {
+			if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
+				recyclerView.setBackground(pageBackground);
+			} else {
+				recyclerView.setBackgroundDrawable(pageBackground);
+			}
+			pageBackground = null;
+		}
+
+		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
 		if (hideIndicator) {
-			view.setVisibility(GONE);
+			indicatorContainer.setVisibility(GONE);
 		} else {
+			if (indicatorContainerBackground != null) {
+				if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
+					indicatorContainer.setBackground(indicatorContainerBackground);
+				} else {
+					indicatorContainer.setBackgroundDrawable(indicatorContainerBackground);
+				}
+				indicatorContainerBackground = null;
+			}
+			View view = inflate.findViewById(R.id.relativeLayout);
+			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+			if (orientation == OnPageDataListener.HORIZONTAL) {
+				layoutParams.height = indicatorGroupHeight;
+			} else if (orientation == OnPageDataListener.VERTICAL) {
+				layoutParams.width = indicatorGroupWidth;
+			}
+			Logd(TAG, "initView: indicatorGroupAlignment:"+indicatorGroupAlignment);
+//			layoutParams.addRule();
+			view.setLayoutParams(layoutParams);
 			indicatorGroup = (LinearLayout) inflate.findViewById(R.id.indicatorGroup);
 			moveIndicator = inflate.findViewById(R.id.moveIndicator);
 			layoutParams = (LayoutParams) moveIndicator.getLayoutParams();
@@ -147,15 +173,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				} else {
 					moveIndicator.setBackgroundDrawable(selectedIndicatorDrawable);
 				}
+				selectedIndicatorDrawable = null;
 			}
 		}
-		if (pageBackground != null) {
-			if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
-				recyclerView.setBackground(pageBackground);
-			} else {
-				recyclerView.setBackgroundDrawable(pageBackground);
-			}
-		}
+
 		addView(inflate);
 	}
 

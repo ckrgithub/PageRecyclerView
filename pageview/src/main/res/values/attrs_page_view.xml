@@ -14,7 +14,21 @@
         <attr name="endless_loop" format="boolean"/>
         <attr name="loop_interval" format="integer"/>
         <attr name="page_background" format="color|reference"/>
-        <attr name="orientation" format="integer">
+        <attr name="indicator_container_background" format="color|reference"/>
+        <attr name="indicator_group_marginLeft" format="dimension"/>
+        <attr name="indicator_group_marginTop" format="dimension"/>
+        <attr name="indicator_group_marginRight" format="dimension"/>
+        <attr name="indicator_group_marginBottom" format="dimension"/>
+        <attr name="indicator_group_alignment" >
+            <flag name="left" value="9"></flag>
+            <flag name="top" value="10"></flag>
+            <flag name="right" value="11"></flag>
+            <flag name="bottom" value="12"></flag>
+            <flag name="center" value="13"></flag>
+            <flag name="centerHorizontal" value="14"></flag>
+            <flag name="centerVertical" value="15"></flag>
+        </attr>
+        <attr name="orientation" format="enum">
             <enum name="horizontal" value="0"></enum>
             <enum name="vertical" value="1"></enum>
         </attr>
@@ -29,7 +43,7 @@
             <enum name="four" value="4"></enum>
             <enum name="five" value="5"></enum>
         </attr>
-        <attr name="layout_flag" format="integer">
+        <attr name="layout_flag" format="enum">
             <enum name="linear" value="0"/>
             <enum name="grid" value="1"/>
         </attr>
