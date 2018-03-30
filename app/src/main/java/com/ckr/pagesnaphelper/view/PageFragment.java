@@ -74,8 +74,10 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		isLooping = mainAdapter.isLooping();
 		if (isLooping) {
 			pageView.updateAll(items.subList(0, 4));
-			pageView.setCurrentItem(MAX_VALUE / 2, false);
 			Log.d(TAG, "initView: " + isVisible);
+			if (isVisible) {
+				pageView.setCurrentItem(MAX_VALUE / 2, false);
+			}
 		} else {
 			pageView.updateAll(items);
 		}
@@ -131,6 +133,9 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	@Override
 	public void onStop() {
 		super.onStop();
+		if (isLooping) {
+			Log.d(TAG, "onStop: " + isVisible);
+		}
 		if (pageView != null) {
 			pageView.stopLooping();
 		}
@@ -140,7 +145,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	protected void addData(int index) {
 		if (mainAdapter.isLooping()) {
 //			mainAdapter.updateAll(new ArrayList<Item>());
-			pageView.updateAll(items.subList(0, index>CAPACITY?CAPACITY:index));
+			pageView.updateAll(items.subList(0, index > CAPACITY ? CAPACITY : index));
 			return;
 		}
 		int itemCount = mainAdapter.getRawItemCount();

@@ -55,7 +55,7 @@ public class PageRecyclerView extends RecyclerView {
 	private boolean mIsLooping = false;
 	private boolean isSliding;//是否是滑动
 	private boolean forwardDirection;//滑动方向
-	private OnPageChangeListener listener;
+	private OnPageChangeListener mOnPageChangeListener;
 	private DecimalFormat decimalFormat;
 
 	public PageRecyclerView(Context context) {
@@ -159,8 +159,8 @@ public class PageRecyclerView extends RecyclerView {
 	public void onScrollStateChanged(int state) {
 		Logd(TAG, "onScrollStateChanged,mScrollState:" + state);
 		this.mScrollState = state;
-		if (listener != null) {
-			listener.onPageScrollStateChanged(state);
+		if (mOnPageChangeListener != null) {
+			mOnPageChangeListener.onPageScrollStateChanged(state);
 		}
 		switch (state) {
 			case SCROLL_STATE_IDLE://0
@@ -272,12 +272,12 @@ public class PageRecyclerView extends RecyclerView {
 				int targetPage = mScrollOffset / mWidth;
 				mCurrentPage = targetPage;
 			}
-			if (listener != null) {
+			if (mOnPageChangeListener != null) {
 				int positionOffsetPixels = mScrollOffset % mWidth;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mWidth / (double) mWidth));
-				listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
+				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
-					listener.onPageSelected(mCurrentPage);
+					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
 		} else {
@@ -302,12 +302,12 @@ public class PageRecyclerView extends RecyclerView {
 				int targetPage = mScrollOffset / mHeight;
 				mCurrentPage = targetPage;
 			}
-			if (listener != null) {
+			if (mOnPageChangeListener != null) {
 				int positionOffsetPixels = mScrollOffset % mHeight;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mHeight / (double) mHeight));
-				listener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
+				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
-					listener.onPageSelected(mCurrentPage);
+					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
 		}
@@ -502,7 +502,7 @@ public class PageRecyclerView extends RecyclerView {
 	}
 
 	public void addOnPageChangeListener(OnPageChangeListener listener) {
-		this.listener = listener;
+		this.mOnPageChangeListener = listener;
 	}
 
 	public interface OnPageChangeListener {

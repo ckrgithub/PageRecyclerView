@@ -14,7 +14,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -204,7 +203,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void restartLooping() {
-		Log.d(TAG, "restartLooping: ");
+		Loge(TAG, "restartLooping: ");
 		if (mHandler != null) {
 			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 			isLooping = true;
