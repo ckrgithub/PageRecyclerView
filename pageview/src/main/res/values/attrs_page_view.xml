@@ -27,6 +27,7 @@
             <enum name="two" value="2"></enum>
             <enum name="three" value="3"></enum>
             <enum name="four" value="4"></enum>
+            <enum name="five" value="5"></enum>
         </attr>
         <attr name="layout_flag" format="integer">
             <enum name="linear" value="0"/>
