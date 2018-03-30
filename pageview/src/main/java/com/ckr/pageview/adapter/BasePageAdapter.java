@@ -184,7 +184,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	}
 
 	protected int adjustPosition(int index) {
-		int pos=index;
+		int pos = index;
 		if (mLayoutFlag == OnPageDataListener.GRID && mOrientation == OnPageDataListener.LINEAR) {
 			pos = getAdjustedPosition(index, mRow * mColumn);
 		}

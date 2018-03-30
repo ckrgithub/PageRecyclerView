@@ -9,10 +9,11 @@ import static com.ckr.pageview.utils.PageLog.Logd;
  */
 
 public class PosUtil {
-	private static final String TAG="PosUtil";
+	private static final String TAG = "PosUtil";
 
 	/**
 	 * 2行2列的下标调整
+	 *
 	 * @param position
 	 * @param sum
 	 * @return
@@ -34,14 +35,16 @@ public class PosUtil {
 		}
 		return pos;
 	}
+
 	/**
 	 * 2行3列的下标调整
+	 *
 	 * @param position
 	 * @param sum
 	 * @return
 	 */
 	public static int adjustPosition23(int position, @IntRange(from = 1) int sum) {
-		int pos =position;
+		int pos = position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition23,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
@@ -66,12 +69,13 @@ public class PosUtil {
 
 	/**
 	 * 2行4列的下标调整
+	 *
 	 * @param position
 	 * @param sum
 	 * @return
 	 */
 	public static int adjustPosition24(int position, @IntRange(from = 1) int sum) {
-		int pos =position;
+		int pos = position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
@@ -99,14 +103,16 @@ public class PosUtil {
 		}
 		return pos;
 	}
+
 	/**
 	 * 2行5列的下标调整
+	 *
 	 * @param position
 	 * @param sum
 	 * @return
 	 */
 	public static int adjustPosition25(int position, @IntRange(from = 1) int sum) {
-		int pos =position;
+		int pos = position;
 		int page = position / sum;
 		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
 		switch (position % sum) {
