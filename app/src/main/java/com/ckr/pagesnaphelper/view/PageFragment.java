@@ -140,7 +140,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	protected void addData(int index) {
 		if (mainAdapter.isLooping()) {
 //			mainAdapter.updateAll(new ArrayList<Item>());
-			mainAdapter.updateAll(items.subList(0, index>CAPACITY?CAPACITY:index));
+			pageView.updateAll(items.subList(0, index>CAPACITY?CAPACITY:index));
 			return;
 		}
 		int itemCount = mainAdapter.getRawItemCount();
