@@ -228,13 +228,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping).setOnIndicatorListener(this);
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)
+				.setColumn(pageColumn).setRow(pageRow)
+				.setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {
-			mAdapter.setColumn(OnPageDataListener.ONE).setRow(OnPageDataListener.ONE);
 			recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), orientation, false));
 		} else {
-			mAdapter.setColumn(pageColumn).setRow(pageRow);
-			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == 0 ? pageRow : pageColumn, orientation, false));
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == OnPageDataListener.HORIZONTAL ? pageRow : pageColumn, orientation, false));
 		}
 		recyclerView.setAdapter(mAdapter);
 	}

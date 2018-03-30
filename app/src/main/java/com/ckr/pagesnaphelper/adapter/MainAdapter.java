@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
 import com.ckr.pageview.adapter.BasePageAdapter;
-import com.ckr.pageview.adapter.OnPageDataListener;
 
 
 /**
@@ -48,12 +47,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	}
 
 	@Override
-	protected void convert(MainHolder holder, final int position, Item originItem) {
-		int adjustedPosition = position;
-		if (mOrientation == OnPageDataListener.HORIZONTAL && mRow * mColumn > 1) {
-			adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
-		}
-		Item item = mTargetData.get(adjustedPosition);
+	protected void convert(MainHolder holder, final int position, Item originItem, final int adjustedPosition, Item item) {
 		int page = position % (mRow * mColumn * 6);
 		if (page < mRow * mColumn) {
 			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));

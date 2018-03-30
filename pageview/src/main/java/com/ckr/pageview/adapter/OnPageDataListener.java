@@ -15,18 +15,19 @@ public interface OnPageDataListener<T> {
 	int TWO = 2;
 	int THREE = 3;
 	int FOUR = 4;
+	int FIVE = 5;
 	int HORIZONTAL = 0;
 	int VERTICAL = 1;
 	int LINEAR = 0;
 	int GRID = 1;
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({ONE, TWO})
+	@IntDef({ONE, TWO, THREE, FOUR,FIVE})
 	@interface PageRow {
 	}
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({ONE, TWO, THREE, FOUR})
+	@IntDef({ONE, TWO})
 	@interface PageColumn {
 	}
 

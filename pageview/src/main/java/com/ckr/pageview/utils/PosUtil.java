@@ -93,11 +93,53 @@ public class PosUtil {
 			case 4:
 				pos = 2 + page * sum;
 				break;
+			case 5:
+				pos = 6 + page * sum;
+				break;
 			case 6:
 				pos = 3 + page * sum;
 				break;
-			case 5:
+		}
+		return pos;
+	}
+	/**
+	 * 2行5列的下标调整
+	 * @param position
+	 * @param sum
+	 * @return
+	 */
+	public static int adjustPosition25(int position, @IntRange(from = 1) int sum) {
+		int pos = -1;
+		int page = position / sum;
+		Logd(TAG, "adjustPosition24,下标：" + position + "，每页的总个数：" + sum);
+		switch (position % sum) {
+			case 0:
+			case 9:
+				pos = position;
+				break;
+			case 1:
+				pos = 5 + page * sum;
+				break;
+			case 2:
+				pos = 1 + page * sum;
+				break;
+			case 3:
 				pos = 6 + page * sum;
+				break;
+			case 4:
+				pos = 2 + page * sum;
+				break;
+			case 5:
+				pos = 7 + page * sum;
+				break;
+			case 6:
+				pos = 3 + page * sum;
+				break;
+			case 7:
+				pos = 8 + page * sum;
+				break;
+			case 8:
+				pos = 4 + page * sum;
 				break;
 		}
 		return pos;

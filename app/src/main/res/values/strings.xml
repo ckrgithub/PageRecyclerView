@@ -3,9 +3,9 @@
 
     <string-array name="tab_title">
         <item>无限轮播</item>
-        <item>水平网格</item>
-        <item>水平网格2</item>
-        <item>竖直线性</item>
-        <item>竖直网格</item>
+        <!--<item>水平网格</item>-->
+        <!--<item>水平网格2</item>-->
+        <!--<item>竖直线性</item>-->
+        <!--<item>竖直网格</item>-->
     </string-array>
 </resources>

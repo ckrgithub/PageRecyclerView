@@ -1,10 +1,13 @@
 package com.ckr.pageview.adapter;
 
 import android.content.Context;
+import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ckr.pageview.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,7 @@ import static com.ckr.pageview.utils.PageLog.Logd;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition22;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition23;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition24;
+import static com.ckr.pageview.utils.PosUtil.adjustPosition25;
 
 
 /**
@@ -38,12 +42,12 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		mTargetData = new ArrayList<>();
 	}
 
-	public BasePageAdapter setRow(@PageRow int mRow) {
+	public BasePageAdapter setRow(@IntRange(from = 1) int mRow) {
 		this.mRow = mRow;
 		return this;
 	}
 
-	public BasePageAdapter setColumn(@PageColumn int mColumn) {
+	public BasePageAdapter setColumn(@IntRange(from = 1) int mColumn) {
 		this.mColumn = mColumn;
 		return this;
 	}
@@ -172,7 +176,15 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (mIsLooping) {
 			index = position % mTargetData.size();
 		}
-		convert(holder, index, mTargetData.get(index));
+		if (BuildConfig.VERSION_CODE >= 10) {
+			int adjustedPosition = position;
+			if (mOrientation == OnPageDataListener.GRID) {
+				adjustedPosition = getAdjustedPosition(position, mRow * mColumn);
+			}
+			convert(holder, index, mTargetData.get(index),adjustedPosition,mTargetData.get(adjustedPosition));
+		} else {
+			convert(holder, index, mTargetData.get(index));
+		}
 	}
 
 	@Override
@@ -192,6 +204,9 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 					break;
 				case OnPageDataListener.FOUR:
 					index = adjustPosition24(position, sum);
+					break;
+				case OnPageDataListener.FIVE:
+					index = adjustPosition25(position, sum);
 					break;
 				default:
 					break;
@@ -241,6 +256,9 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	protected abstract ViewHolder getViewHolder(View itemView, int viewType);
 
-	protected abstract void convert(ViewHolder holder, int position, T t);
+	@Deprecated
+	protected void convert(ViewHolder holder, int position, T t){}
+
+	protected abstract void convert(ViewHolder holder, int originalPos, T originalItem, int adjustedPos, T adjustedItem);
 
 }
