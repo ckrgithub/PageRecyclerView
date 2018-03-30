@@ -22,12 +22,12 @@ public interface OnPageDataListener<T> {
 	int GRID = 1;
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({ONE, TWO, THREE, FOUR,FIVE})
+	@IntDef({ONE, TWO})
 	@interface PageRow {
 	}
 
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({ONE, TWO})
+	@IntDef({ONE, TWO, THREE, FOUR, FIVE})
 	@interface PageColumn {
 	}
 
@@ -35,6 +35,7 @@ public interface OnPageDataListener<T> {
 	@IntDef({HORIZONTAL, VERTICAL})
 	@interface LayoutOrientation {
 	}
+
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({LINEAR, GRID})
 	@interface LayoutFlag {
