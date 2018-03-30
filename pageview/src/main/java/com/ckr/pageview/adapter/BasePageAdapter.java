@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ckr.pageview.BuildConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,21 +174,21 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (mIsLooping) {
 			index = position % mTargetData.size();
 		}
-		Logd(TAG, "onBindViewHolder: VERSION_CODE:" + BuildConfig.VERSION_CODE);
-		if (BuildConfig.VERSION_CODE >= 10) {
-			int adjustedPosition = index;
-			if (mLayoutFlag == OnPageDataListener.GRID) {
-				adjustedPosition = getAdjustedPosition(index, mRow * mColumn);
-			}
-			convert(holder, index, mTargetData.get(index),adjustedPosition,mTargetData.get(adjustedPosition));
-		} else {
-			convert(holder, index, mTargetData.get(index));
-		}
+		int adjustedPosition = adjustPosition(index);
+		convert(holder, index, mTargetData.get(index), adjustedPosition, mTargetData.get(adjustedPosition));
 	}
 
 	@Override
 	public int getItemCount() {
 		return mTargetData.size();
+	}
+
+	protected int adjustPosition(int index) {
+		int pos=index;
+		if (mLayoutFlag == OnPageDataListener.GRID && mOrientation == OnPageDataListener.LINEAR) {
+			pos = getAdjustedPosition(index, mRow * mColumn);
+		}
+		return pos;
 	}
 
 	protected int getAdjustedPosition(int position, int sum) {
@@ -256,9 +254,6 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	protected abstract int getLayoutId(int viewType);
 
 	protected abstract ViewHolder getViewHolder(View itemView, int viewType);
-
-	@Deprecated
-	protected void convert(ViewHolder holder, int position, T t){}
 
 	protected abstract void convert(ViewHolder holder, int originalPos, T originalItem, int adjustedPos, T adjustedItem);
 
