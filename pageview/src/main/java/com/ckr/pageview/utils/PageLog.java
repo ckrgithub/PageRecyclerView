@@ -2,8 +2,6 @@ package com.ckr.pageview.utils;
 
 import android.util.Log;
 
-import com.ckr.pageview.BuildConfig;
-
 /**
  * Created by PC大佬 on 2018/1/26.
  */
@@ -21,7 +19,7 @@ public class PageLog {
 	}
 
 	public static void Logd(String tag, String msg) {
-		if (BuildConfig.isDebug || isDebug) {
+		if (isDebug) {
 			Log.d(TAG, tag + "--->" + msg);
 		}
 	}
@@ -31,7 +29,7 @@ public class PageLog {
 	}
 
 	public static void Logi(String tag, String msg) {
-		if (BuildConfig.isDebug || isDebug) {
+		if (isDebug) {
 			Log.i(TAG, tag + "--->" + msg);
 		}
 	}
@@ -41,7 +39,7 @@ public class PageLog {
 	}
 
 	public static void Logw(String tag, String msg) {
-		if (BuildConfig.isDebug || isDebug) {
+		if (isDebug) {
 			Log.w(TAG, tag + "--->" + msg);
 		}
 	}
@@ -51,7 +49,7 @@ public class PageLog {
 	}
 
 	public static void Loge(String tag, String msg) {
-		if (BuildConfig.isDebug || isDebug) {
+		if (isDebug) {
 			Log.e(TAG, tag + "--->" + msg);
 		}
 	}

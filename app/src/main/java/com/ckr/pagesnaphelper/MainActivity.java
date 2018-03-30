@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ckr.pagesnaphelper.view.MainFragment;
+import com.ckr.pageview.utils.PageLog;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PageLog.debug();
         unbinder = ButterKnife.bind(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
