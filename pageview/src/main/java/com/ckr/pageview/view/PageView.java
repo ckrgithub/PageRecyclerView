@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -38,9 +39,6 @@ import static com.ckr.pageview.utils.PageLog.Loge;
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private static final int INTERVAL = 3000;
-	private static final int BELOW = 0;
-	private static final int OVERLAP = 1;
-	private static final int LEFT = 2;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -53,13 +51,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean hideIndicator = false;
 	private int indicatorContainerHeight = 90;
 	private int indicatorContainerWidth = 90;
-	private int indicatorContainerStyle = BELOW;
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
 	private int interval;
+	private boolean overlapStyle = false;
 	private int indicatorGroupAlignment = 0x11;
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
@@ -117,7 +115,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		hideIndicator = typedArray.getBoolean(R.styleable.PageView_hide_indicator, hideIndicator);
 		indicatorContainerHeight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_height, indicatorContainerHeight);
 		indicatorContainerWidth = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_width, indicatorContainerWidth);
-		indicatorContainerStyle = typedArray.getInteger(R.styleable.PageView_indicator_container_style, indicatorContainerStyle);
+		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
@@ -141,6 +139,17 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 		//<editor-fold desc="init recyclerView">
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
+		FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) recyclerView.getLayoutParams();
+		if (orientation == OnPageDataListener.HORIZONTAL) {
+			if (!overlapStyle) {
+				params.bottomMargin = indicatorContainerHeight;
+			}
+		} else if (orientation == OnPageDataListener.VERTICAL) {
+			if (!overlapStyle) {
+				params.leftMargin = indicatorContainerWidth;
+			}
+		}
+		recyclerView.setLayoutParams(params);
 		recyclerView.setOrientation(orientation);
 		recyclerView.setLooping(isLooping);
 		recyclerView.addOnPageChangeListener(this);
@@ -158,23 +167,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			indicatorContainer.setVisibility(GONE);
 		} else {
 			//<editor-fold desc="init indicatorContainer"
-			LayoutParams layoutParams = (LayoutParams) indicatorContainer.getLayoutParams();
-			if (orientation == OnPageDataListener.HORIZONTAL) {
-				layoutParams.height = indicatorContainerHeight;
-				if (indicatorContainerStyle == BELOW) {
-					layoutParams.addRule(RelativeLayout.BELOW, recyclerView.getId());
-				} else if (indicatorContainerStyle == OVERLAP) {
-					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-				}
-			} else if (orientation == OnPageDataListener.VERTICAL) {
-				layoutParams.width = indicatorContainerWidth;
-				if (indicatorContainerStyle == LEFT) {
-					layoutParams.addRule(RelativeLayout.LEFT_OF, recyclerView.getId());
-				} else if (indicatorContainerStyle == OVERLAP) {
-					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-				}
-			}
-			indicatorContainer.setLayoutParams(layoutParams);
 			if (indicatorContainerBackground != null) {
 				if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
 					indicatorContainer.setBackground(indicatorContainerBackground);
@@ -187,7 +179,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			layoutIndicatorGroup(inflate);
 			//<editor-fold desc="init moveIndicator"
 			moveIndicator = inflate.findViewById(R.id.moveIndicator);
-			layoutParams = (LayoutParams) moveIndicator.getLayoutParams();
+			LayoutParams layoutParams = (LayoutParams) moveIndicator.getLayoutParams();
 			layoutParams.width = selectedIndicatorDiameter;
 			layoutParams.height = selectedIndicatorDiameter;
 			moveIndicator.setLayoutParams(layoutParams);

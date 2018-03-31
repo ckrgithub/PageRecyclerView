@@ -13,15 +13,11 @@
         <attr name="indicator_container_width" format="dimension"/>
         <attr name="indicator_container_background" format="color|reference"/>
         <attr name="page_background" format="color|reference"/>
-        <attr name="indicator_container_style" format="enum">
-            <enum name="below" value="0"/>
-            <enum name="overlap" value="1"/>
-            <enum name="left" value="2"/>
-        </attr>
 
         <attr name="hide_indicator" format="boolean"/>
         <attr name="endless_loop" format="boolean"/>
         <attr name="loop_interval" format="integer"/>
+        <attr name="overlap_layout" format="boolean"/>
 
         <attr name="indicator_group_marginLeft" format="dimension"/>
         <attr name="indicator_group_marginTop" format="dimension"/>

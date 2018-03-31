@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,12 +9,13 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
+        android:layout_gravity="center_horizontal"/>
 
     <RelativeLayout
         android:id="@+id/indicatorContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -38,4 +39,4 @@
     </RelativeLayout>
 
 
-</RelativeLayout>
+</FrameLayout>
