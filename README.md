@@ -85,6 +85,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ## Version Tracking
 * **1.1.0-release**
   * add: the indicator container alignment, margin Settings, background Settings, and overlap layout styles
+  * other: optimize the code
  
 * **1.0.9-release**
   * repair: When the carousel is broadcast, the data source changes to cause confusion in the indicator point.
