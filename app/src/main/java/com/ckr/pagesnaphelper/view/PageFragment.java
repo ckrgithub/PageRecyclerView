@@ -30,7 +30,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	PageView pageView;
 	private MainAdapter mainAdapter;
 	private ArrayList<Item> items;
-	private final static int CAPACITY = 22;
+	private final static int CAPACITY = 15;
 	private int layoutId;
 	private int itemLayoutId;
 	private int startCount = 100;
