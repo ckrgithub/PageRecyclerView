@@ -14,8 +14,7 @@
     <RelativeLayout
         android:id="@+id/indicatorContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recyclerView">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"

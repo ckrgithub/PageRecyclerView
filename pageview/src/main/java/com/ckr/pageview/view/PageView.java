@@ -32,10 +32,14 @@ import static com.ckr.pageview.utils.PageLog.Loge;
 
 /**
  * Created by PC大佬 on 2018/1/16.
+ * <p>
+ * this is a puzzle here ,line 209
  */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private static final int INTERVAL = 3000;
+	private static final int BELOW = 0;
+	private static final int OVERLAP = 1;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -48,13 +52,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean hideIndicator = false;
 	private int indicatorContainerHeight = 90;
 	private int indicatorContainerWidth = 90;
-	private int indicatorGroupAlignment = 0x11;
+	private int indicatorContainerStyle = BELOW;
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
 	private int interval;
+	private int indicatorGroupAlignment = 0x11;
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
 	private int indicatorGroupMarginRight;
@@ -95,10 +100,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		unselectedIndicatorColor = typedArray.getColor(R.styleable.PageView_unselected_indicator_color, unselectedIndicatorColor);
 		selectedIndicatorDiameter = typedArray.getDimensionPixelSize(R.styleable.PageView_selected_indicator_diameter, selectedIndicatorDiameter);
 		unselectedIndicatorDiameter = typedArray.getDimensionPixelSize(R.styleable.PageView_unselected_indicator_diameter, unselectedIndicatorDiameter);
-		indicatorContainerHeight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_height, indicatorContainerHeight);
-		indicatorContainerWidth = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_width, indicatorContainerWidth);
 		indicatorMargin = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_margin, indicatorMargin);
-		hideIndicator = typedArray.getBoolean(R.styleable.PageView_hide_indicator, hideIndicator);
 		if (typedArray.hasValue(R.styleable.PageView_selected_indicator_drawable)) {
 			selectedIndicatorDrawable = typedArray.getDrawable(R.styleable.PageView_selected_indicator_drawable);
 		}
@@ -111,13 +113,17 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (typedArray.hasValue(R.styleable.PageView_indicator_container_background)) {
 			indicatorContainerBackground = typedArray.getDrawable(R.styleable.PageView_indicator_container_background);
 		}
-		indicatorGroupAlignment = typedArray.getInteger(R.styleable.PageView_indicator_group_alignment, indicatorGroupAlignment);
+		hideIndicator = typedArray.getBoolean(R.styleable.PageView_hide_indicator, hideIndicator);
+		indicatorContainerHeight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_height, indicatorContainerHeight);
+		indicatorContainerWidth = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_width, indicatorContainerWidth);
+		indicatorContainerStyle = typedArray.getInteger(R.styleable.PageView_indicator_container_style, indicatorContainerStyle);
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
+		indicatorGroupAlignment = typedArray.getInteger(R.styleable.PageView_indicator_group_alignment, indicatorGroupAlignment);
 		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
 		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, 0);
 		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
@@ -156,6 +162,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				layoutParams.height = indicatorContainerHeight;
 			} else if (orientation == OnPageDataListener.VERTICAL) {
 				layoutParams.width = indicatorContainerWidth;
+			}
+			if (indicatorContainerStyle == BELOW) {
+				layoutParams.addRule(RelativeLayout.BELOW, recyclerView.getId());
+			}else if (indicatorContainerStyle == OVERLAP) {
+				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 			}
 			indicatorContainer.setLayoutParams(layoutParams);
 			if (indicatorContainerBackground != null) {
@@ -204,6 +215,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				layoutParams.addRule(CENTER_HORIZONTAL);
 				break;
 			case Gravity.RIGHT:
+//				layoutParams.addRule(ALIGN_PARENT_RIGHT);.tell me why it doesn't work ?
 				layoutParams.addRule(ALIGN_PARENT_END);
 			case Gravity.LEFT:
 			default:
