@@ -120,8 +120,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
 		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, 0);
-		indicatorGroupMarginRight =typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
-		indicatorGroupMarginBottom =typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, 0);
+		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
+		indicatorGroupMarginBottom = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, 0);
 		typedArray.recycle();
 	}
 
@@ -194,7 +194,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		indicatorGroup = (LinearLayout) inflate.findViewById(R.id.indicatorGroup);
 		View view = inflate.findViewById(R.id.relativeLayout);
 		LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-		layoutParams.setMargins(indicatorGroupMarginLeft,indicatorGroupMarginTop,indicatorGroupMarginRight,indicatorGroupMarginBottom);
+		layoutParams.setMargins(indicatorGroupMarginLeft, indicatorGroupMarginTop, indicatorGroupMarginRight, indicatorGroupMarginBottom);
 		final int verticalGravity = indicatorGroupAlignment & Gravity.VERTICAL_GRAVITY_MASK;
 		int horizontalGravity = indicatorGroupAlignment & Gravity.HORIZONTAL_GRAVITY_MASK;
 		Logd(TAG, "initView: indicatorGroupAlignment:" + indicatorGroupAlignment
