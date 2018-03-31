@@ -29,17 +29,17 @@ PageRecyclerView实现翻页功能及无限轮播。
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:page_background="#80000000"
-        app:endless_loop="true"
-        app:loop_interval="3000"
         app:hide_indicator="false"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
-        app:indicator_group_width="@dimen/viewpager_indicator_group_height"
+        app:indicator_container_background="#20000000"
+        app:indicator_container_height="@dimen/viewpager_indicator_container_height"
+        app:indicator_group_alignment="right|centerVertical"
+        app:indicator_group_marginBottom="10dp"
+        app:indicator_group_marginRight="10dp"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
         app:orientation="horizontal"
-        app:page_column="four"
-        app:page_row="two"
+        app:page_column="4"
+        app:page_row="2"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
@@ -53,8 +53,8 @@ PageRecyclerView实现翻页功能及无限轮播。
 | endless_loop                  | 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
 | loop_interval                 | 轮询时间间隔							 | int			| 3000			|
 | hide_indicator                | 是否隐藏指示器  						 | boolean 		| false		 	|
-| indicator_group_heigt         | 指示器父容器的高度 						 | int     		| 90			|
-| indicator_group_width         | 指示器父容器的高度 						 | int     		| 90			|
+| indicator_contianer_heigt     | 指示器父容器的高度 					 	 | int     		| 90			|
+| indicator_contianer_width     | 指示器父容器的高度 					 	 | int     		| 90			|
 | indicator_margin				| 指示器间的间距  						 | int      	| 15            |
 | layout_flag					| 标记线性布局或网格布局  					 | int      		| 0(线性)     	|
 | orientation					| 布局方向  								 | int      	| 0(horizontal) |

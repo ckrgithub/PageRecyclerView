@@ -29,17 +29,17 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:page_background="#80000000"
-        app:endless_loop="true"
-        app:loop_interval="3000"
         app:hide_indicator="false"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
-        app:indicator_group_width="@dimen/viewpager_indicator_group_height"
+        app:indicator_container_background="#20000000"
+        app:indicator_container_height="@dimen/viewpager_indicator_container_height"
+        app:indicator_group_alignment="right|centerVertical"
+        app:indicator_group_marginBottom="10dp"
+        app:indicator_group_marginRight="10dp"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
         app:orientation="horizontal"
-        app:page_column="four"
-        app:page_row="two"
+        app:page_column="4"
+        app:page_row="2"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
@@ -53,8 +53,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | endless_loop                  | start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
 | loop_interval                 | loop interval								  							     | int		    | 3000		        |
 | hide_indicator                | hide indicator  														     | boolean      | false	            |
-| indicator_group_heigt         | indicator parent container height(valid in the vertical orientation) 	     | int          | 90		        |
-| indicator_group_width         | indicator parent container width(valid in the horizontal orientation)      | int          | 90		            |
+| indicator_container_heigt     | indicator parent container height(valid in the vertical orientation) 	 	 | int          | 90		        |
+| indicator_contianer_width     | indicator parent container width(valid in the horizontal orientation)  	 | int          | 90		        |
 | indicator_margin				| indicator spacing  													     | int          | 15                |
 | layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
 | orientation					| layout orientation  													     | int          | 0(horizontal)     |
