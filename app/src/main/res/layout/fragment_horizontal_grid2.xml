@@ -13,7 +13,7 @@
         android:layout_gravity="center_horizontal"
         app:endless_loop="true"
         app:hide_indicator="false"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
+        app:indicator_container_height="@dimen/viewpager_indicator_container_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
         app:orientation="horizontal"

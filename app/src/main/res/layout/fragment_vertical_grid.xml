@@ -17,7 +17,7 @@
         app:indicator_group_marginRight="10dp"
         app:indicator_group_marginLeft="10dp"
         app:indicator_container_background="#20585757"
-        app:indicator_group_height="@dimen/viewpager_indicator_group_height"
+        app:indicator_container_height="@dimen/viewpager_indicator_container_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
         app:orientation="vertical"
