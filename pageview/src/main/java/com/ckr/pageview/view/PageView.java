@@ -1,5 +1,6 @@
 package com.ckr.pageview.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -14,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,7 +49,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean hideIndicator = false;
 	private int indicatorGroupHeight = 90;
 	private int indicatorGroupWidth = 90;
-	private int indicatorGroupAlignment = RelativeLayout.CENTER_IN_PARENT;
+	private int indicatorGroupAlignment = 0x05;
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
@@ -123,6 +125,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			inflate = View.inflate(getContext(), R.layout.vertical_page_view, null);
 		}
+		//<editor-fold desc="init recyclerView">
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		recyclerView.setOrientation(orientation);
 		recyclerView.setLooping(isLooping);
@@ -135,11 +138,19 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			}
 			pageBackground = null;
 		}
-
+		//</editor-fold>
 		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
 		if (hideIndicator) {
 			indicatorContainer.setVisibility(GONE);
 		} else {
+			//<editor-fold desc="init indicatorContainer"
+			LayoutParams layoutParams = (LayoutParams) indicatorContainer.getLayoutParams();
+			if (orientation == OnPageDataListener.HORIZONTAL) {
+				layoutParams.height = indicatorGroupHeight;
+			} else if (orientation == OnPageDataListener.VERTICAL) {
+				layoutParams.width = indicatorGroupWidth;
+			}
+			indicatorContainer.setLayoutParams(layoutParams);
 			if (indicatorContainerBackground != null) {
 				if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
 					indicatorContainer.setBackground(indicatorContainerBackground);
@@ -148,16 +159,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				}
 				indicatorContainerBackground = null;
 			}
-			View view = inflate.findViewById(R.id.relativeLayout);
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-			if (orientation == OnPageDataListener.HORIZONTAL) {
-				layoutParams.height = indicatorGroupHeight;
-			} else if (orientation == OnPageDataListener.VERTICAL) {
-				layoutParams.width = indicatorGroupWidth;
-			}
-			Logd(TAG, "initView: indicatorGroupAlignment:"+indicatorGroupAlignment);
-//			layoutParams.addRule();
-			view.setLayoutParams(layoutParams);
+			//</editor-fold>
+			layoutIndicatorGroup(inflate);
 			indicatorGroup = (LinearLayout) inflate.findViewById(R.id.indicatorGroup);
 			moveIndicator = inflate.findViewById(R.id.moveIndicator);
 			layoutParams = (LayoutParams) moveIndicator.getLayoutParams();
@@ -178,6 +181,42 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 
 		addView(inflate);
+	}
+
+	@TargetApi(17)
+	private void layoutIndicatorGroup(View inflate) {
+		View view = inflate.findViewById(R.id.relativeLayout);
+		LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+		final int layoutDirection = getLayoutDirection();
+		final int absoluteGravity = Gravity.getAbsoluteGravity(indicatorGroupAlignment, layoutDirection);
+		final int verticalGravity = indicatorGroupAlignment & Gravity.VERTICAL_GRAVITY_MASK;
+		int horizontalGravity = absoluteGravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+		Logd(TAG, "initView: indicatorGroupAlignment:" + indicatorGroupAlignment
+				+ ",verticalGravity:" + verticalGravity + ",horizontalGravity:" + horizontalGravity);
+		switch (horizontalGravity) {
+			case Gravity.CENTER_HORIZONTAL:
+				layoutParams.addRule(CENTER_HORIZONTAL);
+				break;
+			case Gravity.RIGHT:
+				layoutParams.addRule(ALIGN_PARENT_END);
+			case Gravity.LEFT:
+			default:
+				layoutParams.addRule(ALIGN_PARENT_LEFT);
+				break;
+		}
+		switch (verticalGravity) {
+			case Gravity.CENTER_VERTICAL:
+				layoutParams.addRule(CENTER_VERTICAL);
+				break;
+			case Gravity.BOTTOM:
+				layoutParams.addRule(ALIGN_PARENT_BOTTOM);
+				break;
+			case Gravity.TOP:
+			default:
+				layoutParams.addRule(ALIGN_PARENT_TOP);
+				break;
+		}
+		view.setLayoutParams(layoutParams);
 	}
 
 	private void drawViewBackground(@NonNull View view, @ColorInt int color, float r0, float r1,

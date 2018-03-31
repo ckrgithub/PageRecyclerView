@@ -12,6 +12,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         app:hide_indicator="false"
+        app:indicator_group_alignment="center"
+        app:indicator_container_background="#20585757"
         app:indicator_group_height="@dimen/viewpager_indicator_group_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
