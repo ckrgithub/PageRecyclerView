@@ -167,6 +167,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			indicatorContainer.setVisibility(GONE);
 		} else {
 			//<editor-fold desc="init indicatorContainer"
+			params = (FrameLayout.LayoutParams) indicatorContainer.getLayoutParams();
+			if (orientation == OnPageDataListener.HORIZONTAL) {
+				params.height = indicatorContainerHeight;
+			} else if (orientation == OnPageDataListener.VERTICAL) {
+				params.width = indicatorContainerWidth;
+			}
+			indicatorContainer.setLayoutParams(params);
 			if (indicatorContainerBackground != null) {
 				if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
 					indicatorContainer.setBackground(indicatorContainerBackground);
