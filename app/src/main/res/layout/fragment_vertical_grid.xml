@@ -8,12 +8,13 @@
 
     <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         app:hide_indicator="false"
-        app:indicator_container_background="#20585757"
+        app:indicator_container_background="#40000000"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
+        app:indicator_container_style="overlap"
         app:indicator_group_alignment="bottom"
         app:indicator_group_marginBottom="10dp"
         app:indicator_group_marginLeft="10dp"

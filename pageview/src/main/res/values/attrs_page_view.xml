@@ -16,6 +16,7 @@
         <attr name="indicator_container_style" format="enum">
             <enum name="below" value="0"/>
             <enum name="overlap" value="1"/>
+            <enum name="left" value="2"/>
         </attr>
 
         <attr name="hide_indicator" format="boolean"/>

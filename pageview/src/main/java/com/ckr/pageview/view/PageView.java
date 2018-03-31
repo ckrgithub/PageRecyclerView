@@ -40,6 +40,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private static final int INTERVAL = 3000;
 	private static final int BELOW = 0;
 	private static final int OVERLAP = 1;
+	private static final int LEFT = 2;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -160,13 +161,18 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			LayoutParams layoutParams = (LayoutParams) indicatorContainer.getLayoutParams();
 			if (orientation == OnPageDataListener.HORIZONTAL) {
 				layoutParams.height = indicatorContainerHeight;
+				if (indicatorContainerStyle == BELOW) {
+					layoutParams.addRule(RelativeLayout.BELOW, recyclerView.getId());
+				} else if (indicatorContainerStyle == OVERLAP) {
+					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+				}
 			} else if (orientation == OnPageDataListener.VERTICAL) {
 				layoutParams.width = indicatorContainerWidth;
-			}
-			if (indicatorContainerStyle == BELOW) {
-				layoutParams.addRule(RelativeLayout.BELOW, recyclerView.getId());
-			}else if (indicatorContainerStyle == OVERLAP) {
-				layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+				if (indicatorContainerStyle == LEFT) {
+					layoutParams.addRule(RelativeLayout.LEFT_OF, recyclerView.getId());
+				} else if (indicatorContainerStyle == OVERLAP) {
+					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				}
 			}
 			indicatorContainer.setLayoutParams(layoutParams);
 			if (indicatorContainerBackground != null) {
