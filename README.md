@@ -17,8 +17,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.0.9'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.0.9'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.1.0'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.1.0'//gradle plugin 3.0 below used
 	}
 ```
 
@@ -28,9 +28,9 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
      <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
         app:hide_indicator="false"
-        app:indicator_container_background="#20000000"
+        app:indicator_container_background="#40000000"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
         app:indicator_group_alignment="right|centerVertical"
         app:indicator_group_marginBottom="10dp"
@@ -38,6 +38,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:layout_flag="grid"
         app:orientation="horizontal"
+        app:overlap_layout="true"
         app:page_column="4"
         app:page_row="2"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
@@ -53,11 +54,18 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | endless_loop                  | start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
 | loop_interval                 | loop interval								  							     | int		    | 3000		        |
 | hide_indicator                | hide indicator  														     | boolean      | false	            |
-| indicator_container_heigt     | indicator parent container height(valid in the vertical orientation) 	 	 | int          | 90		        |
+| indicator_container_background| the background of indicator parent container 	 	 						 | drawable     | null		        |
+| indicator_container_height    | indicator parent container height(valid in the vertical orientation) 	 	 | int          | 90		        |
 | indicator_contianer_width     | indicator parent container width(valid in the horizontal orientation)  	 | int          | 90		        |
+| indicator_group_alignment     | the alignment of indicator group(eg: left,top,center)  	 				 | int          | 0x11(center)    	|
+| indicator_group_marginLeft    | the marginLeft of indicator group  	 	 								 | int          | 0 		        |
+| indicator_group_marginTop     | the marginTop of indicator group  	 	 								 	 | int          | 0 		        |
+| indicator_group_marginRight   | the marginRight of indicator group  	 	 								 | int          | 0 		        |
+| indicator_group_marginBottom  | the marginBottom of indicator group  	 	 								 | int          | 0 		        |
 | indicator_margin				| indicator spacing  													     | int          | 15                |
 | layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
 | orientation					| layout orientation  													     | int          | 0(horizontal)     |
+| overlap_layout				| Whether the indicator overlaps the page 									 | boolean      | false     		|
 | page_column					| the number of columns per page  										     | int          | 1		            |
 | page_row						| the number of rows per page  											     | int          | 1		            |
 | selected_indicator_color      | indicator color for the current page  									     | int          | Color.RED         |
@@ -75,6 +83,9 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
     pageView.updateAll(items);
 ```
 ## Version Tracking
+* **1.1.0-release**
+  * add: the indicator container alignment, margin Settings, background Settings, and overlap layout styles
+ 
 * **1.0.9-release**
   * repair: When the carousel is broadcast, the data source changes to cause confusion in the indicator point.
 
