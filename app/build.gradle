@@ -40,6 +40,6 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportVersion"
     compile 'com.jakewharton:butterknife:8.8.1'
     apt 'com.jakewharton:butterknife-compiler:8.8.1'
-//    compile project(':pageview')
-        compile 'ckrjfrog.Page:PageView:1.1.0'
+    compile project(':pageview')
+//        compile 'ckrjfrog.Page:PageView:1.1.0'
 }

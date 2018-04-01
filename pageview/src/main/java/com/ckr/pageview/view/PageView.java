@@ -57,7 +57,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
 	private int interval;
-	private boolean overlapStyle = false;
+	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private int indicatorGroupAlignment = 0x11;
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
@@ -222,9 +222,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			case Gravity.RIGHT:
 //				layoutParams.addRule(ALIGN_PARENT_RIGHT);.tell me why it doesn't work ?
 				layoutParams.addRule(ALIGN_PARENT_END);
+				break;
 			case Gravity.LEFT:
 			default:
-				layoutParams.addRule(ALIGN_PARENT_LEFT);
+//				layoutParams.addRule(ALIGN_PARENT_LEFT);
+				layoutParams.addRule(ALIGN_PARENT_START);
 				break;
 		}
 		switch (verticalGravity) {
