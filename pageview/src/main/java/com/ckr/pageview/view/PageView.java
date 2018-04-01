@@ -149,7 +149,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			if (!overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
-			recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
+			if (isLooping&&pageRow*pageColumn==1) {
+				recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
+			}
 		} else if (orientation == OnPageDataListener.VERTICAL) {
 			if (!overlapStyle) {
 				params.leftMargin = indicatorContainerWidth;

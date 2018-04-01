@@ -10,6 +10,8 @@
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        app:pagePadding="@dimen/page_padding"
+        app:clipToPadding="false"
         app:hide_indicator="false"
         app:indicator_container_background="#40000000"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
