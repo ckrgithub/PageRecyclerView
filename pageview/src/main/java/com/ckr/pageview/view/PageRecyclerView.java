@@ -30,13 +30,13 @@ public class PageRecyclerView extends RecyclerView {
 	private static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
 	private static final String ARGS_PAGE = "mCurrentPage";
 	private static final String ARGS_SUPER = "super";
-	private static final String ARGS_WIDTH = "mWidth";
-	private static final String ARGS_HEIGHT = "mHeight";
+	private static final String ARGS_WIDTH = "mScrollWidth";
+	private static final String ARGS_HEIGHT = "mScrollHeight";
 	private static final int MAX_SETTLE_DURATION = 600; // ms
 	private static final int DEFAULT_VELOCITY = 4000;
 	private int mVelocity = DEFAULT_VELOCITY;
-	private int mWidth;
-	private int mHeight;
+	private int mScrollWidth;
+	private int mScrollHeight;
 	private int mOrientation;
 	private Method smoothScrollBy = null;
 	private Field mViewFlingerField = null;
@@ -80,15 +80,20 @@ public class PageRecyclerView extends RecyclerView {
 			@Override
 			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 				removeOnLayoutChangeListener(this);
-				mWidth = getWidth();
-				mHeight = getHeight();
-				Logd(TAG, "onLayoutChange: mWidth:" + mWidth + ",mHeight:" + mHeight
+				int paddingLeft = getPaddingLeft();
+				int paddingRight = getPaddingRight();
+				int paddingTop = getPaddingTop();
+				int paddingBottom = getPaddingBottom();
+				Logd(TAG, "onLayoutChange: paddingLeft:" + paddingLeft + ",paddingRight:" + paddingRight + ",paddingTop:" + paddingTop + ",paddingBottom:" + paddingBottom);
+				mScrollWidth = getWidth() - paddingLeft - paddingRight;
+				mScrollHeight = getHeight() - paddingTop - paddingBottom;
+				Logd(TAG, "onLayoutChange: mScrollWidth:" + mScrollWidth + ",mScrollHeight:" + mScrollHeight
 						+ ",mCurrentPage:" + mCurrentPage + ",mFirstLayout:" + mFirstLayout);
 				if (mFirstLayout) {
 					if (mOrientation == OnPageDataListener.HORIZONTAL) {
-						mScrollOffset = mCurrentPage * mWidth;
+						mScrollOffset = mCurrentPage * mScrollWidth;
 					} else {
-						mScrollOffset = mCurrentPage * mHeight;
+						mScrollOffset = mCurrentPage * mScrollHeight;
 					}
 					if (mIsLooping) {
 						PageRecyclerView.super.scrollToPosition(mCurrentPage);
@@ -165,12 +170,12 @@ public class PageRecyclerView extends RecyclerView {
 		switch (state) {
 			case SCROLL_STATE_IDLE://0
 				if (mOrientation == OnPageDataListener.HORIZONTAL) {
-					if (mWidth != 0) {
+					if (mScrollWidth != 0) {
 						if (isSliding) {//放手后的滑动
-							int t = mScrollOffset / mWidth;
-							int deltaX = mScrollOffset - t * mWidth;
+							int t = mScrollOffset / mScrollWidth;
+							int deltaX = mScrollOffset - t * mScrollWidth;
 							if (!forwardDirection) {//向前
-								deltaX = deltaX - mWidth;
+								deltaX = deltaX - mScrollWidth;
 							} else {//向后
 							}
 							Logd(TAG, "isSliding=true,deltaX:" + deltaX + ",mScrollOffset:" + mScrollOffset);
@@ -181,12 +186,12 @@ public class PageRecyclerView extends RecyclerView {
 						}
 					}
 				} else {
-					if (mHeight != 0) {
+					if (mScrollHeight != 0) {
 						if (isSliding) {//放手后的滑动
-							int t = mScrollOffset / mHeight;
-							int deltaY = mScrollOffset - t * mHeight;
+							int t = mScrollOffset / mScrollHeight;
+							int deltaY = mScrollOffset - t * mScrollHeight;
 							if (!forwardDirection) {
-								deltaY = deltaY - mHeight;
+								deltaY = deltaY - mScrollHeight;
 							} else {
 							}
 							Logd(TAG, "isSliding=true,deltaY:" + deltaY + ",mScrollOffset:" + mScrollOffset);
@@ -210,16 +215,16 @@ public class PageRecyclerView extends RecyclerView {
 
 	private void moveX(int deltaX) {
 		Logd(TAG, "move,deltaX:" + deltaX + ",mCurrentPage:" + mCurrentPage);
-		if (Math.abs(deltaX) == 0 || Math.abs(deltaX) == mWidth) {
+		if (Math.abs(deltaX) == 0 || Math.abs(deltaX) == mScrollWidth) {
 			return;
 		}
-		int itemWidth = mWidth / 2;
+		int itemWidth = mScrollWidth / 2;
 		if (deltaX >= itemWidth) {//下一页
-			int moveX = mWidth - deltaX;
+			int moveX = mScrollWidth - deltaX;
 			Logd(TAG, "move,deltaX:" + moveX);
 			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
 		} else if (deltaX <= -itemWidth) {//上一页
-			int moveX = -(mWidth + deltaX);
+			int moveX = -(mScrollWidth + deltaX);
 			Logd(TAG, "move,deltaX:" + moveX);
 			smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
 		} else {//回弹
@@ -230,16 +235,16 @@ public class PageRecyclerView extends RecyclerView {
 
 	private void moveY(int deltaY) {
 		Logd(TAG, "move,deltaY:" + deltaY + ",mCurrentPage:" + mCurrentPage);
-		if (Math.abs(deltaY) == 0 || Math.abs(deltaY) == mHeight) {
+		if (Math.abs(deltaY) == 0 || Math.abs(deltaY) == mScrollHeight) {
 			return;
 		}
-		int itemHeight = mHeight / 2;
+		int itemHeight = mScrollHeight / 2;
 		if (deltaY >= itemHeight) {//下一页
-			int moveY = mHeight - deltaY;
+			int moveY = mScrollHeight - deltaY;
 			Logd(TAG, "move,deltaY:" + moveY);
 			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
 		} else if (deltaY <= -itemHeight) {//上一页
-			int moveY = -(mHeight + deltaY);
+			int moveY = -(mScrollHeight + deltaY);
 			Logd(TAG, "move,deltaY:" + moveY);
 			smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
 		} else {//回弹
@@ -261,20 +266,20 @@ public class PageRecyclerView extends RecyclerView {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
-					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mWidth：" + mWidth);
-			if (mWidth == 0) {
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mScrollWidth：" + mScrollWidth);
+			if (mScrollWidth == 0) {
 				return;
 			}
-			if (dx < 0 && mScrollOffset % mWidth != 0) {
-				int targetPage = mScrollOffset / mWidth + 1;
+			if (dx < 0 && mScrollOffset % mScrollWidth != 0) {
+				int targetPage = mScrollOffset / mScrollWidth + 1;
 				mCurrentPage = targetPage;
 			} else {
-				int targetPage = mScrollOffset / mWidth;
+				int targetPage = mScrollOffset / mScrollWidth;
 				mCurrentPage = targetPage;
 			}
 			if (mOnPageChangeListener != null) {
-				int positionOffsetPixels = mScrollOffset % mWidth;
-				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mWidth / (double) mWidth));
+				int positionOffsetPixels = mScrollOffset % mScrollWidth;
+				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollWidth / (double) mScrollWidth));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
@@ -291,20 +296,20 @@ public class PageRecyclerView extends RecyclerView {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
-					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mHeight：" + mHeight);
-			if (mHeight == 0) {
+					",mDragOffset:" + mDragOffset + ",forwardDirection:" + forwardDirection + ",mScrollHeight：" + mScrollHeight);
+			if (mScrollHeight == 0) {
 				return;
 			}
-			if (dy < 0 && mScrollOffset % mHeight != 0) {
-				int targetPage = mScrollOffset / mHeight + 1;
+			if (dy < 0 && mScrollOffset % mScrollHeight != 0) {
+				int targetPage = mScrollOffset / mScrollHeight + 1;
 				mCurrentPage = targetPage;
 			} else {
-				int targetPage = mScrollOffset / mHeight;
+				int targetPage = mScrollOffset / mScrollHeight;
 				mCurrentPage = targetPage;
 			}
 			if (mOnPageChangeListener != null) {
-				int positionOffsetPixels = mScrollOffset % mHeight;
-				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mHeight / (double) mHeight));
+				int positionOffsetPixels = mScrollOffset % mScrollHeight;
+				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollHeight / (double) mScrollHeight));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (positionOffsetPixels == 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
@@ -316,9 +321,9 @@ public class PageRecyclerView extends RecyclerView {
 
 	void scrollToEndPage(@IntRange(from = 0) int page) {
 		if (mOrientation == OnPageDataListener.HORIZONTAL) {
-			mScrollOffset = page * mWidth;
+			mScrollOffset = page * mScrollWidth;
 		} else {
-			mScrollOffset = page * mHeight;
+			mScrollOffset = page * mScrollHeight;
 		}
 		super.scrollToPosition(getAdapter().getItemCount() - 1);
 	}
@@ -336,7 +341,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mFirstLayout) {
 				mCurrentPage = page;
 			} else {
-				int scrollX = page * mWidth;
+				int scrollX = page * mScrollWidth;
 				int moveX = scrollX - mScrollOffset;
 				Loge(TAG, "scrollToPage: moveX:" + moveX);
 				if (smoothScroll) {
@@ -349,7 +354,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mFirstLayout) {
 				mCurrentPage = page;
 			} else {
-				int scrollY = page * mHeight;
+				int scrollY = page * mScrollHeight;
 				int moveY = scrollY - mScrollOffset;
 				Loge(TAG, "scrollToPage: moveY:" + moveY);
 				if (smoothScroll) {
@@ -396,15 +401,15 @@ public class PageRecyclerView extends RecyclerView {
 		Logd(TAG, "snapFromFling,mScrollState:" + this.mScrollState + ",velocityX:" + velocityX + ",velocityY:" + velocityY);
 		if (SCROLL_STATE_DRAGGING == this.mScrollState) {
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
-				int moveX = getMoveDistance(mScrollOffset, mWidth);
+				int moveX = getMoveDistance(mScrollOffset, mScrollWidth);
 				Loge(TAG, "snapFromFling: deltaX:" + moveX + ",mCurrentPage:" + mCurrentPage);
-				if (Math.abs(moveX) != 0 && Math.abs(moveX) != mWidth) {
+				if (Math.abs(moveX) != 0 && Math.abs(moveX) != mScrollWidth) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocityX, moveX));
 				}
 			} else {
-				int moveY = getMoveDistance(mScrollOffset, mHeight);
+				int moveY = getMoveDistance(mScrollOffset, mScrollHeight);
 				Loge(TAG, "snapFromFling: deltaY:" + moveY + ",mCurrentPage:" + mCurrentPage);
-				if (Math.abs(moveY) != 0 && Math.abs(moveY) != mHeight) {
+				if (Math.abs(moveY) != 0 && Math.abs(moveY) != mScrollHeight) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocityY, moveY));
 				}
 			}
@@ -434,7 +439,7 @@ public class PageRecyclerView extends RecyclerView {
 	 * @return
 	 */
 	private int calculateTimeForHorizontalScrolling(int velocity, int dx) {
-		final int width = mWidth;
+		final int width = mScrollWidth;
 		final int halfWidth = width / 2;
 		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dx) / width);
 		final float distance = halfWidth + halfWidth
@@ -453,7 +458,7 @@ public class PageRecyclerView extends RecyclerView {
 	}
 
 	private int calculateTimeForVerticalScrolling(int velocity, int dy) {
-		final int height = mHeight;
+		final int height = mScrollHeight;
 		final int halfHeight = height / 2;
 		final float distanceRatio = Math.min(1f, 1.0f * Math.abs(dy) / height);
 		final float distance = halfHeight + halfHeight
@@ -482,21 +487,21 @@ public class PageRecyclerView extends RecyclerView {
 		Bundle bundle = (Bundle) state;
 		mScrollOffset = bundle.getInt(ARGS_SCROLL_OFFSET, 0);
 		mCurrentPage = bundle.getInt(ARGS_PAGE, 0);
-		mWidth = bundle.getInt(ARGS_WIDTH, 0);
-		mHeight = bundle.getInt(ARGS_HEIGHT, 0);
+		mScrollWidth = bundle.getInt(ARGS_WIDTH, 0);
+		mScrollHeight = bundle.getInt(ARGS_HEIGHT, 0);
 		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);
-		Logd(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
+		Logd(TAG, "onRestoreInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth + ",mScrollHeight:" + mScrollHeight + ",mCurrentPage:" + mCurrentPage);
 		super.onRestoreInstanceState(parcelable);
 	}
 
 	@Override
 	protected Parcelable onSaveInstanceState() {
-		Logd(TAG, "onSaveInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mWidth:" + mWidth + ",mHeight:" + mHeight + ",mCurrentPage:" + mCurrentPage);
+		Logd(TAG, "onSaveInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth + ",mScrollHeight:" + mScrollHeight + ",mCurrentPage:" + mCurrentPage);
 		Bundle bundle = new Bundle();
 		bundle.putInt(ARGS_SCROLL_OFFSET, mScrollOffset);
 		bundle.putInt(ARGS_PAGE, mCurrentPage);
-		bundle.putInt(ARGS_WIDTH, mWidth);
-		bundle.putInt(ARGS_HEIGHT, mHeight);
+		bundle.putInt(ARGS_WIDTH, mScrollWidth);
+		bundle.putInt(ARGS_HEIGHT, mScrollHeight);
 		bundle.putParcelable(ARGS_SUPER, super.onSaveInstanceState());
 		return bundle;
 	}

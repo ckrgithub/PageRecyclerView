@@ -58,6 +58,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean isLooping = false;
 	private int interval;
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
+	private boolean clipToPadding = false;
+	private int pagePadding;
 	private int indicatorGroupAlignment = 0x11;
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
@@ -115,14 +117,17 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		hideIndicator = typedArray.getBoolean(R.styleable.PageView_hide_indicator, hideIndicator);
 		indicatorContainerHeight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_height, indicatorContainerHeight);
 		indicatorContainerWidth = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_container_width, indicatorContainerWidth);
-		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		orientation = typedArray.getInteger(R.styleable.PageView_orientation, orientation);
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
+		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
+		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
+		pagePadding = typedArray.getDimensionPixelSize(R.styleable.PageView_pagePadding, 0);
 		indicatorGroupAlignment = typedArray.getInteger(R.styleable.PageView_indicator_group_alignment, indicatorGroupAlignment);
+		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
 		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
 		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, 0);
 		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
@@ -144,12 +149,15 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			if (!overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
+			recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
 		} else if (orientation == OnPageDataListener.VERTICAL) {
 			if (!overlapStyle) {
 				params.leftMargin = indicatorContainerWidth;
 			}
+//			recyclerView.setPadding(0, pagePadding, 0, pagePadding);
 		}
 		recyclerView.setLayoutParams(params);
+		recyclerView.setClipToPadding(clipToPadding);
 		recyclerView.setOrientation(orientation);
 		recyclerView.setLooping(isLooping);
 		recyclerView.addOnPageChangeListener(this);
