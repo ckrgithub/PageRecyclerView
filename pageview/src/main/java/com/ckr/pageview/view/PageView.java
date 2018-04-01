@@ -34,7 +34,7 @@ import static com.ckr.pageview.utils.PageLog.Loge;
 /**
  * Created by PC大佬 on 2018/1/16.
  * <p>
- * this is a puzzle here ,line 223
+ * this is a puzzle here ,line 233
  */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
