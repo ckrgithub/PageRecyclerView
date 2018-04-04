@@ -51,6 +51,7 @@ public class PageRecyclerView extends RecyclerView {
 	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
 	private int mCurrentPage;
+	private int mLastPage;
 	private boolean mFirstLayout = true;
 	private boolean mIsLooping = false;
 	private boolean isSliding;//是否是滑动
@@ -270,6 +271,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mScrollWidth == 0) {
 				return;
 			}
+			mLastPage=mCurrentPage;
 			if (dx < 0 && mScrollOffset % mScrollWidth != 0) {
 				int targetPage = mScrollOffset / mScrollWidth + 1;
 				mCurrentPage = targetPage;
@@ -281,7 +283,7 @@ public class PageRecyclerView extends RecyclerView {
 				int positionOffsetPixels = mScrollOffset % mScrollWidth;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollWidth / (double) mScrollWidth));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (positionOffsetPixels == 0) {
+				if (mLastPage-mCurrentPage!=0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
@@ -300,6 +302,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mScrollHeight == 0) {
 				return;
 			}
+			mLastPage=mCurrentPage;
 			if (dy < 0 && mScrollOffset % mScrollHeight != 0) {
 				int targetPage = mScrollOffset / mScrollHeight + 1;
 				mCurrentPage = targetPage;
@@ -311,7 +314,7 @@ public class PageRecyclerView extends RecyclerView {
 				int positionOffsetPixels = mScrollOffset % mScrollHeight;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollHeight / (double) mScrollHeight));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (positionOffsetPixels == 0) {
+				if (mLastPage-mCurrentPage!=0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
