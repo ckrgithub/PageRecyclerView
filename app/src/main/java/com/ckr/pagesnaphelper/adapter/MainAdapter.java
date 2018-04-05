@@ -5,13 +5,16 @@ import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ckr.itemanimator.ItemAnimator;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
 import com.ckr.pageview.adapter.BasePageAdapter;
+import com.daimajia.androidanimations.library.YoYo;
 
 
 /**
@@ -72,6 +75,13 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 			holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
 			holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
 			holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
+		}
+		if (mRow * mColumn == 1) {
+			YoYo.with(ItemAnimator.ScaleIn.getAnimator())
+					.duration(2000)
+					.pivot(holder.itemView.getWidth()/2, holder.itemView.getHeight()/2)
+					.interpolate(new LinearInterpolator())
+					.playOn(holder.itemView);
 		}
 	}
 
