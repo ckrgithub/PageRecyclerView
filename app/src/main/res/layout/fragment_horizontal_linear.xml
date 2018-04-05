@@ -17,7 +17,7 @@
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:loop_interval="3000"
-        app:pagePadding="@dimen/page_padding"
+        app:pagePadding="80dp"
         app:page_background="#80000000"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"

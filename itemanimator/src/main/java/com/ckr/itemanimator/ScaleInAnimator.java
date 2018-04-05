@@ -10,11 +10,14 @@ import com.daimajia.androidanimations.library.BaseViewAnimator;
  */
 
 public class ScaleInAnimator extends BaseViewAnimator {
+
+	private static final float scaleRatio=0.8f;
+
 	@Override
 	public void prepare(View target) {
 		getAnimatorAgent().playTogether(
-				ObjectAnimator.ofFloat(target, "scaleX", 0.45f, 1),
-				ObjectAnimator.ofFloat(target, "scaleY", 0.45f, 1)
+				ObjectAnimator.ofFloat(target, "scaleX", scaleRatio,scaleRatio),
+				ObjectAnimator.ofFloat(target, "scaleY", scaleRatio, scaleRatio)
 //				ObjectAnimator.ofFloat(target, "alpha", 0, 1)
 		);
 	}
