@@ -1,1 +1,1 @@
-include ':app', ':pageview'
+include ':app', ':pageview', ':itemanimator'
