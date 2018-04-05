@@ -2,6 +2,7 @@ package com.ckr.pageview.view;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
@@ -152,7 +153,7 @@ public class PageRecyclerView extends RecyclerView {
 
 	private void smoothScrollBy(int dx, int dy, int duration) {
 		try {
-			Loge(TAG, "smoothScrollBy,dx:" + dx + ",dy:" + dy + ",duration" + duration);
+			Loge(TAG, "smoothScrollBy,dx:" + dx + ",dy:" + dy + ",duration:" + duration);
 			smoothScrollBy.invoke(mViewFlingerField.get(this), dx, dy, duration, mInterpolator);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -271,7 +272,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mScrollWidth == 0) {
 				return;
 			}
-			mLastPage=mCurrentPage;
+			mLastPage = mCurrentPage;
 			if (dx < 0 && mScrollOffset % mScrollWidth != 0) {
 				int targetPage = mScrollOffset / mScrollWidth + 1;
 				mCurrentPage = targetPage;
@@ -283,7 +284,7 @@ public class PageRecyclerView extends RecyclerView {
 				int positionOffsetPixels = mScrollOffset % mScrollWidth;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollWidth / (double) mScrollWidth));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (mLastPage-mCurrentPage!=0) {
+				if (mLastPage - mCurrentPage != 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
@@ -302,7 +303,7 @@ public class PageRecyclerView extends RecyclerView {
 			if (mScrollHeight == 0) {
 				return;
 			}
-			mLastPage=mCurrentPage;
+			mLastPage = mCurrentPage;
 			if (dy < 0 && mScrollOffset % mScrollHeight != 0) {
 				int targetPage = mScrollOffset / mScrollHeight + 1;
 				mCurrentPage = targetPage;
@@ -314,7 +315,7 @@ public class PageRecyclerView extends RecyclerView {
 				int positionOffsetPixels = mScrollOffset % mScrollHeight;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollHeight / (double) mScrollHeight));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (mLastPage-mCurrentPage!=0) {
+				if (mLastPage - mCurrentPage != 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
@@ -350,7 +351,11 @@ public class PageRecyclerView extends RecyclerView {
 				if (smoothScroll) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
-					smoothScrollBy(moveX, 0, 0);
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat Android O RecyclerView
+						scrollBy(moveX, 0);
+					} else {
+						smoothScrollBy(moveX, 0, 0);
+					}
 				}
 			}
 		} else {
@@ -363,7 +368,11 @@ public class PageRecyclerView extends RecyclerView {
 				if (smoothScroll) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
 				} else {
-					smoothScrollBy(0, moveY, 0);
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat Android O RecyclerView
+						scrollBy(0, moveY);
+					} else {
+						smoothScrollBy(0, moveY, 0);
+					}
 				}
 			}
 		}

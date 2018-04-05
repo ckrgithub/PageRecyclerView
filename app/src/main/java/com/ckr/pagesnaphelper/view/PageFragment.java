@@ -166,7 +166,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		if (page > pageCount - 1) {
 			page = pageCount - 1;
 		}
-		pageView.setCurrentItem(page);
+		pageView.setCurrentItem(page,false);
 	}
 
 	@Override
