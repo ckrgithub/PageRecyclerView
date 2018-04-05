@@ -17,8 +17,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.1.2'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.1.2'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.1.3'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.1.3'//gradle plugin 3.0 below used
 	}
 ```
 
@@ -36,6 +36,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         app:indicator_group_marginBottom="10dp"
         app:indicator_group_marginRight="10dp"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
+        app:clipToPadding="false"
+        app:pagePadding="@dimen/page_padding"
         app:layout_flag="grid"
         app:orientation="horizontal"
         app:overlap_layout="true"
@@ -63,6 +65,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | indicator_group_marginRight   | the marginRight of indicator group  	 	 								 | int          | 0 		        |
 | indicator_group_marginBottom  | the marginBottom of indicator group  	 	 								 | int          | 0 		        |
 | indicator_margin				| indicator spacing  													     | int          | 15                |
+| clipToPadding					| the clipTopadding of recyclerView  		 								 | int      	| 15            	|
+| pagePadding					| recyclerView.setPadding(pagePadding,0,pagePading,0)  			 			 | int      	| 15            	|
 | layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
 | orientation					| layout orientation  													     | int          | 0(horizontal)     |
 | overlap_layout				| Whether the indicator overlaps the page 									 | boolean      | false     		|
@@ -83,6 +87,11 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
     pageView.updateAll(items);
 ```
 ## Version Tracking
+* **1.1.1-release**
+  * repair: When fast sliding,the indicators don't update in time
+  * repair: When compiling Android O's recyclerView,the method of setCurrentItem(1,false) doesn't work
+  * add: clipToPadding and pagePadding Settings
+ 
 * **1.1.0-release**
   * add: the indicator container alignment, margin Settings, background Settings, and overlap layout styles
   * other: optimize the code
