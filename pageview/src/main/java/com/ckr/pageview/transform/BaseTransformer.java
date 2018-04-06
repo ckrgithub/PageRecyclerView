@@ -29,7 +29,7 @@ public abstract class BaseTransformer implements PageRecyclerView.PageTransforme
 		ViewCompat.setRotationX(view, 0);
 		ViewCompat.setScaleX(view, 1);
 		ViewCompat.setScaleY(view, 1);
-		ViewCompat.setTranslationX(view, isPagingEnabled() ? 0f : -width * position);
+		ViewCompat.setTranslationX(view, 0);
 		ViewCompat.setTranslationY(view, 0);
 
 	}

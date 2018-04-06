@@ -80,6 +80,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 			if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
 //				pageView.addPageTransformer(new ForegroundTransformer());
 				pageView.addPageTransformer(new CubeOutTransformer());
+//				pageView.addPageTransformer(new CubeInTransformer());
 //				pageView.addPageTransformer(new DepthPageTransformer());
 //				pageView.addPageTransformer(new FlipHorizontalTransformer());
 //				pageView.addPageTransformer(new ScaleInOutTransformer());
