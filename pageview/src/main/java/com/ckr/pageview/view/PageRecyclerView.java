@@ -2,7 +2,6 @@ package com.ckr.pageview.view;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
@@ -308,7 +307,8 @@ public class PageRecyclerView extends RecyclerView {
 			mLastPage = mCurrentPage;
 			if (mScrollOffset % mScrollHeight == 0) {
 				mCurrentPage = mScrollOffset / mScrollHeight;
-			} if (dy < 0 ) {
+			}
+			if (dy < 0) {
 				int targetPage = mScrollOffset / mScrollHeight + 1;
 				mCurrentPage = Math.min(targetPage, mCurrentPage);
 			} else {
@@ -355,11 +355,7 @@ public class PageRecyclerView extends RecyclerView {
 				if (smoothScroll) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat Android O RecyclerView
-						scrollBy(moveX, 0);
-					} else {
-						smoothScrollBy(moveX, 0, 0);
-					}
+					scrollBy(moveX, 0);
 				}
 			}
 		} else {
@@ -372,11 +368,7 @@ public class PageRecyclerView extends RecyclerView {
 				if (smoothScroll) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
 				} else {
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat Android O RecyclerView
-						scrollBy(0, moveY);
-					} else {
-						smoothScrollBy(0, moveY, 0);
-					}
+					scrollBy(0, moveY);
 				}
 			}
 		}
