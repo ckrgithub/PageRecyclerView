@@ -16,29 +16,35 @@
 
 package com.ckr.pageview.transform;
 
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 public class FlipHorizontalTransformer extends BaseTransformer {
 
-    @Override
-    protected void onTransform(View view, float position) {
-        final float rotation = 180f * position;
+	@Override
+	protected void onTransform(View view, float position) {
+		final float rotation = 180f * (position);
+		ViewCompat.setAlpha(view,rotation > 90f || rotation < -90f ? 0 : 1);
+		ViewCompat.setPivotX(view,view.getWidth() * 0.5f);
+		ViewCompat.setPivotY(view,view.getHeight() * 0.5f);
+		ViewCompat.setRotationY(view,rotation);
+	}
 
-        view.setAlpha(rotation > 90f || rotation < -90f ? 0 : 1);
-        view.setPivotX(view.getWidth() * 0.5f);
-        view.setPivotY(view.getHeight() * 0.5f);
-        view.setRotationY(rotation);
-    }
+	@Override
+	protected void onPreTransform(View view, float position) {
+		super.onPreTransform(view, position);
+		view.setTranslationX(-view.getWidth()*(position));
+	}
 
-    @Override
-    protected void onPostTransform(View page, float position) {
-        super.onPostTransform(page, position);
+	@Override
+	protected void onPostTransform(View page, float position) {
+		super.onPostTransform(page, position);
 
-        //resolve problem: new page can't handle click event!
-        if (position > -0.5f && position < 0.5f) {
-            page.setVisibility(View.VISIBLE);
-        } else {
-            page.setVisibility(View.INVISIBLE);
-        }
-    }
+		//resolve problem: new page can't handle click event!
+		if (position > -0.5f && position < 0.5f) {
+			page.setVisibility(View.VISIBLE);
+		} else {
+			page.setVisibility(View.INVISIBLE);
+		}
+	}
 }
