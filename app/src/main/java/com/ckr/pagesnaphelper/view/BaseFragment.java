@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ckr.pageview.transform.BaseTransformer;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -54,14 +56,10 @@ public abstract class BaseFragment extends Fragment {
 	protected void onInvisible() {
 	}
 
-	protected void addData(int index) {
-	}
+	protected void addData(int index) {}
 
-	;
+	protected void jumpToPage(int page) {}
 
-	protected void jumpToPage(int page) {
-	}
-
-	;
+	public abstract void refreshFragment(BaseTransformer baseTransformer);
 
 }

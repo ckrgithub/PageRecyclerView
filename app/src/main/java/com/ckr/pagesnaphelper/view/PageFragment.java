@@ -10,6 +10,7 @@ import android.util.Log;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
 import com.ckr.pagesnaphelper.model.Item;
+import com.ckr.pageview.transform.BaseTransformer;
 import com.ckr.pageview.view.PageRecyclerView;
 import com.ckr.pageview.view.PageView;
 
@@ -166,7 +167,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		if (page > pageCount - 1) {
 			page = pageCount - 1;
 		}
-		pageView.setCurrentItem(page,false);
+		pageView.setCurrentItem(page, false);
 	}
 
 	@Override
@@ -182,5 +183,12 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	@Override
 	public void onPageScrollStateChanged(int state) {
 		Log.d(TAG, "onPageScrollStateChanged() called with: state = [" + state + "]");
+	}
+
+	@Override
+	public void refreshFragment(BaseTransformer baseTransformer) {
+		if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
+			pageView.addPageTransformer(baseTransformer);
+		}
 	}
 }

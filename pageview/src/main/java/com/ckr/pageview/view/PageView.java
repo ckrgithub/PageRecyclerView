@@ -56,6 +56,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int pageColumn = OnPageDataListener.ONE;
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
+	private boolean autoPlay = false;
 	private int interval;
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private boolean clipToPadding = false;
@@ -121,7 +122,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping) && pageColumn * pageRow == 1;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping)
+				&& pageRow == OnPageDataListener.ONE && orientation == OnPageDataListener.HORIZONTAL;
+		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
@@ -149,7 +152,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			if (!overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
-			if (isLooping&&pageRow*pageColumn==1) {
+			if (isLooping && pageRow * pageColumn == 1) {
 				recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
 			}
 		} else if (orientation == OnPageDataListener.VERTICAL) {
@@ -283,7 +286,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void resumeLooping() {
-		if (mHandler != null) {
+		if (mHandler != null && isLooping && autoPlay) {
 			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 		}
 	}
@@ -300,7 +303,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	public void restartLooping() {
 		Loge(TAG, "restartLooping: ");
 		if (mHandler != null) {
-			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+			if (autoPlay) {
+				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+			}
 			isLooping = true;
 		}
 	}
@@ -319,6 +324,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void addOnIndicatorListener(OnIndicatorListener listener) {
 		mOnIndicatorListener = listener;
+	}
+
+	public void addPageTransformer(PageRecyclerView.PageTransformer pageTransformer) {
+		recyclerView.addPageTransformer(pageTransformer);
 	}
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
@@ -574,7 +583,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	@Override
 	public void onPageSelected(int position) {
 		moveIndicator(position, moveIndicator);
-		if (isLooping) {
+		Logd(TAG, "onPageScrollStateChanged: position:" + position + ",autoPlay:" + autoPlay + ",:" + (isLooping && autoPlay));
+		if (isLooping && autoPlay) {
 			if (firstEnter) {
 				firstEnter = false;
 				if (mHandler != null) {
@@ -589,8 +599,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-		Logd(TAG, "onPageScrollStateChanged: state:" + state);
-		if (isLooping) {
+		Logd(TAG, "onPageScrollStateChanged: state:" + state + ",autoPlay:" + autoPlay);
+		if (isLooping && autoPlay) {
 			switch (state) {
 				case RecyclerView.SCROLL_STATE_DRAGGING://1
 					if (mHandler != null) {

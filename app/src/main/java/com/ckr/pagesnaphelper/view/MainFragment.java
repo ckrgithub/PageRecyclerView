@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
+import com.ckr.pageview.transform.BaseTransformer;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	private ArrayList<BaseFragment> fragmentList;
 	private int mCurrentPage;
 	private Bundle saveState;
+	private BaseTransformer baseTransformer;
 
 	public static MainFragment newInstance() {
 		Bundle args = new Bundle();
@@ -167,11 +169,17 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	@Override
 	public void onPageSelected(int position) {
 		mCurrentPage = position;
+		fragmentList.get(mCurrentPage).refreshFragment(this.baseTransformer);
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
 	}
 
+	@Override
+	public void refreshFragment(BaseTransformer baseTransformer) {
+		this.baseTransformer = baseTransformer;
+		fragmentList.get(mCurrentPage).refreshFragment(this.baseTransformer);
+	}
 }
 
