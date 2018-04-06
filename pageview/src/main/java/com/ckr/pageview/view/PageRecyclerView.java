@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.transform.CardTransformer;
 import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
 
@@ -114,14 +115,33 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
 	@Override
 	public int onGetChildDrawingOrder(int childCount, int i) {
-		Logd(TAG, "onGetChildDrawingOrder: transformPos: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
+		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
 		if (childCount == 1) {
 			return i;
 		} else {
 			if (mPageTransformer != null) {
 				String name = mPageTransformer.getClass().getName();
-				if (name == StackTransformer.class.getName() || name == DepthPageTransformer.class.getName()) {
-					return 0 == i ? childCount - 1 : 0;
+				if (name == StackTransformer.class.getName()
+						|| name == DepthPageTransformer.class.getName()) {
+					if (childCount >= 3) {
+						if (forwardDirection) {
+							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
+						} else {
+							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
+						}
+					} else {
+						return 0 == i ? childCount - 1 : 0;
+					}
+				} else if (name == CardTransformer.class.getName()) {
+					if (childCount >= 3) {
+						if (forwardDirection) {
+							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
+						} else {
+							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
+						}
+					} else {
+						return 0 == i ? childCount - 1 : 0;
+					}
 				}
 			}
 			return i;
@@ -296,10 +316,11 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			mLastPage = mCurrentPage;
 			if (dx < 0 && mScrollOffset % mScrollWidth != 0) {
 				int targetPage = mScrollOffset / mScrollWidth + 1;
-				mCurrentPage = targetPage;
+				Logd(TAG, "onScrolled: targetPage:" + targetPage + ",mLastPage:" + mLastPage + ",mScrollOffset:" + mScrollOffset);
+				mCurrentPage = Math.min(mCurrentPage, targetPage);
 			} else {
 				int targetPage = mScrollOffset / mScrollWidth;
-				mCurrentPage = targetPage;
+				mCurrentPage = Math.max(mCurrentPage, targetPage);
 			}
 			if (mOnPageChangeListener != null) {
 				int positionOffsetPixels = mScrollOffset % mScrollWidth;
@@ -312,14 +333,18 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			if (mPageTransformer != null) {
 				int scrollX = getScrollX();
 				int childCount = getChildCount();
+				if (childCount >= 3) {
+					return;
+				}
 				for (int i = 0; i < childCount; i++) {
 					View child = getChildAt(i);
 					int left = child.getLeft();
 					float transformPos = (left - scrollX) / (float) mScrollWidth;
+					boolean forwardDirection = mScrollOffset >= mLastPage * mScrollWidth;
 					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + left
 							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
-							+ ",i:" + i);
-					mPageTransformer.transformPage(child, transformPos);
+							+ ",i:" + i + ",forwardDirection:" + forwardDirection);
+					mPageTransformer.transformPage(child, transformPos, forwardDirection);
 				}
 			}
 		} else {
@@ -569,6 +594,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	}
 
 	public interface PageTransformer {
-		void transformPage(View page, float position);
+		void transformPage(View page, float position, boolean forwardDirection);
 	}
 }
