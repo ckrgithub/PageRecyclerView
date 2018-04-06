@@ -10,7 +10,7 @@ import android.util.Log;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
 import com.ckr.pagesnaphelper.model.Item;
-import com.ckr.pageview.transform.CubeOutTransformer;
+import com.ckr.pageview.transform.BaseTransformer;
 import com.ckr.pageview.view.PageRecyclerView;
 import com.ckr.pageview.view.PageView;
 
@@ -77,16 +77,16 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 			Log.d(TAG, "initView: " + isVisible);
 			pageView.updateAll(items.subList(0, 4));
 			pageView.setCurrentItem(MAX_VALUE / 2, false);
-			if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
+//			if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
 //				pageView.addPageTransformer(new ForegroundTransformer());
-				pageView.addPageTransformer(new CubeOutTransformer());
+//				pageView.addPageTransformer(new CubeOutTransformer());
 //				pageView.addPageTransformer(new CubeInTransformer());
 //				pageView.addPageTransformer(new DepthPageTransformer());
 //				pageView.addPageTransformer(new FlipHorizontalTransformer());
 //				pageView.addPageTransformer(new ScaleInOutTransformer());
 //				pageView.addPageTransformer(new StackTransformer());
 //				pageView.addPageTransformer(new ZoomOutSlideTransformer());
-			}
+//			}
 		} else {
 			pageView.updateAll(items);
 		}
@@ -193,5 +193,12 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	@Override
 	public void onPageScrollStateChanged(int state) {
 		Log.d(TAG, "onPageScrollStateChanged() called with: state = [" + state + "]");
+	}
+
+	@Override
+	public void refreshFragment(BaseTransformer baseTransformer) {
+		if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
+			pageView.addPageTransformer(baseTransformer);
+		}
 	}
 }
