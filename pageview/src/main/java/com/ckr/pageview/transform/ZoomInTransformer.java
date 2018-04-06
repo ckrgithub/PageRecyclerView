@@ -21,7 +21,7 @@ import android.view.View;
 public class ZoomInTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position) {
+	protected void onTransform(View view, float position, boolean forwardDirection) {
 		final float scale = position < 0 ? position + 1f : Math.abs(1f - position);
 		view.setScaleX(scale);
 		view.setScaleY(scale);

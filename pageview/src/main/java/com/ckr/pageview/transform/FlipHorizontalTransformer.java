@@ -22,7 +22,7 @@ import android.view.View;
 public class FlipHorizontalTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position) {
+	protected void onTransform(View view, float position, boolean forwardDirection) {
 		final float rotation = 180f * (position);
 		ViewCompat.setAlpha(view,rotation > 90f || rotation < -90f ? 0 : 1);
 		ViewCompat.setPivotX(view,view.getWidth() * 0.5f);

@@ -22,7 +22,7 @@ import android.view.View;
 public class ForegroundTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position) {
+	protected void onTransform(View view, float position, boolean forwardDirection) {
 		final float height = view.getHeight();
 		final float width = view.getWidth();
 		final float scale = Math.max(position > 0 ? 1f : Math.abs(1f + position), 0.5f);

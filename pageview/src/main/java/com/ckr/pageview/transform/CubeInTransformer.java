@@ -22,7 +22,7 @@ import android.view.View;
 public class CubeInTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position) {
+	protected void onTransform(View view, float position, boolean forwardDirection) {
 		ViewCompat.setPivotX(view, position < 0 ? view.getWidth() : 0);
 		ViewCompat.setPivotY(view, 0);
 		ViewCompat.setRotationY(view, position < 0 ? -30f * (position - 0.0f) : -30f * (position - 0.0f));

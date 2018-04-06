@@ -12,7 +12,7 @@
     <item
         android:id="@+id/item3"
         android:checkable="true"
-        android:title="CubeIn"/>
+        android:title="Card"/>
     <item
         android:id="@+id/item4"
         android:checkable="true"

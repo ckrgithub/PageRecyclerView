@@ -13,13 +13,13 @@ import static com.ckr.pageview.utils.PageLog.Logd;
 
 public abstract class BaseTransformer implements PageRecyclerView.PageTransformer {
 	protected static final String TAG = "BaseTransformer";
-	protected abstract void onTransform(View view, float position);
+	protected abstract void onTransform(View view, float position, boolean forwardDirection);
 
 	@Override
-	public void transformPage(View page, float position) {
+	public void transformPage(View page, float position, boolean forwardDirection) {
 		Logd(TAG, "transformPage: position:" + position);
 		onPreTransform(page, position);
-		onTransform(page, position);
+		onTransform(page, position,forwardDirection);
 		onPostTransform(page, position);
 	}
 

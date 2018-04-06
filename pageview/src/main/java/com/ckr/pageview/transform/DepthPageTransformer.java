@@ -24,7 +24,7 @@ public class DepthPageTransformer extends BaseTransformer {
 	private static final float MIN_SCALE = 0.75f;
 
 	@Override
-	protected void onTransform(View view, float position) {
+	protected void onTransform(View view, float position, boolean forwardDirection) {
 		if (position <= 0f) {
 			ViewCompat.setTranslationX(view,0f);
 			ViewCompat.setScaleX(view,1f);
