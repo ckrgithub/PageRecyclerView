@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.transform.CardTransformer;
+import com.ckr.pageview.transform.DepthPageTransformer;
+import com.ckr.pageview.transform.StackTransformer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +28,7 @@ import static com.ckr.pageview.utils.PageLog.Loge;
 /**
  * Created by PC大佬 on 2018/1/14.
  */
-public class PageRecyclerView extends RecyclerView {
+public class PageRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback {
 	private static final String TAG = "PageRecyclerView";
 	private static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
 	private static final String ARGS_PAGE = "mCurrentPage";
@@ -56,8 +59,9 @@ public class PageRecyclerView extends RecyclerView {
 	private boolean mIsLooping = false;
 	private boolean isSliding;//是否是滑动
 	private boolean forwardDirection;//滑动方向
-	private OnPageChangeListener mOnPageChangeListener;
 	private DecimalFormat decimalFormat;
+	private OnPageChangeListener mOnPageChangeListener;
+	private PageTransformer mPageTransformer;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -104,6 +108,43 @@ public class PageRecyclerView extends RecyclerView {
 				Logd(TAG, "onLayoutChange: mScrollOffset:" + mScrollOffset);
 			}
 		});
+		setChildDrawingOrderCallback(this);
+	}
+
+
+	@Override
+	public int onGetChildDrawingOrder(int childCount, int i) {
+		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
+		if (childCount == 1) {
+			return i;
+		} else {
+			if (mPageTransformer != null) {
+				String name = mPageTransformer.getClass().getName();
+				if (name == StackTransformer.class.getName()
+						|| name == DepthPageTransformer.class.getName()) {
+					if (childCount >= 3) {
+						if (forwardDirection) {
+							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
+						} else {
+							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
+						}
+					} else {
+						return 0 == i ? childCount - 1 : 0;
+					}
+				} else if (name == CardTransformer.class.getName()) {
+					if (childCount >= 3) {
+						if (forwardDirection) {
+							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
+						} else {
+							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
+						}
+					} else {
+						return 0 == i ? childCount - 1 : 0;
+					}
+				}
+			}
+			return i;
+		}
 	}
 
 	@Override
@@ -287,6 +328,23 @@ public class PageRecyclerView extends RecyclerView {
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (mLastPage - mCurrentPage != 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
+				}
+			}
+			if (mPageTransformer != null) {
+				int scrollX = getScrollX();
+				int childCount = getChildCount();
+				if (childCount >= 3) {
+					return;
+				}
+				for (int i = 0; i < childCount; i++) {
+					View child = getChildAt(i);
+					int left = child.getLeft();
+					float transformPos = (left - scrollX) / (float) mScrollWidth;
+					boolean forwardDirection = mScrollOffset >= mLastPage * mScrollWidth;
+					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + left
+							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
+							+ ",i:" + i + ",forwardDirection:" + forwardDirection);
+					mPageTransformer.transformPage(child, transformPos, forwardDirection);
 				}
 			}
 		} else {
@@ -518,11 +576,19 @@ public class PageRecyclerView extends RecyclerView {
 		this.mOnPageChangeListener = listener;
 	}
 
+	public void addPageTransformer(PageTransformer pageTransformer) {
+		this.mPageTransformer = pageTransformer;
+	}
+
 	public interface OnPageChangeListener {
 		void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
 
 		void onPageSelected(int position);
 
 		void onPageScrollStateChanged(int state);
+	}
+
+	public interface PageTransformer {
+		void transformPage(View page, float position, boolean forwardDirection);
 	}
 }
