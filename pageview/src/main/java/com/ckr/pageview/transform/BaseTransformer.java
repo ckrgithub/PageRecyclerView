@@ -11,7 +11,7 @@ import com.ckr.pageview.view.PageRecyclerView;
 
 public abstract class BaseTransformer implements PageRecyclerView.PageTransformer {
 
-	protected abstract void onTransform(View page, float position);
+	protected abstract void onTransform(View view, float position);
 
 	@Override
 	public void transformPage(View page, float position) {
@@ -20,18 +20,29 @@ public abstract class BaseTransformer implements PageRecyclerView.PageTransforme
 		onPostTransform(page, position);
 	}
 
-	protected void onPreTransform(View page, float position) {
-		ViewCompat.setAlpha(page, 1);
-		ViewCompat.setPivotX(page, 0);
-		ViewCompat.setPivotY(page, 0);
-		ViewCompat.setRotationY(page, 0);
-		ViewCompat.setRotationX(page, 0);
-		ViewCompat.setScaleX(page, 1);
-		ViewCompat.setScaleY(page, 1);
-		ViewCompat.setTranslationX(page, 0);
-		ViewCompat.setTranslationY(page, 0);
+	protected void onPreTransform(View view, float position) {
+		final float width = view.getWidth();
+		ViewCompat.setAlpha(view, 1);
+		ViewCompat.setPivotX(view, 0);
+		ViewCompat.setPivotY(view, 0);
+		ViewCompat.setRotationY(view, 0);
+		ViewCompat.setRotationX(view, 0);
+		ViewCompat.setScaleX(view, 1);
+		ViewCompat.setScaleY(view, 1);
+		ViewCompat.setTranslationX(view, isPagingEnabled() ? 0f : -width * position);
+		ViewCompat.setTranslationY(view, 0);
+
 	}
 
-	protected void onPostTransform(View page, float position) {
+	protected void onPostTransform(View view, float position) {
 	}
+
+	/**
+	 * cubeInTransformer 需要
+	 * @return
+	 */
+	protected boolean isPagingEnabled() {
+		return false;
+	}
+
 }

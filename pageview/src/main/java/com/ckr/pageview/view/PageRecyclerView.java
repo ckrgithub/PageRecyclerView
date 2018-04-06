@@ -324,11 +324,11 @@ public class PageRecyclerView extends RecyclerView {
 		if (mPageTransformer != null) {
 			int scrollX = getScrollX();
 			int childCount = getChildCount();
-			Logd(TAG, "onScrolled: childCount:" + getChildCount() + ",scrollX:" + scrollX+",mFirstLayout:"+mFirstLayout);
 			for (int i = 0; i < childCount; i++) {
 				View child = getChildAt(i);
-				float transformPos = (child.getLeft() - scrollX) / (float)mScrollWidth;
-				Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + child.getLeft() + ",mScrollWidth:" + mScrollWidth);
+				float transformPos = (child.getLeft() - scrollX) / (float) mScrollWidth;
+				Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + child.getLeft()
+						+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount + ",i:" + i);
 				mPageTransformer.transformPage(child, transformPos);
 			}
 		}
