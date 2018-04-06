@@ -3,7 +3,6 @@ package com.ckr.pagesnaphelper;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -92,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void disableChecked(int pos) {
-		int size = menu.size();
-		Log.d("disableChecked", "disableChecked: size:" + size + ",id:" + MENU_ITEM_ID[pos]);
 		MenuItem menuItem = menu.findItem(MENU_ITEM_ID[pos]);
 		if (menuItem.isChecked()) {
 			menuItem.setChecked(false);

@@ -19,7 +19,7 @@
         app:indicator_margin="@dimen/viewpager_indicator_margin"
         app:loop_interval="3000"
         app:pagePadding="0dp"
-        app:page_background="#80000000"
+        app:page_background="#fff"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"

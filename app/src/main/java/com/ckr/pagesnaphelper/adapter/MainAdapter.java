@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,19 +50,36 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 
 	@Override
 	protected void convert(MainHolder holder, final int position, Item originItem, final int adjustedPosition, Item item) {
-		int page = adjustedPosition % (mRow * mColumn * 6);
-		if (page < mRow * mColumn) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
-		} else if (page < mRow * mColumn * 2) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color2));
-		} else if (page < mRow * mColumn * 3) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color3));
-		} else if (page < mRow * mColumn * 4) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color4));
-		} else if (page < mRow * mColumn * 5) {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color5));
+		if (mLayoutFlag == GRID) {
+			int page = adjustedPosition % (mRow * mColumn * 6);
+			if (page < mRow * mColumn) {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color1));
+			} else if (page < mRow * mColumn * 2) {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color2));
+			} else if (page < mRow * mColumn * 3) {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color3));
+			} else if (page < mRow * mColumn * 4) {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color4));
+			} else if (page < mRow * mColumn * 5) {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color5));
+			} else {
+				holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color6));
+			}
 		} else {
-			holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color6));
+			int page = adjustedPosition % 6;
+			if (page < 1) {
+				holder.imageView.setImageResource(R.drawable.bg_color1);
+			} else if (page < 2) {
+				holder.imageView.setImageResource(R.drawable.bg_color2);
+			} else if (page < 3) {
+				holder.imageView.setImageResource(R.drawable.bg_color3);
+			}else if (page < 4) {
+				holder.imageView.setImageResource(R.drawable.bg_color4);
+			}else if (page < 5) {
+				holder.imageView.setImageResource(R.drawable.bg_color5);
+			}else if (page < 6) {
+				holder.imageView.setImageResource(R.drawable.bg_color6);
+			}
 		}
 		if (item == null) {
 			holder.relativeLayout.setVisibility(View.INVISIBLE);
@@ -76,23 +92,20 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 			holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
 			holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
 		}
-		if (mRow * mColumn == 1) {
-			ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-			Log.d(TAG, "convert: x:" + holder.itemView.getPivotX() + ",y:" + holder.itemView.getPivotY()
-					+ ",width:" +layoutParams.width+",height:"+layoutParams.height);
-		}
 	}
 
 	class MainHolder extends RecyclerView.ViewHolder {
 		private TextView textView;
 		private RelativeLayout relativeLayout;
 		private ImageButton imageButton;
+		private ImageView imageView;
 
 		public MainHolder(View itemView) {
 			super(itemView);
 			textView = (TextView) itemView.findViewById(R.id.textView);
 			relativeLayout = (RelativeLayout) itemView.findViewById(R.id.relativeLayout);
 			imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
+			imageView = (ImageView) itemView.findViewById(R.id.imageView);
 		}
 	}
 

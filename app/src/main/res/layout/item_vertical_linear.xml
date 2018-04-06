@@ -7,30 +7,25 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:src="@mipmap/ic_picture"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:text=""
             android:textColor="#a5a5a5"
-            android:textSize="12sp"/>
+            android:textSize="18sp"/>
 
         <ImageButton
             android:id="@+id/imageButton"
