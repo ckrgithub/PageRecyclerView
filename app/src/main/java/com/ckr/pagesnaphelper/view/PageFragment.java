@@ -77,16 +77,6 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 			Log.d(TAG, "initView: " + isVisible);
 			pageView.updateAll(items.subList(0, 4));
 			pageView.setCurrentItem(MAX_VALUE / 2, false);
-//			if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
-//				pageView.addPageTransformer(new ForegroundTransformer());
-//				pageView.addPageTransformer(new CubeOutTransformer());
-//				pageView.addPageTransformer(new CubeInTransformer());
-//				pageView.addPageTransformer(new DepthPageTransformer());
-//				pageView.addPageTransformer(new FlipHorizontalTransformer());
-//				pageView.addPageTransformer(new ScaleInOutTransformer());
-//				pageView.addPageTransformer(new StackTransformer());
-//				pageView.addPageTransformer(new ZoomOutSlideTransformer());
-//			}
 		} else {
 			pageView.updateAll(items);
 		}

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.transform.StackTransformer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +27,7 @@ import static com.ckr.pageview.utils.PageLog.Loge;
 /**
  * Created by PC大佬 on 2018/1/14.
  */
-public class PageRecyclerView extends RecyclerView {
+public class PageRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback {
 	private static final String TAG = "PageRecyclerView";
 	private static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
 	private static final String ARGS_PAGE = "mCurrentPage";
@@ -106,6 +107,24 @@ public class PageRecyclerView extends RecyclerView {
 				Logd(TAG, "onLayoutChange: mScrollOffset:" + mScrollOffset);
 			}
 		});
+		setChildDrawingOrderCallback(this);
+	}
+
+
+	@Override
+	public int onGetChildDrawingOrder(int childCount, int i) {
+		Logd(TAG, "onGetChildDrawingOrder: transformPos: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
+		if (childCount == 1) {
+			return i;
+		} else {
+			if (mPageTransformer != null) {
+				String name = mPageTransformer.getClass().getName();
+				if (name == StackTransformer.class.getName()) {
+					return 0 == i ? childCount - 1 : 0;
+				}
+			}
+			return i;
+		}
 	}
 
 	@Override
@@ -295,8 +314,8 @@ public class PageRecyclerView extends RecyclerView {
 				for (int i = 0; i < childCount; i++) {
 					View child = getChildAt(i);
 					int left = child.getLeft();
-					float transformPos = (left-scrollX) / (float) mScrollWidth;
-					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" +left
+					float transformPos = (left - scrollX) / (float) mScrollWidth;
+					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + left
 							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
 							+ ",i:" + i);
 					mPageTransformer.transformPage(child, transformPos);

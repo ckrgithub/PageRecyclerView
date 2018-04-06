@@ -22,16 +22,11 @@ public class StackTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-//		if (position < 0) {
-//			view.bringToFront();
-//		}
 		view.setTranslationX(position < 0 ? 0f : -view.getWidth() * position);
-		
 	}
 
 	@Override
 	protected void onPreTransform(View view, float position) {
 		super.onPreTransform(view, position);
-//		view.setTranslationX(-view.getWidth() * position);
 	}
 }
