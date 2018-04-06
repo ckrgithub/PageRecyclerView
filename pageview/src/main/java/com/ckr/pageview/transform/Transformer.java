@@ -5,7 +5,7 @@ package com.ckr.pageview.transform;
  */
 
 public enum Transformer {
-	Default(null),
+	Default(DefaultTransformer.class),
 	Accordion(AccordionTransformer.class),
 	CubeIn(CubeInTransformer.class),
 	CubeOut(CubeOutTransformer.class),
