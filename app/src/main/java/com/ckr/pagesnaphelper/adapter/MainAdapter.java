@@ -7,16 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ckr.itemanimator.ItemAnimator;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
 import com.ckr.pageview.adapter.BasePageAdapter;
-import com.daimajia.androidanimations.library.YoYo;
 
 
 /**
@@ -83,11 +80,6 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 			ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
 			Log.d(TAG, "convert: x:" + holder.itemView.getPivotX() + ",y:" + holder.itemView.getPivotY()
 					+ ",width:" +layoutParams.width+",height:"+layoutParams.height);
-			YoYo.with(ItemAnimator.ScaleIn.getAnimator())
-					.duration(2000)
-					.pivot(layoutParams.width/2, layoutParams.height/2)
-					.interpolate(new LinearInterpolator())
-					.playOn(holder.itemView);
 		}
 	}
 

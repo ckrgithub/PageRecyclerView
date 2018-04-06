@@ -57,8 +57,9 @@ public class PageRecyclerView extends RecyclerView {
 	private boolean mIsLooping = false;
 	private boolean isSliding;//是否是滑动
 	private boolean forwardDirection;//滑动方向
-	private OnPageChangeListener mOnPageChangeListener;
 	private DecimalFormat decimalFormat;
+	private OnPageChangeListener mOnPageChangeListener;
+	private PageTransformer mPageTransformer;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -320,6 +321,17 @@ public class PageRecyclerView extends RecyclerView {
 				}
 			}
 		}
+		if (mPageTransformer != null) {
+			int scrollX = getScrollX();
+			int childCount = getChildCount();
+			Logd(TAG, "onScrolled: childCount:" + getChildCount() + ",scrollX:" + scrollX+",mFirstLayout:"+mFirstLayout);
+			for (int i = 0; i < childCount; i++) {
+				View child = getChildAt(i);
+				float transformPos = (child.getLeft() - scrollX) / (float)mScrollWidth;
+				Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + child.getLeft() + ",mScrollWidth:" + mScrollWidth);
+				mPageTransformer.transformPage(child, transformPos);
+			}
+		}
 		Logd(TAG, "onScrolled,mCurrentPage:" + mCurrentPage);
 	}
 
@@ -522,11 +534,19 @@ public class PageRecyclerView extends RecyclerView {
 		this.mOnPageChangeListener = listener;
 	}
 
+	public void addPageTransformer(PageTransformer pageTransformer) {
+		this.mPageTransformer = pageTransformer;
+	}
+
 	public interface OnPageChangeListener {
 		void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
 
 		void onPageSelected(int position);
 
 		void onPageScrollStateChanged(int state);
+	}
+
+	public interface PageTransformer {
+		void transformPage(View page, float position);
 	}
 }

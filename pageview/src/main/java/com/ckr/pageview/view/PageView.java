@@ -326,6 +326,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		mOnIndicatorListener = listener;
 	}
 
+	public void addPageTransformer(PageRecyclerView.PageTransformer pageTransformer) {
+		recyclerView.addPageTransformer(pageTransformer);
+	}
+
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
 		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
 import com.ckr.pagesnaphelper.model.Item;
+import com.ckr.pageview.transform.CubeOutTransformer;
 import com.ckr.pageview.view.PageRecyclerView;
 import com.ckr.pageview.view.PageView;
 
@@ -76,6 +77,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 			Log.d(TAG, "initView: " + isVisible);
 			pageView.updateAll(items.subList(0, 4));
 			pageView.setCurrentItem(MAX_VALUE / 2, false);
+			pageView.addPageTransformer(new CubeOutTransformer());
 		} else {
 			pageView.updateAll(items);
 		}

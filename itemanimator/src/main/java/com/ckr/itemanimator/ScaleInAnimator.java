@@ -11,7 +11,7 @@ import com.daimajia.androidanimations.library.BaseViewAnimator;
 
 public class ScaleInAnimator extends BaseViewAnimator {
 
-	private static final float scaleRatio=0.8f;
+	private static final float scaleRatio=1.0f;
 
 	@Override
 	public void prepare(View target) {
