@@ -13,4 +13,9 @@ public class ScaleInOutTransformer extends BaseTransformer {
 		view.setScaleY(scale);
 	}
 
+	@Override
+	protected void onPreTransform(View view, float position) {
+		super.onPreTransform(view, position);
+		view.setTranslationX(-view.getWidth() * position);
+	}
 }
