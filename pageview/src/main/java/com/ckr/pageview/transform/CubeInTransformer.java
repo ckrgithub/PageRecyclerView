@@ -23,10 +23,16 @@ public class CubeInTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-		ViewCompat.setPivotX(view,position > 0 ? 0 : view.getWidth());
-		ViewCompat.setPivotY(view,0);
-		ViewCompat.setRotationY(view,-90f * position);
+		ViewCompat.setPivotX(view, position < 0 ? view.getWidth() : 0);
+		ViewCompat.setPivotY(view, 0);
+		ViewCompat.setRotationY(view, position < 0 ? -30f * (position - 0.0f) : -30f * (position - 0.0f));
 	}
+
+	@Override
+	protected void onPreTransform(View view, float position) {
+		super.onPreTransform(view, position);
+	}
+
 	@Override
 	public boolean isPagingEnabled() {
 		return true;

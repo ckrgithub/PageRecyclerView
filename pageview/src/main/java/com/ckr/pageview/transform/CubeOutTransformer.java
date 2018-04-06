@@ -16,4 +16,9 @@ public class CubeOutTransformer extends BaseTransformer {
 		ViewCompat.setPivotY(view, view.getHeight() * 0.5f);
 		ViewCompat.setRotationY(view, 90f * position);
 	}
+
+	@Override
+	public boolean isPagingEnabled() {
+		return true;
+	}
 }
