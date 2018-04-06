@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
 
 import java.lang.reflect.Field;
@@ -119,7 +120,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		} else {
 			if (mPageTransformer != null) {
 				String name = mPageTransformer.getClass().getName();
-				if (name == StackTransformer.class.getName()) {
+				if (name == StackTransformer.class.getName() || name == DepthPageTransformer.class.getName()) {
 					return 0 == i ? childCount - 1 : 0;
 				}
 			}
