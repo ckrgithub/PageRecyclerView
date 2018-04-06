@@ -43,6 +43,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	private ArrayList<BaseFragment> fragmentList;
 	private int mCurrentPage;
 	private Bundle saveState;
+	private BaseTransformer baseTransformer;
 
 	public static MainFragment newInstance() {
 		Bundle args = new Bundle();
@@ -168,6 +169,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 	@Override
 	public void onPageSelected(int position) {
 		mCurrentPage = position;
+		fragmentList.get(mCurrentPage).refreshFragment(this.baseTransformer);
 	}
 
 	@Override
@@ -176,7 +178,8 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 
 	@Override
 	public void refreshFragment(BaseTransformer baseTransformer) {
-		fragmentList.get(mCurrentPage).refreshFragment(baseTransformer);
+		this.baseTransformer = baseTransformer;
+		fragmentList.get(mCurrentPage).refreshFragment(this.baseTransformer);
 	}
 }
 

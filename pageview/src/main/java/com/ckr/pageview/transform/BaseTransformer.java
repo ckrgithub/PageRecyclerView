@@ -12,7 +12,7 @@ import static com.ckr.pageview.utils.PageLog.Logd;
  */
 
 public abstract class BaseTransformer implements PageRecyclerView.PageTransformer {
-	private static final String TAG = "BaseTransformer";
+	protected static final String TAG = "BaseTransformer";
 	protected abstract void onTransform(View view, float position);
 
 	@Override

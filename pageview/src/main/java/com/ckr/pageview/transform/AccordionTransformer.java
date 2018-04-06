@@ -18,12 +18,15 @@ package com.ckr.pageview.transform;
 
 import android.view.View;
 
+import static com.ckr.pageview.utils.PageLog.Logd;
+
 public class AccordionTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-		view.setPivotX(position < 0 ? 0 : view.getWidth());
-		view.setScaleX(position < 0 ? 1f + position : 1f - position);
+		int width = view.getWidth();
+		view.setPivotX(position < 0 ? width : 0);
+		view.setScaleX(position < 0 ? 1f + position : (1f - position));
 	}
 
 }
