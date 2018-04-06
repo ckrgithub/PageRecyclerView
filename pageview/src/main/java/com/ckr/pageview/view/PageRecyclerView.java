@@ -273,12 +273,14 @@ public class PageRecyclerView extends RecyclerView {
 				return;
 			}
 			mLastPage = mCurrentPage;
-			if (dx < 0 && mScrollOffset % mScrollWidth != 0) {
+			if (mScrollOffset % mScrollWidth == 0) {
+				mCurrentPage = mScrollOffset / mScrollWidth;
+			} else if (dx < 0) {
 				int targetPage = mScrollOffset / mScrollWidth + 1;
-				mCurrentPage = targetPage;
+				mCurrentPage = Math.min(targetPage, mCurrentPage);
 			} else {
 				int targetPage = mScrollOffset / mScrollWidth;
-				mCurrentPage = targetPage;
+				mCurrentPage = Math.max(targetPage, mCurrentPage);
 			}
 			if (mOnPageChangeListener != null) {
 				int positionOffsetPixels = mScrollOffset % mScrollWidth;
@@ -304,12 +306,14 @@ public class PageRecyclerView extends RecyclerView {
 				return;
 			}
 			mLastPage = mCurrentPage;
-			if (dy < 0 && mScrollOffset % mScrollHeight != 0) {
+			if (mScrollOffset % mScrollHeight == 0) {
+				mCurrentPage = mScrollOffset / mScrollHeight;
+			} if (dy < 0 ) {
 				int targetPage = mScrollOffset / mScrollHeight + 1;
-				mCurrentPage = targetPage;
+				mCurrentPage = Math.min(targetPage, mCurrentPage);
 			} else {
 				int targetPage = mScrollOffset / mScrollHeight;
-				mCurrentPage = targetPage;
+				mCurrentPage = Math.max(targetPage, mCurrentPage);
 			}
 			if (mOnPageChangeListener != null) {
 				int positionOffsetPixels = mScrollOffset % mScrollHeight;
