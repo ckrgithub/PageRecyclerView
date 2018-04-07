@@ -1,48 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item1"
+        android:id="@+id/item"
         android:checkable="true"
         android:checked="true"
         android:title="Default"/>
     <item
-        android:id="@+id/item2"
+        android:id="@+id/accordion"
         android:checkable="true"
         android:title="Accordion"/>
     <item
-        android:id="@+id/item3"
-        android:checkable="true"
-        android:title="Card"/>
-    <item
-        android:id="@+id/item4"
+        android:id="@+id/cubeOut"
         android:checkable="true"
         android:title="CubeOut"/>
     <item
-        android:id="@+id/item5"
+        android:id="@+id/depthPage"
         android:checkable="true"
         android:title="DepthPage"/>
     <item
-        android:id="@+id/item6"
+        android:id="@+id/flipHorizontal"
         android:checkable="true"
         android:title="FlipHorizontal"/>
     <item
-        android:id="@+id/item7"
+        android:id="@+id/scaleInOut"
         android:checkable="true"
         android:title="ScaleInOut"/>
     <item
-        android:id="@+id/item8"
+        android:id="@+id/stack"
         android:checkable="true"
         android:title="Stack"/>
     <item
-        android:id="@+id/item9"
+        android:id="@+id/tablet"
         android:checkable="true"
         android:title="Tablet"/>
     <item
-        android:id="@+id/item10"
+        android:id="@+id/zoomIn"
         android:checkable="true"
         android:title="ZoomIn"/>
     <item
-        android:id="@+id/item11"
+        android:id="@+id/zoomOutSlide"
         android:checkable="true"
         android:title="ZoomOutSlide"/>
 
