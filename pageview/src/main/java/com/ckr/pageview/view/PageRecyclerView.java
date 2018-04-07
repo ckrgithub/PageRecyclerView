@@ -113,11 +113,11 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
 	@Override
 	public int onGetChildDrawingOrder(int childCount, int i) {
-		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
+		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i);
 		if (mPageTransformer != null) {
 			String name = mPageTransformer.getClass().getName();
 			if (name == StackTransformer.class.getName()
-					|| name == DepthPageTransformer.class.getName()) {
+					|| name == DepthPageTransformer.class.getName()) {//自定义Item绘制顺序
 				if (childCount == 2) {
 					return 0 == i ? childCount - 1 : 0;
 				}

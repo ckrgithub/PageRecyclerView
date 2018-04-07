@@ -29,7 +29,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
-import static com.ckr.pageview.utils.PageLog.Loge;
 
 /**
  * Created by PC大佬 on 2018/1/16.
@@ -91,7 +90,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		super(context, attrs, defStyleAttr);
 		initAttr(context, attrs, defStyleAttr);
 		initView();
-		if (isLooping) {
+		if (isLooping()) {
 			mHandler = new PageHandler(new WeakReference<PageView>(this));
 		}
 	}
@@ -286,27 +285,31 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void resumeLooping() {
-		if (mHandler != null && isLooping && autoPlay) {
+		if (isLooping() && mHandler != null) {
 			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 		}
 	}
 
+	public final boolean isLooping() {
+		return autoPlay && isLooping;
+	}
+
 	public void stopLooping() {
-		Loge(TAG, "stopLooping: ");
+		Logd(TAG, "stopLooping: ");
 		if (mHandler != null) {
 			mHandler.removeMessages(PageHandler.MSG_START_LOOPING);
 			mHandler.removeMessages(PageHandler.MSG_STOP_LOOPING);
-			isLooping = false;
+			autoPlay = false;
 		}
 	}
 
 	public void restartLooping() {
-		Loge(TAG, "restartLooping: ");
+		Logd(TAG, "restartLooping: ");
 		if (mHandler != null) {
-			if (autoPlay) {
+			autoPlay = true;
+			if (isLooping()) {
 				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 			}
-			isLooping = true;
 		}
 	}
 
@@ -352,7 +355,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (null == mAdapter) {
 			return;
 		}
-		if (isLooping) {
+		if (isLooping()) {
 			isPaused = true;//标记已暂停轮询状态
 			pauseLooping();
 		}
@@ -370,7 +373,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (hideIndicator) {
 			return;
 		}
-		if (isLooping) {
+		if (isLooping()) {
 			if (isPaused) {
 				isPaused = false;//解除已暂停轮询状态
 			} else {
@@ -583,8 +586,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	@Override
 	public void onPageSelected(int position) {
 		moveIndicator(position, moveIndicator);
-		Logd(TAG, "onPageScrollStateChanged: position:" + position + ",autoPlay:" + autoPlay + ",:" + (isLooping && autoPlay));
-		if (isLooping && autoPlay) {
+		Logd(TAG, "onPageScrollStateChanged: position:" + position);
+		if (isLooping()) {
 			if (firstEnter) {
 				firstEnter = false;
 				if (mHandler != null) {
@@ -599,8 +602,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-		Logd(TAG, "onPageScrollStateChanged: state:" + state + ",autoPlay:" + autoPlay);
-		if (isLooping && autoPlay) {
+		Logd(TAG, "onPageScrollStateChanged: state:" + state);
+		if (isLooping()) {
 			switch (state) {
 				case RecyclerView.SCROLL_STATE_DRAGGING://1
 					if (mHandler != null) {
