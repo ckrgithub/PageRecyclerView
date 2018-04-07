@@ -315,7 +315,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				for (int i = 0; i < childCount; i++) {
 					View child = getChildAt(i);
 					int left = child.getLeft();
-					float transformPos = (left - scrollX) / (float) mScrollWidth;
+					float transformPos = (left - scrollX - getPaddingLeft()) / (float) mScrollWidth;
 					boolean nextPage = mScrollOffset >= mLastPage * mScrollWidth;
 					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + left
 							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
@@ -363,12 +363,12 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				for (int i = 0; i < childCount; i++) {
 					View child = getChildAt(i);
 					int top = child.getTop();
-					float transformPos = (top - scrollY) / (float) mScrollWidth;
-					boolean nextPage = mScrollOffset >= mLastPage * mScrollWidth;
+					float transformPos = (top - scrollY - getPaddingTop()) / (float) mScrollHeight;
+					boolean nextPage = mScrollOffset >= mLastPage * mScrollHeight;
 					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",top:" + top
-							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
+							+ ",mScrollHeight:" + mScrollHeight + ",childCount:" + childCount
 							+ ",nextPage:" + nextPage);
-					mPageTransformer.transformPage(child, transformPos, nextPage,mOrientation);
+					mPageTransformer.transformPage(child, transformPos, nextPage, mOrientation);
 				}
 			}
 		}
@@ -579,6 +579,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	}
 
 	public interface PageTransformer {
-		void transformPage(View page, float position, boolean forwardDirection,@OnPageDataListener.LayoutOrientation int mOrientation);
+		void transformPage(View page, float position, boolean forwardDirection, @OnPageDataListener.LayoutOrientation int mOrientation);
 	}
 }

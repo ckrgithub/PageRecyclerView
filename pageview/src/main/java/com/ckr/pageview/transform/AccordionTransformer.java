@@ -19,12 +19,20 @@ package com.ckr.pageview.transform;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
+import com.ckr.pageview.adapter.OnPageDataListener;
+
 public class AccordionTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
-		ViewCompat.setPivotX(view,position < 0 ? view.getWidth() : 0);
-		ViewCompat.setScaleX(view,position < 0 ? 1f + position : (1f - position));
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			ViewCompat.setPivotX(view, position < 0 ? view.getWidth() : 0);
+			ViewCompat.setScaleX(view, position < 0 ? 1f + position : (1f - position));
+		} else {
+			ViewCompat.setPivotY(view, position < 0 ? view.getHeight() : 0);
+			ViewCompat.setPivotX(view, view.getWidth());
+			ViewCompat.setScaleY(view, position < 0 ? 1f + position : (1f - position));
+		}
 	}
 
 }
