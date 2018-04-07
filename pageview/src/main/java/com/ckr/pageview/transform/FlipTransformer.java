@@ -19,21 +19,34 @@ package com.ckr.pageview.transform;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
-public class FlipHorizontalTransformer extends BaseTransformer {
+import com.ckr.pageview.adapter.OnPageDataListener;
+
+public class FlipTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		final float rotation = 180f * (position);
-		ViewCompat.setAlpha(view,rotation > 90f || rotation < -90f ? 0 : 1);
-		ViewCompat.setPivotX(view,view.getWidth() * 0.5f);
-		ViewCompat.setPivotY(view,view.getHeight() * 0.5f);
-		ViewCompat.setRotationY(view,rotation);
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			ViewCompat.setAlpha(view, rotation > 90f || rotation < -90f ? 0 : 1);
+			ViewCompat.setPivotX(view, view.getWidth() * 0.5f);
+			ViewCompat.setPivotY(view, view.getHeight() * 0.5f);
+			ViewCompat.setRotationY(view, rotation);
+		} else {
+			ViewCompat.setAlpha(view, rotation > 90f || rotation < -90f ? 0 : 1);
+			ViewCompat.setPivotX(view, view.getWidth() * 0.5f);
+			ViewCompat.setPivotY(view, view.getHeight() * 0.5f);
+			ViewCompat.setRotationX(view, -rotation);
+		}
 	}
 
 	@Override
 	protected void onPreTransform(View view, float position, int mOrientation) {
 		super.onPreTransform(view, position, mOrientation);
-		view.setTranslationX(-view.getWidth()*(position));
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			view.setTranslationX(-view.getWidth() * (position));
+		} else {
+			view.setTranslationY(-view.getHeight() * (position));
+		}
 	}
 
 	@Override

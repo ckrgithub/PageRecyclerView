@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 public class MainActivity extends AppCompatActivity {
 	private Unbinder unbinder;
 	private static final int[] MENU_ITEM_ID = {R.id.item, R.id.accordion, R.id.cubeOut
-			, R.id.depthPage, R.id.flipHorizontal, R.id.scaleInOut, R.id.stack, R.id.tablet
+			, R.id.depthPage, R.id.flip, R.id.scaleInOut, R.id.stack, R.id.tablet
 			, R.id.zoomIn, R.id.zoomOutSlide};
 	private Menu menu;
 	private MainFragment mainFragment;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 			case R.id.accordion:
 			case R.id.cubeOut:
 			case R.id.depthPage:
-			case R.id.flipHorizontal:
+			case R.id.flip:
 			case R.id.scaleInOut:
 			case R.id.stack:
 			case R.id.tablet:

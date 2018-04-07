@@ -18,9 +18,9 @@
         android:checkable="true"
         android:title="DepthPage"/>
     <item
-        android:id="@+id/flipHorizontal"
+        android:id="@+id/flip"
         android:checkable="true"
-        android:title="FlipHorizontal"/>
+        android:title="Flip"/>
     <item
         android:id="@+id/scaleInOut"
         android:checkable="true"

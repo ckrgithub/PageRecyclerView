@@ -9,7 +9,7 @@ public enum Transformer {
 	Accordion(AccordionTransformer.class),
 	CubeOut(CubeOutTransformer.class),
 	DepthPage(DepthPageTransformer.class),
-	FlipHorizontal(FlipHorizontalTransformer.class),
+	FlipHorizontal(FlipTransformer.class),
 	ScaleInOut(ScaleInOutTransformer.class),
 	Stack(StackTransformer.class),
 	Tablet(TabletTransformer.class),
