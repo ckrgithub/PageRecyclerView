@@ -121,8 +121,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping)
-				&& pageRow == OnPageDataListener.ONE && orientation == OnPageDataListener.HORIZONTAL;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_endless_loop, isLooping)&& pageColumn * pageRow == 1;
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
@@ -151,7 +150,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			if (!overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
-			if (isLooping && pageRow * pageColumn == 1) {
+			if (isLooping) {
 				recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
 			}
 		} else if (orientation == OnPageDataListener.VERTICAL) {

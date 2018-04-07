@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         app:clipToPadding="false"
-        app:endless_loop="false"
+        app:endless_loop="true"
         app:hide_indicator="false"
         app:indicator_container_width="@dimen/viewpager_indicator_container_width"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
