@@ -19,23 +19,40 @@ package com.ckr.pageview.transform;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
+import com.ckr.pageview.adapter.OnPageDataListener;
+
 public class DepthPageTransformer extends BaseTransformer {
 
 	private static final float MIN_SCALE = 0.75f;
 
 	@Override
 	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
-		if (position <= 0f) {
-			ViewCompat.setTranslationX(view, 0f);
-			ViewCompat.setScaleX(view, 1f);
-			ViewCompat.setScaleY(view, 1f);
-		} else if (position <= 1f) {
-			final float scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - Math.abs(position));
-			ViewCompat.setAlpha(view, 1 - position);
-			ViewCompat.setPivotY(view, 0.5f * view.getHeight());
-			ViewCompat.setTranslationX(view, view.getWidth() * -position);
-			ViewCompat.setScaleX(view, scaleFactor);
-			ViewCompat.setScaleY(view, scaleFactor);
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			if (position <= 0f) {
+				ViewCompat.setTranslationX(view, 0f);
+				ViewCompat.setScaleX(view, 1f);
+				ViewCompat.setScaleY(view, 1f);
+			} else if (position <= 1f) {
+				final float scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - Math.abs(position));
+				ViewCompat.setAlpha(view, 1 - position);
+				ViewCompat.setPivotY(view, 0.5f * view.getHeight());
+				ViewCompat.setTranslationX(view, view.getWidth() * -position);
+				ViewCompat.setScaleX(view, scaleFactor);
+				ViewCompat.setScaleY(view, scaleFactor);
+			}
+		}else {
+			if (position <= 0f) {
+				ViewCompat.setTranslationY(view, 0f);
+				ViewCompat.setScaleX(view, 1f);
+				ViewCompat.setScaleY(view, 1f);
+			} else if (position <= 1f) {
+				final float scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - Math.abs(position));
+				ViewCompat.setAlpha(view, 1 - position);
+				ViewCompat.setPivotX(view, 0.5f * view.getWidth());
+				ViewCompat.setTranslationY(view, view.getHeight() * -position);
+				ViewCompat.setScaleX(view, scaleFactor);
+				ViewCompat.setScaleY(view, scaleFactor);
+			}
 		}
 	}
 
