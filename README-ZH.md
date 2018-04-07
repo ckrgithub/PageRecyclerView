@@ -91,6 +91,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 
 ## 我的开源项目
 [CollapsingRefresh](https://github.com/ckrgithub/CollapsingRefresh):AppBarLayout+ViewPager+RecyclerView的刷新功能
+
 [FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration):recyclerView分割线的绘制
 
 ## 版本更新

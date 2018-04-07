@@ -91,6 +91,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 
 ## My Other Project
 [CollapsingRefresh](https://github.com/ckrgithub/CollapsingRefresh)
+
 [FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration)
 
 ## Version Tracking
