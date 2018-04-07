@@ -67,17 +67,16 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		}
 		switch (item.getItemId()) {
-			case R.id.item1:
-			case R.id.item2:
-			case R.id.item3:
-			case R.id.item4:
-			case R.id.item5:
-			case R.id.item6:
-			case R.id.item7:
-			case R.id.item8:
-			case R.id.item9:
-			case R.id.item10:
-			case R.id.item11:
+			case R.id.item:
+			case R.id.accordion:
+			case R.id.cubeOut:
+			case R.id.depthPage:
+			case R.id.flipHorizontal:
+			case R.id.scaleInOut:
+			case R.id.stack:
+			case R.id.tablet:
+			case R.id.zoomIn:
+			case R.id.zoomOutSlide:
 				disableChecked(lastIndex);
 				boolean checked = !item.isChecked();
 				item.setChecked(checked);

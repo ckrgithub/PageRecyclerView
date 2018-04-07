@@ -114,26 +114,16 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	@Override
 	public int onGetChildDrawingOrder(int childCount, int i) {
 		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i + ",current:" + mCurrentPage % 4);
-		if (childCount == 1) {
-			return i;
-		} else {
-			if (mPageTransformer != null) {
-				String name = mPageTransformer.getClass().getName();
-				if (name == StackTransformer.class.getName()
-						|| name == DepthPageTransformer.class.getName()) {
-					if (childCount >= 3) {
-						if (forwardDirection) {
-							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
-						} else {
-							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
-						}
-					} else {
-						return 0 == i ? childCount - 1 : 0;
-					}
+		if (mPageTransformer != null) {
+			String name = mPageTransformer.getClass().getName();
+			if (name == StackTransformer.class.getName()
+					|| name == DepthPageTransformer.class.getName()) {
+				if (childCount == 2) {
+					return 0 == i ? childCount - 1 : 0;
 				}
 			}
-			return i;
 		}
+		return i;
 	}
 
 	@Override
@@ -322,9 +312,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			if (mPageTransformer != null) {
 				int scrollX = getScrollX();
 				int childCount = getChildCount();
-				if (childCount >= 3) {
-					return;
-				}
 				for (int i = 0; i < childCount; i++) {
 					View child = getChildAt(i);
 					int left = child.getLeft();
