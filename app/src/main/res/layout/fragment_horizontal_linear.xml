@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:clipToPadding="false"
-        app:endless_loop="true"
+        app:loop="true"
         app:autoplay="true"
         app:hide_indicator="false"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
