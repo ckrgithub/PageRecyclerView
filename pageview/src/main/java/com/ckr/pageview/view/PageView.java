@@ -90,7 +90,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		super(context, attrs, defStyleAttr);
 		initAttr(context, attrs, defStyleAttr);
 		initView();
-		if (isLooping()) {
+		if (isAutoLooping()) {
 			mHandler = new PageHandler(new WeakReference<PageView>(this));
 		}
 	}
@@ -284,12 +284,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void resumeLooping() {
-		if (isLooping() && mHandler != null) {
+		if (isAutoLooping() && mHandler != null) {
 			mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 		}
 	}
 
-	public final boolean isLooping() {
+	public final boolean isAutoLooping() {
 		return autoPlay && isLooping;
 	}
 
@@ -306,7 +306,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		Logd(TAG, "restartLooping: ");
 		if (mHandler != null) {
 			autoPlay = true;
-			if (isLooping()) {
+			if (isAutoLooping()) {
 				mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 			}
 		}
@@ -354,7 +354,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (null == mAdapter) {
 			return;
 		}
-		if (isLooping()) {
+		if (isAutoLooping()) {
 			isPaused = true;//标记已暂停轮询状态
 			pauseLooping();
 		}
@@ -372,7 +372,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (hideIndicator) {
 			return;
 		}
-		if (isLooping()) {
+		if (isAutoLooping()) {
 			if (isPaused) {
 				isPaused = false;//解除已暂停轮询状态
 			} else {
@@ -586,7 +586,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	public void onPageSelected(int position) {
 		moveIndicator(position, moveIndicator);
 		Logd(TAG, "onPageScrollStateChanged: position:" + position);
-		if (isLooping()) {
+		if (isAutoLooping()) {
 			if (firstEnter) {
 				firstEnter = false;
 				if (mHandler != null) {
@@ -602,7 +602,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	@Override
 	public void onPageScrollStateChanged(int state) {
 		Logd(TAG, "onPageScrollStateChanged: state:" + state);
-		if (isLooping()) {
+		if (isAutoLooping()) {
 			switch (state) {
 				case RecyclerView.SCROLL_STATE_DRAGGING://1
 					if (mHandler != null) {
