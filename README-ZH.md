@@ -53,7 +53,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 ### 2.属性说明
 | 属性							| 描述									 | 类型			| 默认值			|
 | ----------------------------- | -------------------------------------- | ----------   | ------------- |
-| loop                  | 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
+| loop                  			| 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
 | loop_interval                 | 轮询时间间隔							 | int			| 3000			|
 | hide_indicator                | 是否隐藏指示器  						 | boolean 		| false		 	|
 | indicator_container_background| 指示器父容器的背景 	 	 			 	 | drawable     | null		    |
@@ -86,6 +86,13 @@ PageRecyclerView实现翻页功能及无限轮播。
     pageView.setAdapter(mainAdapter);//设置adapter
     pageView.updateAll(items);//更新数据
 ```
+## 感谢
+[banner](https://github.com/youth5201314/banner)
+
+## 我的开源项目
+[CollapsingRefresh](https://github.com/ckrgithub/CollapsingRefresh):AppBarLayout+ViewPager+RecyclerView的刷新功能
+[FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration):recyclerView分割线的绘制
+
 ## 版本更新
 * **1.1.1-release**
   * 修复：快速滑动，指示器没有及时更新的问题

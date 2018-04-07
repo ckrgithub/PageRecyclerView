@@ -53,7 +53,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### 2.attributes description
 | attributes                    | description                   | type              | defaults         |
 | ----------------------------- | ----------------------------- | ----------------- | ---------------- |
-| loop                  | start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
+| loop                  			| start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
 | loop_interval                 | loop interval								  							     | int		    | 3000		        |
 | hide_indicator                | hide indicator  														     | boolean      | false	            |
 | indicator_container_background| the background of indicator parent container 	 	 						 | drawable     | null		        |
@@ -86,6 +86,13 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
     pageView.setAdapter(mainAdapter);
     pageView.updateAll(items);
 ```
+## Thanks
+[banner](https://github.com/youth5201314/banner)
+
+## My Other Project
+[CollapsingRefresh](https://github.com/ckrgithub/CollapsingRefresh)
+[FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration)
+
 ## Version Tracking
 * **1.1.1-release**
   * repair: When fast sliding,the indicators don't update in time
