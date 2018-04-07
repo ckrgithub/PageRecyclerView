@@ -24,7 +24,7 @@ public class ZoomOutSlideTransformer extends BaseTransformer {
 	private static final float MIN_ALPHA = 0.5f;
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		if (position >= -1 || position <= 1) {
 			// Modify the default slide transition to shrink the page as well
 			final float height = view.getHeight();

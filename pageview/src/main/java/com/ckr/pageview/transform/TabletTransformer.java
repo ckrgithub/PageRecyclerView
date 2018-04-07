@@ -27,7 +27,7 @@ public class TabletTransformer extends BaseTransformer {
 	private static final float[] OFFSET_TEMP_FLOAT = new float[2];
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		final float rotation = (position < 0 ? 30f : -30f) * Math.abs(position);
 
 		view.setTranslationX(getOffsetXForRotation(rotation, view.getWidth(), view.getHeight()));

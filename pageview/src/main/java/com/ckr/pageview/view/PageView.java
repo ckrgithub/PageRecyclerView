@@ -334,7 +334,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(1).setLooping(isLooping)
 				.setColumn(pageColumn).setRow(pageRow)
 				.setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {

@@ -22,7 +22,7 @@ import android.view.View;
 public class AccordionTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		ViewCompat.setPivotX(view,position < 0 ? view.getWidth() : 0);
 		ViewCompat.setScaleX(view,position < 0 ? 1f + position : (1f - position));
 	}

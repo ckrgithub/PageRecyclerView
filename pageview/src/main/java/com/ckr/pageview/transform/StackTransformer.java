@@ -21,12 +21,12 @@ import android.view.View;
 public class StackTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
-		view.setTranslationX(position < 0 ? 0f : -view.getWidth() * position);
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
+		view.setTranslationX(position <0 ? 0f : -view.getWidth() * position);
 	}
 
 	@Override
-	protected void onPreTransform(View view, float position) {
-		super.onPreTransform(view, position);
+	protected void onPreTransform(View view, float position, int mOrientation) {
+		super.onPreTransform(view, position, mOrientation);
 	}
 }

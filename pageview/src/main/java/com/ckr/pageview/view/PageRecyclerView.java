@@ -316,11 +316,11 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 					View child = getChildAt(i);
 					int left = child.getLeft();
 					float transformPos = (left - scrollX) / (float) mScrollWidth;
-					boolean forwardDirection = mScrollOffset >= mLastPage * mScrollWidth;
+					boolean nextPage = mScrollOffset >= mLastPage * mScrollWidth;
 					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",left:" + left
 							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
-							+ ",i:" + i + ",forwardDirection:" + forwardDirection);
-					mPageTransformer.transformPage(child, transformPos, forwardDirection);
+							+ ",nextPage:" + nextPage);
+					mPageTransformer.transformPage(child, transformPos, nextPage, mOrientation);
 				}
 			}
 		} else {
@@ -355,6 +355,20 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
 				if (mLastPage - mCurrentPage != 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
+				}
+			}
+			if (mPageTransformer != null) {
+				int scrollY = getScrollY();
+				int childCount = getChildCount();
+				for (int i = 0; i < childCount; i++) {
+					View child = getChildAt(i);
+					int top = child.getTop();
+					float transformPos = (top - scrollY) / (float) mScrollWidth;
+					boolean nextPage = mScrollOffset >= mLastPage * mScrollWidth;
+					Logd(TAG, "onScrolled: transformPos:" + transformPos + ",top:" + top
+							+ ",mScrollWidth:" + mScrollWidth + ",childCount:" + childCount
+							+ ",nextPage:" + nextPage);
+					mPageTransformer.transformPage(child, transformPos, nextPage,mOrientation);
 				}
 			}
 		}
@@ -565,6 +579,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	}
 
 	public interface PageTransformer {
-		void transformPage(View page, float position, boolean forwardDirection);
+		void transformPage(View page, float position, boolean forwardDirection,@OnPageDataListener.LayoutOrientation int mOrientation);
 	}
 }

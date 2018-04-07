@@ -22,7 +22,7 @@ import android.view.View;
 public class FlipHorizontalTransformer extends BaseTransformer {
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		final float rotation = 180f * (position);
 		ViewCompat.setAlpha(view,rotation > 90f || rotation < -90f ? 0 : 1);
 		ViewCompat.setPivotX(view,view.getWidth() * 0.5f);
@@ -31,14 +31,14 @@ public class FlipHorizontalTransformer extends BaseTransformer {
 	}
 
 	@Override
-	protected void onPreTransform(View view, float position) {
-		super.onPreTransform(view, position);
+	protected void onPreTransform(View view, float position, int mOrientation) {
+		super.onPreTransform(view, position, mOrientation);
 		view.setTranslationX(-view.getWidth()*(position));
 	}
 
 	@Override
-	protected void onPostTransform(View page, float position) {
-		super.onPostTransform(page, position);
+	protected void onPostTransform(View page, float position, int mOrientation) {
+		super.onPostTransform(page, position, mOrientation);
 
 		//resolve problem: new page can't handle click event!
 		if (position > -0.5f && position < 0.5f) {

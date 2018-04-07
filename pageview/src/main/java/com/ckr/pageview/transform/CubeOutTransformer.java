@@ -11,14 +11,10 @@ public class CubeOutTransformer extends BaseTransformer {
 
 
 	@Override
-	protected void onTransform(View view, float position, boolean forwardDirection) {
+	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		ViewCompat.setPivotX(view, position < 0f ? view.getWidth() : 0f);
 		ViewCompat.setPivotY(view, view.getHeight() * 0.5f);
 		ViewCompat.setRotationY(view, 90f * position);
 	}
 
-	@Override
-	public boolean isPagingEnabled() {
-		return true;
-	}
 }
