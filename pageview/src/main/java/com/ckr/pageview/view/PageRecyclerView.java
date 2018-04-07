@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
-import com.ckr.pageview.transform.CardTransformer;
 import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
 
@@ -122,16 +121,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				String name = mPageTransformer.getClass().getName();
 				if (name == StackTransformer.class.getName()
 						|| name == DepthPageTransformer.class.getName()) {
-					if (childCount >= 3) {
-						if (forwardDirection) {
-							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;
-						} else {
-							return 0 == i ? childCount - 1 : i == 2 ? 0 : 1;
-						}
-					} else {
-						return 0 == i ? childCount - 1 : 0;
-					}
-				} else if (name == CardTransformer.class.getName()) {
 					if (childCount >= 3) {
 						if (forwardDirection) {
 							return 0 == i ? childCount - 1 : i == 2 ? 1 : 0;

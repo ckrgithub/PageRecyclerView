@@ -7,7 +7,6 @@ package com.ckr.pageview.transform;
 public enum Transformer {
 	Default(DefaultTransformer.class),
 	Accordion(AccordionTransformer.class),
-	Card(CardTransformer.class),
 	CubeOut(CubeOutTransformer.class),
 	DepthPage(DepthPageTransformer.class),
 	FlipHorizontal(FlipHorizontalTransformer.class),
