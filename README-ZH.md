@@ -53,7 +53,7 @@ PageRecyclerView实现翻页功能及无限轮播。
 ### 2.属性说明
 | 属性							| 描述									 | 类型			| 默认值			|
 | ----------------------------- | -------------------------------------- | ----------   | ------------- |
-| endless_loop                  | 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
+| loop                  | 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
 | loop_interval                 | 轮询时间间隔							 | int			| 3000			|
 | hide_indicator                | 是否隐藏指示器  						 | boolean 		| false		 	|
 | indicator_container_background| 指示器父容器的背景 	 	 			 	 | drawable     | null		    |
