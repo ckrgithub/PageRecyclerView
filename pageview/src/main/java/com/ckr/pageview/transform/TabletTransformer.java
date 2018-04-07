@@ -20,6 +20,8 @@ import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.view.View;
 
+import com.ckr.pageview.adapter.OnPageDataListener;
+
 public class TabletTransformer extends BaseTransformer {
 
 	private static final Matrix OFFSET_MATRIX = new Matrix();
@@ -29,17 +31,28 @@ public class TabletTransformer extends BaseTransformer {
 	@Override
 	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
 		final float rotation = (position < 0 ? 30f : -30f) * Math.abs(position);
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			view.setTranslationX(getOffsetForRotation(rotation, view.getWidth(), view.getHeight(), mOrientation));
+			view.setPivotX(view.getWidth() * 0.5f);
+			view.setPivotY(0);
+			view.setRotationY(rotation);
+		} else {
+			view.setTranslationY(getOffsetForRotation(rotation, view.getWidth(), view.getHeight(), mOrientation));
+			view.setPivotY(view.getHeight() * 0.5f);
+			view.setPivotX(0);
+			view.setRotationX(-rotation);
+		}
 
-		view.setTranslationX(getOffsetXForRotation(rotation, view.getWidth(), view.getHeight()));
-		view.setPivotX(view.getWidth() * 0.5f);
-		view.setPivotY(0);
-		view.setRotationY(rotation);
 	}
 
-	protected static final float getOffsetXForRotation(float degrees, int width, int height) {
+	protected static final float getOffsetForRotation(float degrees, int width, int height, int mOrientation) {
 		OFFSET_MATRIX.reset();
 		OFFSET_CAMERA.save();
-		OFFSET_CAMERA.rotateY(Math.abs(degrees));
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			OFFSET_CAMERA.rotateY(Math.abs(degrees));
+		} else {
+			OFFSET_CAMERA.rotateX(-Math.abs(degrees));
+		}
 		OFFSET_CAMERA.getMatrix(OFFSET_MATRIX);
 		OFFSET_CAMERA.restore();
 
@@ -48,7 +61,11 @@ public class TabletTransformer extends BaseTransformer {
 		OFFSET_TEMP_FLOAT[0] = width;
 		OFFSET_TEMP_FLOAT[1] = height;
 		OFFSET_MATRIX.mapPoints(OFFSET_TEMP_FLOAT);
-		return (width - OFFSET_TEMP_FLOAT[0]) * (degrees > 0.0f ? 1.0f : -1.0f);
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			return (width - OFFSET_TEMP_FLOAT[0]) * (degrees > 0.0f ? 1.0f : -1.0f);
+		} else {
+			return (height - OFFSET_TEMP_FLOAT[1]) * (degrees > 0.0f ? 1.0f : -1.0f);
+		}
 	}
 
 }
