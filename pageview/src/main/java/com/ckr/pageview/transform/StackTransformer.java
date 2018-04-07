@@ -18,11 +18,17 @@ package com.ckr.pageview.transform;
 
 import android.view.View;
 
+import com.ckr.pageview.adapter.OnPageDataListener;
+
 public class StackTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position, boolean forwardDirection, int mOrientation) {
-		view.setTranslationX(position <0 ? 0f : -view.getWidth() * position);
+		if (mOrientation == OnPageDataListener.HORIZONTAL) {
+			view.setTranslationX(position < 0 ? 0f : -view.getWidth() * position);
+		} else {
+			view.setTranslationY(position < 0 ? 0f : -view.getHeight() * position);
+		}
 	}
 
 	@Override
