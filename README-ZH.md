@@ -17,36 +17,37 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 ### 添加依赖：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.1.4'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.1.4'//gradle plugin 3.0一下使用
+		implementation 'ckrjfrog.Page:PageView:1.2.0'//gradle plugin 3.0(包含)以上使用
+		//compile 'ckrjfrog.Page:PageView:1.2.0'//gradle plugin 3.0一下使用
 	}
 ```
 
 ## 功能及使用
 ### 1.布局引用
 ```
-     <com.ckr.pageview.view.PageView
+    <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:autoplay="true"
+        app:loop="true"
+        app:loop_interval="3000"
         app:hide_indicator="false"
-        app:indicator_container_background="#40000000"
+        app:indicator_container_background="#fff"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
-        app:indicator_group_alignment="right|centerVertical"
-        app:indicator_group_marginBottom="10dp"
-        app:indicator_group_marginRight="10dp"
+        app:indicator_group_alignment="center"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
-        app:clipToPadding="false"
-        app:pagePadding="@dimen/page_padding"
-        app:layout_flag="grid"
+        app:layout_flag="linear"
         app:orientation="horizontal"
-        app:overlap_layout="true"
-        app:page_column="4"
-        app:page_row="2"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
+        app:overlap_layout="false"
+        app:clipToPadding="false"
+        app:pagePadding="0dp"
+        app:page_background="#fff"
+        app:page_column="one"
+        app:page_row="one"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
@@ -55,6 +56,7 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 | ----------------------------- | -------------------------------------- | ----------   | ------------- |
 | loop                  			| 是否启动无限轮播(当每页只有一个item时有效)	 | boolean  	| false			|
 | loop_interval                 | 轮询时间间隔							 | int			| 3000			|
+| autoplay                 		| 自动轮播							 	 | boolean		| false			|
 | hide_indicator                | 是否隐藏指示器  						 | boolean 		| false		 	|
 | indicator_container_background| 指示器父容器的背景 	 	 			 	 | drawable     | null		    |
 | indicator_contianer_heigt     | 指示器父容器的高度 					 	 | int     		| 90			|
@@ -65,7 +67,7 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 | indicator_group_marginRight   | 指示器组的marginRight  	 	 			 | int          | 0 		    |
 | indicator_group_marginBottom  | 指示器组的marginBottom  	 	 		 | int          | 0 		    |
 | indicator_margin				| 指示器间的间距  						 | int      	| 15            |
-| clipToPadding					| recyclerView的clipTopadding设置  		 | int      	| 15            |
+| clipToPadding					| recyclerView的clipTopadding设置  		 | boolean      | false         |
 | pagePadding					| recyclerView的左右padding设置  			 | int      	| 15            |
 | layout_flag					| 标记线性布局或网格布局  					 | int      		| 0(线性)     	|
 | orientation					| 布局方向  								 | int      	| 0(horizontal) |
@@ -95,6 +97,10 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 [FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration):recyclerView分割线的绘制
 
 ## 版本更新
+* **1.2.0-release**
+  * 添加：autopaly属性
+  * 添加：翻页动画
+  * 
 * **1.1.1-release**
   * 修复：快速滑动，指示器没有及时更新的问题
   * 修复：当引用android O 的recyclerview时，setCurrentItem(1,false)不起效问题

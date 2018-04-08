@@ -17,44 +17,46 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.1.4'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.1.4'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.2.0'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.2.0'//gradle plugin 3.0 below used
 	}
 ```
 
 ## Function And Use
 ### 1.layout reference
 ```
-     <com.ckr.pageview.view.PageView
+    <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:autoplay="true"
+        app:loop="true"
+        app:loop_interval="3000"
         app:hide_indicator="false"
-        app:indicator_container_background="#40000000"
+        app:indicator_container_background="#fff"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
-        app:indicator_group_alignment="right|centerVertical"
-        app:indicator_group_marginBottom="10dp"
-        app:indicator_group_marginRight="10dp"
+        app:indicator_group_alignment="center"
         app:indicator_margin="@dimen/viewpager_indicator_margin"
-        app:clipToPadding="false"
-        app:pagePadding="@dimen/page_padding"
-        app:layout_flag="grid"
+        app:layout_flag="linear"
         app:orientation="horizontal"
-        app:overlap_layout="true"
-        app:page_column="4"
-        app:page_row="2"
-        app:selected_indicator_color="@color/viewpager_selected_indicator_color"
+        app:overlap_layout="false"
+        app:clipToPadding="false"
+        app:pagePadding="0dp"
+        app:page_background="#fff"
+        app:page_column="one"
+        app:page_row="one"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
-        app:unselected_indicator_color="@color/viewpager_unselected_indicator_color"
         app:unselected_indicator_diameter="@dimen/viewpager_unselected_indicator_diameter"
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
 ### 2.attributes description
 | attributes                    | description                   | type              | defaults         |
 | ----------------------------- | ----------------------------- | ----------------- | ---------------- |
-| loop                  			| start an unlimited carousel(valid when there is only one item per page)    | boolean      | false		        |
+| loop                  			| start a carousel(valid when there is only one item per page)    			 | boolean      | false		        |
 | loop_interval                 | loop interval								  							     | int		    | 3000		        |
+| autoplay                 		| automatically scroll to the next page								  		 | boolean      | false		        |
 | hide_indicator                | hide indicator  														     | boolean      | false	            |
 | indicator_container_background| the background of indicator parent container 	 	 						 | drawable     | null		        |
 | indicator_container_height    | indicator parent container height(valid in the vertical orientation) 	 	 | int          | 90		        |
@@ -64,7 +66,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | indicator_group_marginTop     | the marginTop of indicator group  	 	 								 	 | int          | 0 		        |
 | indicator_group_marginRight   | the marginRight of indicator group  	 	 								 | int          | 0 		        |
 | indicator_group_marginBottom  | the marginBottom of indicator group  	 	 								 | int          | 0 		        |
-| indicator_margin				| indicator spacing  													     | int          | 15                |
+| indicator_margin				| indicator spacing  													     | boolean      | false             |
 | clipToPadding					| the clipTopadding of recyclerView  		 								 | int      	| 15            	|
 | pagePadding					| recyclerView.setPadding(pagePadding,0,pagePading,0)  			 			 | int      	| 15            	|
 | layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
@@ -95,9 +97,13 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 [FlexItemDecoration](https://github.com/ckrgithub/FlexItemDecoration)
 
 ## Version Tracking
+* **1.2.0-release**
+  * add: the settings of autoplay
+  * add: the animation of scrolling to the page
+
 * **1.1.1-release**
   * repair: When fast sliding,the indicators don't update in time
-  * repair: When compiling Android O's recyclerView,the method of setCurrentItem(1,false) doesn't work
+  * repair: the method of setCurrentItem(1,false) doesn't work
   * add: clipToPadding and pagePadding Settings
  
 * **1.1.0-release**
