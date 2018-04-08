@@ -100,7 +100,7 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 * **1.2.0-release**
   * 添加：autopaly属性
   * 添加：翻页动画
-  * 
+
 * **1.1.1-release**
   * 修复：快速滑动，指示器没有及时更新的问题
   * 修复：当引用android O 的recyclerview时，setCurrentItem(1,false)不起效问题
