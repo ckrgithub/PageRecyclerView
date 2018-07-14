@@ -1,4 +1,4 @@
-package com.ckr.pageview.view;
+package android.support.v7.widget;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.Interpolator;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
 import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -25,8 +20,9 @@ import static com.ckr.pageview.utils.PageLog.Logd;
 import static com.ckr.pageview.utils.PageLog.Loge;
 
 /**
- * Created by PC大佬 on 2018/1/14.
+ * Created by PC大佬 on 2018/7/14.
  */
+
 public class PageRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback {
 	private static final String TAG = "PageRecyclerView";
 	private static final String ARGS_SCROLL_OFFSET = "mScrollOffset";
@@ -40,15 +36,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private int mScrollWidth;
 	private int mScrollHeight;
 	private int mOrientation;
-	private Method smoothScrollBy = null;
-	private Field mViewFlingerField = null;
-	private static final Interpolator mInterpolator = new Interpolator() {
-		@Override
-		public float getInterpolation(float t) {
-			t -= 1.0f;
-			return t * t * t * t * t + 1.0f;
-		}
-	};
 	private int mScrollOffset;//滚动偏移量
 	private int mDragOffset;//拖动时偏移量
 	private int mScrollState;
@@ -59,8 +46,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private boolean isSliding;//是否是滑动
 	private boolean forwardDirection;//滑动方向
 	private DecimalFormat decimalFormat;
-	private OnPageChangeListener mOnPageChangeListener;
-	private PageTransformer mPageTransformer;
+	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
+	private PageRecyclerView.PageTransformer mPageTransformer;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -78,8 +65,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private void init() {
 		decimalFormat = new DecimalFormat("0.00");
 		decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
-		getScrollerByReflection();
-		setOnFlingListener(new OnPageFlingListener());
+		setOnFlingListener(new PageRecyclerView.OnPageFlingListener());
 		addOnLayoutChangeListener(new OnLayoutChangeListener() {
 			@Override
 			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -147,38 +133,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		this.mVelocity = mVelocity;
 	}
 
-	/**
-	 * {@link ViewFlinger}
-	 */
-	private void getScrollerByReflection() {
-		Class<?> c = null;
-		Class<?> ViewFlingerClass = null;
-		try {
-			c = Class.forName("android.support.v7.widget.RecyclerView");
-			mViewFlingerField = c.getDeclaredField("mViewFlinger");
-			mViewFlingerField.setAccessible(true);
-			ViewFlingerClass = Class.forName(mViewFlingerField.getType().getName());
-			smoothScrollBy = ViewFlingerClass.getDeclaredMethod("smoothScrollBy",
-					int.class, int.class, int.class, Interpolator.class);
-			smoothScrollBy.setAccessible(true);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void smoothScrollBy(int dx, int dy, int duration) {
-		try {
-			Loge(TAG, "smoothScrollBy,dx:" + dx + ",dy:" + dy + ",duration:" + duration);
-			smoothScrollBy.invoke(mViewFlingerField.get(this), dx, dy, duration, mInterpolator);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		super.mViewFlinger.smoothScrollBy(dx, dy, duration, sQuinticInterpolator);
 	}
 
 	@Override
@@ -375,7 +331,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		Logd(TAG, "onScrolled,mCurrentPage:" + mCurrentPage);
 	}
 
-	void scrollToEndPage(@IntRange(from = 0) int page) {
+	public void scrollToEndPage(@IntRange(from = 0) int page) {
 		if (mOrientation == OnPageDataListener.HORIZONTAL) {
 			mScrollOffset = page * mScrollWidth;
 		} else {
@@ -384,12 +340,12 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		super.scrollToPosition(getAdapter().getItemCount() - 1);
 	}
 
-	void scrollToBeginPage() {
+	public void scrollToBeginPage() {
 		mScrollOffset = 0;
 		super.scrollToPosition(0);
 	}
 
-	void scrollToPage(@IntRange(from = 0) int page, boolean smoothScroll) {
+	public void scrollToPage(@IntRange(from = 0) int page, boolean smoothScroll) {
 		if (mCurrentPage == page) {
 			return;
 		}
@@ -562,11 +518,11 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		return bundle;
 	}
 
-	public void addOnPageChangeListener(OnPageChangeListener listener) {
+	public void addOnPageChangeListener(PageRecyclerView.OnPageChangeListener listener) {
 		this.mOnPageChangeListener = listener;
 	}
 
-	public void addPageTransformer(PageTransformer pageTransformer) {
+	public void addPageTransformer(PageRecyclerView.PageTransformer pageTransformer) {
 		this.mPageTransformer = pageTransformer;
 	}
 

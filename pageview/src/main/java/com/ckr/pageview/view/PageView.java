@@ -12,6 +12,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PageRecyclerView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -138,7 +139,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	private void initView() {
 		View inflate;
-		if (orientation == 0) {
+		if (orientation == OnPageDataListener.HORIZONTAL) {
 			inflate = View.inflate(getContext(), R.layout.horizontal_page_view, null);
 		} else {
 			inflate = View.inflate(getContext(), R.layout.vertical_page_view, null);
@@ -334,7 +335,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(1).setLooping(isLooping)
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)
 				.setColumn(pageColumn).setRow(pageRow)
 				.setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {

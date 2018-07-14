@@ -5,13 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PageRecyclerView;
 import android.util.Log;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MainAdapter;
 import com.ckr.pagesnaphelper.model.Item;
 import com.ckr.pageview.transform.BaseTransformer;
-import com.ckr.pageview.view.PageRecyclerView;
 import com.ckr.pageview.view.PageView;
 
 import java.util.ArrayList;
@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 import static com.ckr.pagesnaphelper.adapter.MainAdapter.MAX_VALUE;
+
+//import com.ckr.pageview.view.PageRecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,10 +1,10 @@
 package com.ckr.pageview.transform;
 
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.PageRecyclerView;
 import android.view.View;
 
 import com.ckr.pageview.adapter.OnPageDataListener;
-import com.ckr.pageview.view.PageRecyclerView;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
 
