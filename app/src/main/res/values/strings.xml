@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PageSnapHelper</string>
+    <string name="app_name">翻页</string>
 
     <string-array name="tab_title">
         <item>无限轮播</item>
