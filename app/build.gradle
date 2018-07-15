@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion rootProject.ext.androidConfig.compileSdkVersion
+    buildToolsVersion rootProject.ext.androidConfig.buildToolsVersion
     defaultConfig {
         applicationId rootProject.ext.appConfig.applicationId
         minSdkVersion rootProject.ext.androidConfig.minSdkVersion
@@ -9,10 +11,21 @@ android {
         versionCode rootProject.ext.appConfig.versionCode
         versionName rootProject.ext.appConfig.versionName
     }
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('./android.jks')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {
@@ -21,12 +34,12 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
-    implementation "com.android.support:recyclerview-v7:$rootProject.supportVersion"
-    implementation "com.android.support:design:$rootProject.supportVersion"
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    implementation project(':pageview')
-//    implementation 'ckrjfrog.Page:PageView:1.2.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile "com.android.support:appcompat-v7:$rootProject.supportVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+    compile "com.android.support:design:$rootProject.supportVersion"
+    compile 'com.jakewharton:butterknife:8.8.1'
+    apt 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile project(':pageview')
+//    compile 'ckrjfrog.Page:PageView:1.2.1'
 }
