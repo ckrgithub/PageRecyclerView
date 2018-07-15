@@ -462,7 +462,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
 							int targetPage = quotient * pageCount;
 							setCurrentItem(targetPage, false);
-							resumeLooping();
+							if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+								resumeLooping();
+							} else if (targetPage == currentPage) {
+								resumeLooping();
+							}
 						}
 					} else {
 						scrollToBeginPage();
@@ -475,7 +479,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
 							int targetPage = quotient * pageCount - 1;
 							setCurrentItem(targetPage, false);
-							resumeLooping();
+							if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+								resumeLooping();
+							} else if (targetPage == currentPage) {
+								resumeLooping();
+							}
 						}
 					} else {
 						scrollToEndPage(pageCount - 1);
@@ -486,7 +494,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 					int currentPage = recyclerView.getCurrentPage();
 					int targetPage = currentPage / pageCount * pageCount + lastPage;
 					setCurrentItem(targetPage, false);
-					resumeLooping();
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+						resumeLooping();
+					} else if (targetPage == currentPage) {
+						resumeLooping();
+					}
 				} else {
 					moveIndicator(lastPage, moveIndicator);
 				}

@@ -2,6 +2,7 @@ package android.support.v7.widget;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
@@ -355,11 +356,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			} else {
 				int scrollX = page * mScrollWidth;
 				int moveX = scrollX - mScrollOffset;
-				Loge(TAG, "scrollToPage: moveX:" + moveX);
 				if (smoothScroll) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
-					scrollBy(moveX, 0);
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat recyclerview-v7-26.1.0 above
+						scrollBy(moveX, 0);
+					} else {
+						smoothScrollBy(moveX, 0, 0);
+					}
 				}
 			}
 		} else {
@@ -368,11 +372,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			} else {
 				int scrollY = page * mScrollHeight;
 				int moveY = scrollY - mScrollOffset;
-				Loge(TAG, "scrollToPage: moveY:" + moveY);
 				if (smoothScroll) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
 				} else {
-					scrollBy(0, moveY);
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat recyclerview-v7-26.1.0
+						scrollBy(0, moveY);
+					} else {
+						smoothScrollBy(0, moveY, 0);
+					}
 				}
 			}
 		}
