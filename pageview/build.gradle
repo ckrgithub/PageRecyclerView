@@ -20,6 +20,7 @@ tasks.withType(Javadoc) {
 
 android {
     compileSdkVersion rootProject.ext.androidConfig.compileSdkVersion
+    buildToolsVersion rootProject.ext.androidConfig.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidConfig.minSdkVersion
@@ -32,6 +33,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("boolean","isDebug","false")
+        }
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("boolean","isDebug","true")
         }
     }
     lintOptions {
@@ -40,8 +47,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
-    compileOnly "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:$rootProject.supportVersion"
+    provided "com.android.support:recyclerview-v7:$rootProject.supportVersion"
 
 }
