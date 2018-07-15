@@ -122,7 +122,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping)&& pageColumn * pageRow == 1;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
@@ -359,6 +359,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			isPaused = true;//标记已暂停轮询状态
 			pauseLooping();
 		}
+		Logd(TAG, "updateAll: isPaused:" + isPaused);
 		mAdapter.updateAll(list);
 	}
 
@@ -374,6 +375,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		if (isAutoLooping()) {
+			Logd(TAG, "updateIndicator: isPaused:" + isPaused);
 			if (isPaused) {
 				isPaused = false;//解除已暂停轮询状态
 			} else {
@@ -460,11 +462,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
 							int targetPage = quotient * pageCount;
 							setCurrentItem(targetPage, false);
-							if (currentPage == targetPage) {
-								if (targetPage == currentPage) {
-									resumeLooping();
-								}
-							}
+							resumeLooping();
 						}
 					} else {
 						scrollToBeginPage();
@@ -477,11 +475,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 							int quotient = currentPage / pageCount + (mod == 0 ? 0 : Math.abs(pageCount - mod) <= 1 ? 0 : 1);
 							int targetPage = quotient * pageCount - 1;
 							setCurrentItem(targetPage, false);
-							if (currentPage == targetPage) {
-								if (targetPage == currentPage) {
-									resumeLooping();
-								}
-							}
+							resumeLooping();
 						}
 					} else {
 						scrollToEndPage(pageCount - 1);
@@ -492,9 +486,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 					int currentPage = recyclerView.getCurrentPage();
 					int targetPage = currentPage / pageCount * pageCount + lastPage;
 					setCurrentItem(targetPage, false);
-					if (targetPage == currentPage) {
-						resumeLooping();
-					}
+					resumeLooping();
 				} else {
 					moveIndicator(lastPage, moveIndicator);
 				}
