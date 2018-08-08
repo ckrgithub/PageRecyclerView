@@ -149,14 +149,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) recyclerView.getLayoutParams();
 		if (orientation == OnPageDataListener.HORIZONTAL) {
-			if (!overlapStyle) {
+			if (!hideIndicator && !overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
 			if (isLooping) {
 				recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
 			}
 		} else if (orientation == OnPageDataListener.VERTICAL) {
-			if (!overlapStyle) {
+			if (!hideIndicator && !overlapStyle) {
 				params.leftMargin = indicatorContainerWidth;
 			}
 //			recyclerView.setPadding(0, pagePadding, 0, pagePadding);
