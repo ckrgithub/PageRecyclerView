@@ -39,5 +39,5 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 //    compile project(':pageview')
-    compile 'ckrjfrog.Page:PageView:1.2.2'
+    implementation 'ckrjfrog.Page:PageView:1.2.2'
 }
