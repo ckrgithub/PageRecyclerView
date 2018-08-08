@@ -55,4 +55,15 @@
             <enum name="grid" value="1"/>
         </attr>
     </declare-styleable>
+
+    <integer name="loop_interval">3000</integer>
+    <color name="color_indicator_selected">#ff0000</color>
+    <color name="color_indicator_unselected">#000000</color>
+    <dimen name="diameter_indicator_selected">5dp</dimen>
+    <dimen name="diameter_indicator_unselected">5dp</dimen>
+    <dimen name="indicator_gap">5dp</dimen>
+    <dimen name="height_indicator_container">30dp</dimen>
+    <dimen name="width_indicator_container">30dp</dimen>
+    <integer name="align_center">0x11</integer>
+
 </resources>

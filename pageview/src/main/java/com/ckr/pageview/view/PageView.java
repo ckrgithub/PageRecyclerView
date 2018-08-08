@@ -1,6 +1,7 @@
 package com.ckr.pageview.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,19 +39,19 @@ import static com.ckr.pageview.utils.PageLog.Logd;
  */
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
-	private static final int INTERVAL = 3000;
-	private int selectedIndicatorColor = Color.RED;
-	private int unselectedIndicatorColor = Color.BLACK;
-	private int selectedIndicatorDiameter = 15;
-	private int unselectedIndicatorDiameter = 15;
-	private int indicatorMargin = 15;
+	private static final int INTERVAL = Resources.getSystem().getInteger(R.integer.loop_interval);
+	private int selectedIndicatorColor = Resources.getSystem().getColor(R.color.color_indicator_selected);
+	private int unselectedIndicatorColor = Resources.getSystem().getColor(R.color.color_indicator_unselected);
+	private int selectedIndicatorDiameter = (int) Resources.getSystem().getDimension(R.dimen.diameter_indicator_selected);
+	private int unselectedIndicatorDiameter = (int) Resources.getSystem().getDimension(R.dimen.diameter_indicator_unselected);
+	private int indicatorMargin = (int) Resources.getSystem().getDimension(R.dimen.indicator_gap);
 	private Drawable selectedIndicatorDrawable = null;
 	private Drawable unselectedIndicatorDrawable = null;
 	private Drawable pageBackground = null;
 	private Drawable indicatorContainerBackground = null;
 	private boolean hideIndicator = false;
-	private int indicatorContainerHeight = 90;
-	private int indicatorContainerWidth = 90;
+	private int indicatorContainerHeight = (int) Resources.getSystem().getDimension(R.dimen.height_indicator_container);
+	private int indicatorContainerWidth = (int) Resources.getSystem().getDimension(R.dimen.width_indicator_container);
 	private int orientation = OnPageDataListener.HORIZONTAL;
 	private int pageRow = OnPageDataListener.ONE;
 	private int pageColumn = OnPageDataListener.ONE;
@@ -61,7 +62,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private boolean clipToPadding = false;
 	private int pagePadding;
-	private int indicatorGroupAlignment = 0x11;
+	private int indicatorGroupAlignment = Resources.getSystem().getInteger(R.integer.align_center);
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
 	private int indicatorGroupMarginRight;
