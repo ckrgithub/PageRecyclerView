@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -122,7 +123,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && onlyOne();
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
@@ -137,6 +138,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		typedArray.recycle();
 	}
 
+	private boolean onlyOne() {
+		return pageColumn * pageRow == 1;
+	}
+
 	private void initView() {
 		View inflate;
 		if (orientation == OnPageDataListener.HORIZONTAL) {
@@ -148,14 +153,14 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView = (PageRecyclerView) inflate.findViewById(R.id.recyclerView);
 		FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) recyclerView.getLayoutParams();
 		if (orientation == OnPageDataListener.HORIZONTAL) {
-			if (!hideIndicator&&!overlapStyle) {
+			if (!hideIndicator && !overlapStyle) {
 				params.bottomMargin = indicatorContainerHeight;
 			}
 			if (isLooping) {
 				recyclerView.setPadding(pagePadding, 0, pagePadding, 0);
 			}
 		} else if (orientation == OnPageDataListener.VERTICAL) {
-			if (!hideIndicator&&!overlapStyle) {
+			if (!hideIndicator && !overlapStyle) {
 				params.leftMargin = indicatorContainerWidth;
 			}
 //			recyclerView.setPadding(0, pagePadding, 0, pagePadding);
@@ -172,6 +177,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				recyclerView.setBackgroundDrawable(pageBackground);
 			}
 			pageBackground = null;
+		}
+		//</editor-fold>
+		//<editor-fold desc="recyclerView match_parent compat">
+		if (onlyOne()) {
+			FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+			recyclerView.setLayoutParams(layoutParams);
 		}
 		//</editor-fold>
 		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
