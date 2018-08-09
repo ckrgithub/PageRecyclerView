@@ -7,16 +7,15 @@ ext {
     ]
 
     androidConfig = [
-            compileSdkVersion: 25,
-            buildToolsVersion: "25.0.3",
+            compileSdkVersion: 26,
             minSdkVersion    : 15,
-            targetSdkVersion : 25,
+            targetSdkVersion : 26,
     ]
 
-    supportVersion = "25.3.1"
+    supportVersion = "26.1.0"
 
      pageViewConfig = [
-             versionCode: 122,
+             versionCode: 123,
              versionName: "1.2.3",
              publishVersion: "1.2.3"
      ]
