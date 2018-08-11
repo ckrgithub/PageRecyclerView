@@ -17,7 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -123,7 +122,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && onlyOne();
+		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
@@ -136,10 +135,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
 		indicatorGroupMarginBottom = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, 0);
 		typedArray.recycle();
-	}
-
-	private boolean onlyOne() {
-		return pageColumn * pageRow == 1;
 	}
 
 	private void initView() {
@@ -177,12 +172,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				recyclerView.setBackgroundDrawable(pageBackground);
 			}
 			pageBackground = null;
-		}
-		//</editor-fold>
-		//<editor-fold desc="recyclerView match_parent compat">
-		if (onlyOne()) {
-			FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-			recyclerView.setLayoutParams(layoutParams);
 		}
 		//</editor-fold>
 		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
