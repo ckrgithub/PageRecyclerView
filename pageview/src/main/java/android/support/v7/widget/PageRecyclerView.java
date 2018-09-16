@@ -84,10 +84,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				Logd(TAG, "onLayoutChange: mScrollWidth:" + mScrollWidth + ",mScrollHeight:" + mScrollHeight
 						+ ",mCurrentPage:" + mCurrentPage + ",mFirstLayout:" + mFirstLayout + ",isSaveState:" + isSaveState
 						+ ",forwardDirection:" + forwardDirection);
+				label:
 				if (mFirstLayout) {
 					if (mOrientation == OnPageDataListener.HORIZONTAL) {
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollWidth;
+						if (mScrollWidth == 0) {
+							break label;
+						}
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
@@ -106,6 +110,9 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 					} else {
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollHeight;
+						if (mScrollHeight == 0) {
+							break label;
+						}
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
@@ -130,6 +137,21 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		setChildDrawingOrderCallback(this);
 	}
 
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		Logd(TAG, "onSizeChanged: w:" + w + ",h:" + h);
+		int paddingLeft = getPaddingLeft();
+		int paddingRight = getPaddingRight();
+		int paddingTop = getPaddingTop();
+		int paddingBottom = getPaddingBottom();
+		mScrollWidth = getWidth() - paddingLeft - paddingRight;
+		mScrollHeight = getHeight() - paddingTop - paddingBottom;
+		if (mIsLooping) {
+			mScrollOffset = mCurrentPage * mScrollWidth;
+			PageRecyclerView.super.scrollToPosition(mCurrentPage);
+		}
+	}
 
 	@Override
 	public int onGetChildDrawingOrder(int childCount, int i) {
@@ -273,7 +295,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			}
 			if (dx < 0) {
 				forwardDirection = false;
-			} else if(dx > 0) {
+			} else if (dx > 0) {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
@@ -320,7 +342,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			}
 			if (dy < 0) {
 				forwardDirection = false;
-			} else if(dy > 0) {
+			} else if (dy > 0) {
 				forwardDirection = true;
 			}
 			Logd(TAG, "onScrolled: mScrollOffset:" + mScrollOffset + ",mCurrentPage:" + mCurrentPage +
@@ -383,10 +405,10 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		if (mCurrentPage == page) {
 			return;
 		}
-		if (mOrientation == OnPageDataListener.HORIZONTAL) {
-			if (mFirstLayout) {
-				mCurrentPage = page;
-			} else {
+		if (mFirstLayout) {
+			mCurrentPage = page;
+		}else {
+			if (mOrientation == OnPageDataListener.HORIZONTAL) {
 				int scrollX = page * mScrollWidth;
 				int moveX = scrollX - mScrollOffset;
 				if (smoothScroll) {
@@ -398,10 +420,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						smoothScrollBy(moveX, 0, 0);
 					}
 				}
-			}
-		} else {
-			if (mFirstLayout) {
-				mCurrentPage = page;
 			} else {
 				int scrollY = page * mScrollHeight;
 				int moveY = scrollY - mScrollOffset;

@@ -346,6 +346,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView.setAdapter(mAdapter);
 	}
 
+	public int getPageCount(){
+		if (mAdapter != null) {
+			return mAdapter.getPageCount();
+		}
+		return 0;
+	}
+
 	/**
 	 * 更新数据源
 	 *
@@ -453,6 +460,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 					lastPage %= lastPageCount;
 				}
 			}
+			Logd(TAG, "updateMoveIndicator: lastPageCount:" + lastPageCount + ",lastPage:" + lastPage + ",pageCount:" + pageCount);
 			if (pageCount < lastPageCount && lastPage >= pageCount) {//2,3,1
 				if (isScrollToBeginPage) {
 					if (isLooping) {
@@ -492,7 +500,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			} else {
 				if (isLooping) {
 					int currentPage = recyclerView.getCurrentPage();
-					int targetPage = currentPage / pageCount * pageCount + lastPage;
+					int targetPage = lastPageCount == 0 ? currentPage : currentPage / pageCount * pageCount + lastPage;
 					setCurrentItem(targetPage, false);
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 						resumeLooping();
@@ -519,6 +527,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void setCurrentItem(@IntRange(from = 0) int page, boolean smoothScroll) {
+		Logd(TAG, "setCurrentItem: page:" + page);
 		recyclerView.scrollToPage(page, smoothScroll);
 		moveIndicator(page, moveIndicator);
 	}
