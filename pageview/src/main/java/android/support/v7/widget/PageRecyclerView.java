@@ -419,7 +419,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
 				int scrollX = page * mScrollWidth;
 				int moveX = scrollX - mScrollOffset;
-				if (mScrollWidth == 0) {
+				if (mScrollWidth == 0) {//中断recyclerView滚动
 					mCurrentPage = page;
 					return;
 				}
@@ -427,17 +427,15 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat recyclerview-v7-26.1.0 above
-						Logd(TAG, "scrollToPage: 小于M");
 						scrollBy(moveX, 0);
 					} else {
-						Logd(TAG, "scrollToPage: 大于M");
 						smoothScrollBy(moveX, 0, 0);
 					}
 				}
 			} else {
 				int scrollY = page * mScrollHeight;
 				int moveY = scrollY - mScrollOffset;
-				if (mScrollHeight == 0) {
+				if (mScrollHeight == 0) {//中断recyclerView滚动
 					mCurrentPage = page;
 					return;
 				}

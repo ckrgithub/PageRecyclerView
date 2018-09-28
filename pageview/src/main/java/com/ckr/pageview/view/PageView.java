@@ -348,12 +348,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (!hideIndicator) {
 			switchIndicatorContainer();
 		}
-		List data = mAdapter.getRawData();
-		if (data != null && data.size() != 0) {
-			if (indicatorContainer.getVisibility() != VISIBLE) {
-				indicatorContainer.setVisibility(VISIBLE);
-			}
-		}
 	}
 
 	private void switchIndicatorContainer() {
@@ -479,7 +473,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
 			}
 		} else {
-			if (isLooping) {
+			if (isLooping) {				//中断指示器移动
 				if (orientation == OnPageDataListener.HORIZONTAL) {
 					int width = recyclerView.getWidth();
 					if (width == 0) {
