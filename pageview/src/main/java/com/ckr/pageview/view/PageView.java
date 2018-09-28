@@ -78,6 +78,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private PageHandler mHandler;
 	private boolean firstEnter = true;
 	private boolean isPaused = false;
+	private View indicatorContainer;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -174,7 +175,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			pageBackground = null;
 		}
 		//</editor-fold>
-		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
+		indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
 		if (hideIndicator) {
 			indicatorContainer.setVisibility(GONE);
 		} else {
@@ -344,6 +345,28 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == OnPageDataListener.HORIZONTAL ? pageRow : pageColumn, orientation, false));
 		}
 		recyclerView.setAdapter(mAdapter);
+		if (!hideIndicator) {
+			switchIndicatorContainer();
+		}
+		List data = mAdapter.getRawData();
+		if (data != null && data.size() != 0) {
+			if (indicatorContainer.getVisibility() != VISIBLE) {
+				indicatorContainer.setVisibility(VISIBLE);
+			}
+		}
+	}
+
+	private void switchIndicatorContainer() {
+		List data = mAdapter.getRawData();
+		if (data == null || data.size() == 0) {
+			if (indicatorContainer.getVisibility() != INVISIBLE) {
+				indicatorContainer.setVisibility(INVISIBLE);
+			}
+		} else {
+			if (indicatorContainer.getVisibility() != VISIBLE) {
+				indicatorContainer.setVisibility(VISIBLE);
+			}
+		}
 	}
 
 	public int getPageCount() {
@@ -381,6 +404,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (hideIndicator) {
 			return;
 		}
+		switchIndicatorContainer();
 		if (isAutoLooping()) {
 			Logd(TAG, "updateIndicator: isPaused:" + isPaused);
 			if (isPaused) {
