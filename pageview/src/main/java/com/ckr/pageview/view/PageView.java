@@ -346,7 +346,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView.setAdapter(mAdapter);
 	}
 
-	public int getPageCount(){
+	public int getPageCount() {
 		if (mAdapter != null) {
 			return mAdapter.getPageCount();
 		}
@@ -451,9 +451,26 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private void updateMoveIndicator() {
 		int pageCount = mAdapter.getPageCount();
 		if (pageCount == 0) {
-			moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
+			if (moveIndicator.getVisibility() != GONE) {
+				moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
+			}
 		} else {
-			moveIndicator.setVisibility(View.VISIBLE);
+			if (isLooping) {
+				if (orientation == OnPageDataListener.HORIZONTAL) {
+					int width = recyclerView.getWidth();
+					if (width == 0) {
+						return;
+					}
+				} else {
+					int height = recyclerView.getHeight();
+					if (height == 0) {
+						return;
+					}
+				}
+			}
+			if (moveIndicator.getVisibility() != VISIBLE) {
+				moveIndicator.setVisibility(View.VISIBLE);
+			}
 			int lastPage = recyclerView.getCurrentPage();
 			if (isLooping) {
 				if (lastPageCount != 0) {
@@ -585,6 +602,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			@Override
 			public void run() {
 				view.setLayoutParams(layoutParams);
+				if (view.getVisibility() != VISIBLE) {
+					view.setVisibility(VISIBLE);
+				}
 			}
 		});
 	}

@@ -148,8 +148,17 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		mScrollWidth = getWidth() - paddingLeft - paddingRight;
 		mScrollHeight = getHeight() - paddingTop - paddingBottom;
 		if (mIsLooping) {
-			mScrollOffset = mCurrentPage * mScrollWidth;
-			PageRecyclerView.super.scrollToPosition(mCurrentPage);
+			if (mOrientation == OnPageDataListener.HORIZONTAL) {
+				mScrollOffset = mCurrentPage * mScrollWidth;
+			} else {
+				mScrollOffset = mCurrentPage * mScrollHeight;
+			}
+			post(new Runnable() {
+				@Override
+				public void run() {
+					scrollToPosition(mCurrentPage);
+				}
+			});
 		}
 	}
 
@@ -317,7 +326,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				int positionOffsetPixels = mScrollOffset % mScrollWidth;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollWidth / (double) mScrollWidth));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (mLastPage - mCurrentPage != 0) {
+				if (mLastPage - mCurrentPage != 0 || positionOffset == 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
@@ -353,8 +362,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			mLastPage = mCurrentPage;
 			if (mScrollOffset % mScrollHeight == 0) {
 				mCurrentPage = mScrollOffset / mScrollHeight;
-			}
-			if (dy < 0) {
+			} else if (dy < 0) {
 				int targetPage = mScrollOffset / mScrollHeight + 1;
 				mCurrentPage = Math.min(targetPage, mCurrentPage);
 			} else {
@@ -365,7 +373,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				int positionOffsetPixels = mScrollOffset % mScrollHeight;
 				float positionOffset = Float.parseFloat(decimalFormat.format(mScrollOffset % mScrollHeight / (double) mScrollHeight));
 				mOnPageChangeListener.onPageScrolled(mCurrentPage, positionOffset, positionOffsetPixels);
-				if (mLastPage - mCurrentPage != 0) {
+				if (mLastPage - mCurrentPage != 0 || positionOffset == 0) {
 					mOnPageChangeListener.onPageSelected(mCurrentPage);
 				}
 			}
@@ -407,22 +415,32 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		}
 		if (mFirstLayout) {
 			mCurrentPage = page;
-		}else {
+		} else {
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
 				int scrollX = page * mScrollWidth;
 				int moveX = scrollX - mScrollOffset;
+				if (mScrollWidth == 0) {
+					mCurrentPage = page;
+					return;
+				}
 				if (smoothScroll) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, moveX));
 				} else {
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//compat recyclerview-v7-26.1.0 above
+						Logd(TAG, "scrollToPage: 小于M");
 						scrollBy(moveX, 0);
 					} else {
+						Logd(TAG, "scrollToPage: 大于M");
 						smoothScrollBy(moveX, 0, 0);
 					}
 				}
 			} else {
 				int scrollY = page * mScrollHeight;
 				int moveY = scrollY - mScrollOffset;
+				if (mScrollHeight == 0) {
+					mCurrentPage = page;
+					return;
+				}
 				if (smoothScroll) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, moveY));
 				} else {

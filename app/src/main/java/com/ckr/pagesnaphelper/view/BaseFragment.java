@@ -1,6 +1,7 @@
 package com.ckr.pagesnaphelper.view;
 
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,6 +31,15 @@ public abstract class BaseFragment extends Fragment {
 		return view;
 	}
 
+	@CallSuper
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (getUserVisibleHint()) {
+			onVisible();
+		}
+	}
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
@@ -43,7 +53,7 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser) {
+		if (isVisibleToUser&&isResumed()) {
 			onVisible();
 		} else {
 			onInvisible();
