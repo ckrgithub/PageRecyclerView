@@ -176,13 +176,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (isAutoSize()) {
 			ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
 			int itemWidthOrHeight = calculateItemWidthOrHeight();
-			Logd(TAG, "onMeasure  onCreateViewHolder: widthOrHeight:" + widthOrHeight + ",itemWidthOrHeight:" + itemWidthOrHeight + ",mOrientation:" + mOrientation);
 			if (itemWidthOrHeight > 0) {
 				if (mOrientation == HORIZONTAL) {
 					layoutParams.width = itemWidthOrHeight;
 				} else {
 					layoutParams.height = itemWidthOrHeight;
-//                    layoutParams.width = 600;
 				}
 				Loge(TAG, "onMeasure  onCreateViewHolder: width:" + layoutParams.width + ",height:" + layoutParams.height);
 				itemView.setLayoutParams(layoutParams);
