@@ -67,12 +67,14 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 		int length = TITLES.length;
 		fragmentManager = getChildFragmentManager();
 		fragmentList = new ArrayList<>(length);
-		for (int i = 0; i < length; i++) {
+		for (int i = 0; i < 1; i++) {
 			String name = makeFragmentName(R.id.myViewPager, i);
 			BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(name);
 			if (fragment == null) {
 				if (i == 0) {
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
+					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
+
+//					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_linear, R.layout.item_horizontal_linear));
 				} else if (i == 1) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
 				} else if (i == 2) {

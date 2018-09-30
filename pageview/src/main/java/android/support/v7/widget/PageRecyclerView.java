@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.ckr.pageview.adapter.BasePageAdapter;
 import com.ckr.pageview.adapter.OnPageDataListener;
 import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
@@ -35,6 +36,10 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private static final String ARGS_SAVE_STATE = "isSaveState";
 	private static final int MAX_SETTLE_DURATION = 600; // ms
 	private static final int DEFAULT_VELOCITY = 4000;
+	private static final int MODE_DEFAULT = 0;
+	private static final int MODE_AUTO_WIDTH = 1;
+	private static final int MODE_AUTO_HEIGHT = 2;
+	private static final int DEFAULT_VALUE = -1;
 	private int mVelocity = DEFAULT_VELOCITY;
 	private int mScrollWidth;
 	private int mScrollHeight;
@@ -52,6 +57,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private PageRecyclerView.PageTransformer mPageTransformer;
 	private boolean isSaveState;
+	private int size = DEFAULT_VALUE;
+	private int measureMode = MODE_DEFAULT;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -137,6 +144,56 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		setChildDrawingOrderCallback(this);
 	}
 
+
+	@Override
+	protected void onMeasure(int widthSpec, int heightSpec) {
+		super.onMeasure(widthSpec, heightSpec);
+		Logd(TAG, "onMeasure  开始: ");
+		Adapter adapter = getAdapter();
+		if (adapter != null && adapter instanceof BasePageAdapter) {
+			BasePageAdapter pageAdapter = (BasePageAdapter) adapter;
+			int orientation = pageAdapter.getLayoutOrientation();
+			if (orientation == OnPageDataListener.HORIZONTAL) {
+				int mode = MeasureSpec.getMode(widthSpec);
+				int size = MeasureSpec.getSize(widthSpec);
+				Logd(TAG, "onMeasure  mode11: " + mode + ",size:" + size);
+				if (mode == MeasureSpec.EXACTLY) {
+					notifySizeChanged(size);
+					measureMode = MODE_AUTO_WIDTH;
+				}
+			} else {
+				int mode = MeasureSpec.getMode(widthSpec);
+				int size = MeasureSpec.getSize(widthSpec);
+				Logd(TAG, "onMeasure  width: " + mode + ",size:" + size);
+				mode = MeasureSpec.getMode(heightSpec);
+				size = MeasureSpec.getSize(heightSpec);
+				Logd(TAG, "onMeasure  mode: " + mode + ",size:" + size);
+				if (mode == MeasureSpec.EXACTLY) {
+					notifySizeChanged(size);
+					measureMode = MODE_AUTO_HEIGHT;
+				}
+			}
+		}
+	}
+
+	private void notifySizeChanged(int size) {
+		Logd(TAG, "notifySizeChanged: size:" + size);
+		if (this.size != size) {
+			Adapter adapter = getAdapter();
+			if (adapter != null && adapter instanceof BasePageAdapter) {
+				BasePageAdapter pageAdapter = (BasePageAdapter) adapter;
+				if (pageAdapter.isAutoSize()) {
+					pageAdapter.notifySizeChanged(size);
+					Loge(TAG, "notifySizeChanged: s:" + this.size);
+					if (this.size == DEFAULT_VALUE) {
+						setAdapter(adapter);
+					}
+				}
+			}
+		}
+		this.size = size;
+	}
+
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
@@ -147,6 +204,11 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		int paddingBottom = getPaddingBottom();
 		mScrollWidth = getWidth() - paddingLeft - paddingRight;
 		mScrollHeight = getHeight() - paddingTop - paddingBottom;
+		if (measureMode == MODE_AUTO_WIDTH) {
+			notifySizeChanged(w);
+		} else if (measureMode == MODE_AUTO_HEIGHT) {
+			notifySizeChanged(h);
+		}
 		if (mIsLooping) {
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
 				mScrollOffset = mCurrentPage * mScrollWidth;
@@ -180,6 +242,10 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	@Override
 	protected void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 	public int getCurrentPage() {

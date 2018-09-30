@@ -344,6 +344,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == OnPageDataListener.HORIZONTAL ? pageRow : pageColumn, orientation, false));
 		}
+		if (adapter.isAutoSize()) {
+			mAdapter.notifySizeChanged(recyclerView.getSize());
+		}
 		recyclerView.setAdapter(mAdapter);
 		if (!hideIndicator) {
 			switchIndicatorContainer();
