@@ -152,6 +152,10 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		Adapter adapter = getAdapter();
 		if (adapter != null && adapter instanceof BasePageAdapter) {
 			BasePageAdapter pageAdapter = (BasePageAdapter) adapter;
+			if (!pageAdapter.isAutoSize()) {//不启动item自适应
+				measureMode=DEFAULT_VALUE;
+				return;
+			}
 			int orientation = pageAdapter.getLayoutOrientation();
 			if (orientation == OnPageDataListener.HORIZONTAL) {
 				int mode = MeasureSpec.getMode(widthSpec);
@@ -204,11 +208,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		int paddingBottom = getPaddingBottom();
 		mScrollWidth = getWidth() - paddingLeft - paddingRight;
 		mScrollHeight = getHeight() - paddingTop - paddingBottom;
-		if (measureMode == MODE_AUTO_WIDTH) {
-			notifySizeChanged(w);
-		} else if (measureMode == MODE_AUTO_HEIGHT) {
-			notifySizeChanged(h);
-		}
+
 		if (mIsLooping) {
 			if (mOrientation == OnPageDataListener.HORIZONTAL) {
 				mScrollOffset = mCurrentPage * mScrollWidth;
