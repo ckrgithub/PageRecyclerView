@@ -22,7 +22,7 @@ import static com.ckr.pageview.utils.PosUtil.adjustPosition25;
  * Created by PC大佬 on 2018/1/15.
  */
 
-public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T> , OnAutoSizeListener{
+public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T>, OnAutoSizeListener {
 	private static final String TAG = "BasePageAdapter";
 	protected Context mContext;
 	protected List<T> mTargetData;
@@ -33,6 +33,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	protected int mOrientation;
 	protected int mLayoutFlag;
 	protected boolean mIsLooping;
+	protected boolean mIsAutosize;
 	private OnIndicatorListener mOnIndicatorListener;
 	private int widthOrHeight;
 
@@ -64,6 +65,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	public BasePageAdapter setLooping(boolean isLooping) {
 		this.mIsLooping = isLooping;
+		return this;
+	}
+
+	public BasePageAdapter setAutosize(boolean autosize) {
+		this.mIsAutosize = autosize;
 		return this;
 	}
 
@@ -170,7 +176,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 		if (isAutoSize()) {
 			ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
 			int itemWidthOrHeight = calculateItemWidthOrHeight();
-			Logd(TAG, "onMeasure  onCreateViewHolder: widthOrHeight:" + widthOrHeight + ",itemWidthOrHeight:" + itemWidthOrHeight+",mOrientation:"+mOrientation);
+			Logd(TAG, "onMeasure  onCreateViewHolder: widthOrHeight:" + widthOrHeight + ",itemWidthOrHeight:" + itemWidthOrHeight + ",mOrientation:" + mOrientation);
 			if (itemWidthOrHeight > 0) {
 				if (mOrientation == HORIZONTAL) {
 					layoutParams.width = itemWidthOrHeight;
@@ -182,7 +188,8 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 				itemView.setLayoutParams(layoutParams);
 			}
 		}
-		return getViewHolder(itemView, viewType);	}
+		return getViewHolder(itemView, viewType);
+	}
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
@@ -202,7 +209,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	protected int adjustPosition(int index) {
 		int pos = index;
-		if (mLayoutFlag == OnPageDataListener.GRID && mOrientation == OnPageDataListener.LINEAR) {
+		if (isGridLayout() && mOrientation == OnPageDataListener.LINEAR) {
 			pos = getAdjustedPosition(index, mRow * mColumn);
 		}
 		return pos;
@@ -288,7 +295,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	@Override
 	public boolean isAutoSize() {
-		return true&&isGridLayout();
+		return mIsAutosize && isGridLayout();
 	}
 
 	private boolean isGridLayout() {

@@ -57,6 +57,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
 	private boolean autoPlay = false;
+	private boolean autoSize = false;
 	private int interval;
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private boolean clipToPadding = false;
@@ -125,6 +126,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
+		autoSize = typedArray.getBoolean(R.styleable.PageView_autosize, autoSize);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
@@ -336,7 +338,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation)
+				.setLooping(isLooping).setAutosize(autoSize)
 				.setColumn(pageColumn).setRow(pageRow)
 				.setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {
@@ -476,7 +479,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
 			}
 		} else {
-			if (isLooping) {				//中断指示器移动
+			if (isLooping) {                //中断指示器移动
 				if (orientation == OnPageDataListener.HORIZONTAL) {
 					int width = recyclerView.getWidth();
 					if (width == 0) {

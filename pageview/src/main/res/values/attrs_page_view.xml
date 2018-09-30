@@ -17,6 +17,7 @@
         <attr name="hide_indicator" format="boolean"/>
         <attr name="loop" format="boolean"/>
         <attr name="autoplay" format="boolean"/>
+        <attr name="autosize" format="boolean"/>
         <attr name="loop_interval" format="integer"/>
         <attr name="overlap_layout" format="boolean"/>
         <attr name="clipToPadding" format="boolean"/>
