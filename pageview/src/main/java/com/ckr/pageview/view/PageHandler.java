@@ -29,7 +29,7 @@ public class PageHandler extends Handler {
 		}
 		switch (msg.what) {
 			case MSG_START_LOOPING:
-				mPageView.setCurrentItem(mPageView.getCurrentItem() + 1);
+				mPageView.setCurrentItem(mPageView.getCurrentItem() + (mPageView.getPageCount() == 0 ? 0 : 1));
 				mPageView.getHandler().sendEmptyMessageDelayed(MSG_START_LOOPING, mPageView.getLoopingInterval());
 				break;
 			case MSG_STOP_LOOPING:

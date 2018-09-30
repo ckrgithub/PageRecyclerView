@@ -57,6 +57,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int layoutFlag = OnPageDataListener.LINEAR;
 	private boolean isLooping = false;
 	private boolean autoPlay = false;
+	private boolean autoSize = false;
 	private int interval;
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private boolean clipToPadding = false;
@@ -78,6 +79,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private PageHandler mHandler;
 	private boolean firstEnter = true;
 	private boolean isPaused = false;
+	private View indicatorContainer;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -124,6 +126,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
 		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
+		autoSize = typedArray.getBoolean(R.styleable.PageView_autosize, autoSize);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
@@ -174,7 +177,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			pageBackground = null;
 		}
 		//</editor-fold>
-		View indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
+		indicatorContainer = inflate.findViewById(R.id.indicatorContainer);
 		if (hideIndicator) {
 			indicatorContainer.setVisibility(GONE);
 		} else {
@@ -335,7 +338,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setAdapter(@NonNull BasePageAdapter adapter) {
 		mAdapter = adapter;
-		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation).setLooping(isLooping)
+		mAdapter.setLayoutFlag(layoutFlag).setOrientation(orientation)
+				.setLooping(isLooping).setAutosize(autoSize)
 				.setColumn(pageColumn).setRow(pageRow)
 				.setOnIndicatorListener(this);
 		if (layoutFlag == OnPageDataListener.LINEAR) {
@@ -343,7 +347,33 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation == OnPageDataListener.HORIZONTAL ? pageRow : pageColumn, orientation, false));
 		}
+		if (adapter.isAutoSize()) {
+			mAdapter.notifySizeChanged(recyclerView.getSize());
+		}
 		recyclerView.setAdapter(mAdapter);
+		if (!hideIndicator) {
+			switchIndicatorContainer();
+		}
+	}
+
+	private void switchIndicatorContainer() {
+		List data = mAdapter.getRawData();
+		if (data == null || data.size() == 0) {
+			if (indicatorContainer.getVisibility() != INVISIBLE) {
+				indicatorContainer.setVisibility(INVISIBLE);
+			}
+		} else {
+			if (indicatorContainer.getVisibility() != VISIBLE) {
+				indicatorContainer.setVisibility(VISIBLE);
+			}
+		}
+	}
+
+	public int getPageCount() {
+		if (mAdapter != null) {
+			return mAdapter.getPageCount();
+		}
+		return 0;
 	}
 
 	/**
@@ -374,6 +404,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (hideIndicator) {
 			return;
 		}
+		switchIndicatorContainer();
 		if (isAutoLooping()) {
 			Logd(TAG, "updateIndicator: isPaused:" + isPaused);
 			if (isPaused) {
@@ -444,15 +475,33 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private void updateMoveIndicator() {
 		int pageCount = mAdapter.getPageCount();
 		if (pageCount == 0) {
-			moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
+			if (moveIndicator.getVisibility() != GONE) {
+				moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
+			}
 		} else {
-			moveIndicator.setVisibility(View.VISIBLE);
+			if (isLooping) {                //中断指示器移动
+				if (orientation == OnPageDataListener.HORIZONTAL) {
+					int width = recyclerView.getWidth();
+					if (width == 0) {
+						return;
+					}
+				} else {
+					int height = recyclerView.getHeight();
+					if (height == 0) {
+						return;
+					}
+				}
+			}
+			if (moveIndicator.getVisibility() != VISIBLE) {
+				moveIndicator.setVisibility(View.VISIBLE);
+			}
 			int lastPage = recyclerView.getCurrentPage();
 			if (isLooping) {
 				if (lastPageCount != 0) {
 					lastPage %= lastPageCount;
 				}
 			}
+			Logd(TAG, "updateMoveIndicator: lastPageCount:" + lastPageCount + ",lastPage:" + lastPage + ",pageCount:" + pageCount);
 			if (pageCount < lastPageCount && lastPage >= pageCount) {//2,3,1
 				if (isScrollToBeginPage) {
 					if (isLooping) {
@@ -492,7 +541,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			} else {
 				if (isLooping) {
 					int currentPage = recyclerView.getCurrentPage();
-					int targetPage = currentPage / pageCount * pageCount + lastPage;
+					int targetPage = lastPageCount == 0 ? currentPage : currentPage / pageCount * pageCount + lastPage;
 					setCurrentItem(targetPage, false);
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 						resumeLooping();
@@ -519,6 +568,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void setCurrentItem(@IntRange(from = 0) int page, boolean smoothScroll) {
+		Logd(TAG, "setCurrentItem: page:" + page);
 		recyclerView.scrollToPage(page, smoothScroll);
 		moveIndicator(page, moveIndicator);
 	}
@@ -576,6 +626,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			@Override
 			public void run() {
 				view.setLayoutParams(layoutParams);
+				if (view.getVisibility() != VISIBLE) {
+					view.setVisibility(VISIBLE);
+				}
 			}
 		});
 	}

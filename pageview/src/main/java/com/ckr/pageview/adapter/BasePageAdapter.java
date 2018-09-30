@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
+import static com.ckr.pageview.utils.PageLog.Loge;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition22;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition23;
 import static com.ckr.pageview.utils.PosUtil.adjustPosition24;
@@ -21,7 +22,7 @@ import static com.ckr.pageview.utils.PosUtil.adjustPosition25;
  * Created by PC大佬 on 2018/1/15.
  */
 
-public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T> {
+public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T>, OnAutoSizeListener {
 	private static final String TAG = "BasePageAdapter";
 	protected Context mContext;
 	protected List<T> mTargetData;
@@ -32,7 +33,9 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	protected int mOrientation;
 	protected int mLayoutFlag;
 	protected boolean mIsLooping;
+	protected boolean mIsAutosize;
 	private OnIndicatorListener mOnIndicatorListener;
+	private int widthOrHeight;
 
 	public BasePageAdapter(Context context) {
 		mContext = context;
@@ -62,6 +65,11 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	public BasePageAdapter setLooping(boolean isLooping) {
 		this.mIsLooping = isLooping;
+		return this;
+	}
+
+	public BasePageAdapter setAutosize(boolean autosize) {
+		this.mIsAutosize = autosize;
 		return this;
 	}
 
@@ -164,7 +172,21 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return getViewHolder(LayoutInflater.from(mContext).inflate(getLayoutId(viewType), parent, false), viewType);
+		View itemView = LayoutInflater.from(mContext).inflate(getLayoutId(viewType), parent, false);
+		if (isAutoSize()) {
+			ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+			int itemWidthOrHeight = calculateItemWidthOrHeight();
+			if (itemWidthOrHeight > 0) {
+				if (mOrientation == HORIZONTAL) {
+					layoutParams.width = itemWidthOrHeight;
+				} else {
+					layoutParams.height = itemWidthOrHeight;
+				}
+				Loge(TAG, "onMeasure  onCreateViewHolder: width:" + layoutParams.width + ",height:" + layoutParams.height);
+				itemView.setLayoutParams(layoutParams);
+			}
+		}
+		return getViewHolder(itemView, viewType);
 	}
 
 	@Override
@@ -185,7 +207,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 
 	protected int adjustPosition(int index) {
 		int pos = index;
-		if (mLayoutFlag == OnPageDataListener.GRID && mOrientation == OnPageDataListener.LINEAR) {
+		if (isGridLayout() && mOrientation == OnPageDataListener.LINEAR) {
 			pos = getAdjustedPosition(index, mRow * mColumn);
 		}
 		return pos;
@@ -249,6 +271,33 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	@Override
 	public int getRawItemCount() {
 		return mRawData.size();
+	}
+
+
+	@Override
+	public void notifySizeChanged(@IntRange(from = 0) int size) {
+		this.widthOrHeight = size;
+	}
+
+	@Override
+	public int calculateItemWidthOrHeight() {
+		if (isGridLayout()) {
+			if (mOrientation == HORIZONTAL) {
+				return widthOrHeight / mColumn;
+			} else {
+				return widthOrHeight / mRow;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean isAutoSize() {
+		return mIsAutosize && isGridLayout();
+	}
+
+	private boolean isGridLayout() {
+		return mLayoutFlag == GRID;
 	}
 
 	protected abstract int getLayoutId(int viewType);
