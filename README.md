@@ -17,8 +17,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.2.4'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.2.4'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.2.5'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.2.5'//gradle plugin 3.0 below used
 	}
 ```
 
@@ -32,6 +32,7 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         android:layout_gravity="center_horizontal"
         app:autoplay="true"
         app:loop="true"
+	app:autosize="false"
         app:loop_interval="3000"
         app:hide_indicator="false"
         app:indicator_container_background="#fff"
@@ -52,35 +53,36 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
         app:unselected_indicator_drawable="@drawable/shape_point_unselected"/>
 ```
 ### 2.attributes description
-| attributes                    | description                   | type              | defaults         |
-| ----------------------------- | ----------------------------- | ----------------- | ---------------- |
-| loop                  			| start a carousel(valid when there is only one item per page)    			 | boolean      | false		        |
-| loop_interval                 | loop interval								  							     | int		    | 3000		        |
-| autoplay                 		| automatically scroll to the next page								  		 | boolean      | false		        |
-| hide_indicator                | hide indicator  														     | boolean      | false	            |
-| indicator_container_background| the background of indicator parent container 	 	 						 | drawable     | null		        |
-| indicator_container_height    | indicator parent container height(valid in the vertical orientation) 	 	 | int          | 90		        |
-| indicator_contianer_width     | indicator parent container width(valid in the horizontal orientation)  	 | int          | 90		        |
-| indicator_group_alignment     | the alignment of indicator group(eg: left,top,center)  	 				 | int          | 0x11(center)    	|
-| indicator_group_marginLeft    | the marginLeft of indicator group  	 	 								 | int          | 0 		        |
-| indicator_group_marginTop     | the marginTop of indicator group  	 	 								 	 | int          | 0 		        |
-| indicator_group_marginRight   | the marginRight of indicator group  	 	 								 | int          | 0 		        |
-| indicator_group_marginBottom  | the marginBottom of indicator group  	 	 								 | int          | 0 		        |
-| indicator_margin				| indicator spacing  													     | boolean      | false             |
-| clipToPadding					| the clipTopadding of recyclerView  		 								 | int      	| 15            	|
-| pagePadding					| recyclerView.setPadding(pagePadding,0,pagePading,0)  			 			 | int      	| 15            	|
-| layout_flag					| mark linear layout or grid layout                                          | int          | 0(linear layout)  |
-| orientation					| layout orientation  													     | int          | 0(horizontal)     |
-| overlap_layout				| Whether the indicator overlaps the page 									 | boolean      | false     		|
-| page_column					| the number of columns per page  										     | int          | 1		            |
-| page_row						| the number of rows per page  											     | int          | 1		            |
-| selected_indicator_color      | indicator color for the current page  									     | int          | Color.RED         |
-| selected_indicator_diameter   | indicator diameter for the current page  								     | int          | 15                |
-| selected_indicator_drawable   | indicator drawable for the current page(priority is higher than color)     | drawable     | null	            |
-| unselected_indicator_color	| indicator color for the non-current page  								     | int          | Color.BLACK       |
-| unselected_indicator_diameter	| indicator diameter for the non-current page  							     | int          | 15 		        |
-| selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable     | null	            |
-| page_background				| the background of the current page									     | drawable		| null		        |
+| attributes         | description                   | type              | defaults         |
+| ------------------ | ----------------------------- | ----------------- | ---------------- |
+| loop               | start a carousel(valid when there is only one item per page)  | boolean    | false |
+| loop_interval      | loop interval	     | int		   | 3000		 |
+| autoplay           | automatically scroll to the next page	   | boolean      | false   |
+| autosize           | automatically adjust the width or height of item(valid in the grid layout) | boolean | false |
+| hide_indicator     | hide indicator  	     | boolean      | false	    |
+| indicator_container_background| the background of indicator parent container 	 | drawable     | null		|
+| indicator_container_height    | indicator parent container height(valid in the vertical orientation) 	  | int       | 90   |
+| indicator_contianer_width     | indicator parent container width(valid in the horizontal orientation)   | int       | 90   |
+| indicator_group_alignment     | the alignment of indicator group(eg: left,top,center)  | int        | 0x11(center)   |
+| indicator_group_marginLeft    | the marginLeft of indicator group  	 	 | int          | 0 		        |
+| indicator_group_marginTop     | the marginTop of indicator group  	 	 | int          | 0 		        |
+| indicator_group_marginRight   | the marginRight of indicator group  	 	 | int          | 0 		        |
+| indicator_group_marginBottom  | the marginBottom of indicator group  	 	 | int          | 0 		        |
+| indicator_margin		| indicator spacing  	         | boolean      | false             |
+| clipToPadding			| the clipTopadding of recyclerView  		 | int      	| 15     |
+| pagePadding			| recyclerView.setPadding(pagePadding,0,pagePading,0)  	| int      	| 15           |
+| layout_flag			| mark linear layout or grid layout                     | int          | 0(linear layout)  |
+| orientation			| layout orientation  					| int          | 0(horizontal)     |
+| overlap_layout		| Whether the indicator overlaps the page 		| boolean      | false     		|
+| page_column			| the number of columns per page  			| int          | 1		            |
+| page_row			| the number of rows per page  				| int          | 1		            |
+| selected_indicator_color      | indicator color for the current page  		| int          | Color.RED         |
+| selected_indicator_diameter   | indicator diameter for the current page  		| int          | 15                |
+| selected_indicator_drawable   | indicator drawable for the current page(priority is higher than color)     | drawable    | null  |
+| unselected_indicator_color	| indicator color for the non-current page  		| int          | Color.BLACK       |
+| unselected_indicator_diameter	| indicator diameter for the non-current page  		| int          | 15 		        |
+| selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable  | null |
+| page_background		| the background of the current page			| drawable		| null		|
 
 ### 3.code to use
 ```
