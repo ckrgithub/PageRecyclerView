@@ -58,7 +58,7 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 | loop                  	| 是否启动无限轮播(当每页只有一个item时有效)    | boolean  	| false	 	|
 | loop_interval                 | 轮询时间间隔			        | int	          | 3000	  |
 | autoplay                 	| 自动轮播					 | boolean	    | false	    |
-| autosize			| item宽或高自适应				| boolean	  | false	  |
+| autosize			| item宽或高自适应(只在网格布局有效)  	 | boolean	  | false	  |
 | hide_indicator                | 是否隐藏指示器  			       | boolean 	| false		 |
 | indicator_container_background| 指示器父容器的背景 	 	 	     | drawable     | null	|
 | indicator_contianer_heigt     | 指示器父容器的高度 			     | int     		| 90	|
