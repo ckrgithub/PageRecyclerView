@@ -115,6 +115,12 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 * **1.0.9-release**
   * repair: When the carousel is broadcast, the data source changes to cause confusion in the indicator point.
 
+## Community
+-------
+Contact Me: 862950533
+Or scan the QR code below:
+![](screenRecorder/qq.png)
+
 License
 -------
 
