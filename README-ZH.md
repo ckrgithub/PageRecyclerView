@@ -115,9 +115,10 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 * **1.0.9-release**
   * 修复：轮播时，数据源发生变化引起指示点错乱的问题
 ## QQ群
-QQ群号：862950533
-二维码：
+QQ群号：862950533  
+二维码：  
 ![](screenRecorder/qq.png)
+
 License
 -------
 
