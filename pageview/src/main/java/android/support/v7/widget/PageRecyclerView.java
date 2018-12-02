@@ -553,18 +553,18 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				Loge(TAG, "snapFromFling: deltaX:" + moveX + ",mCurrentPage:" + mCurrentPage);
 				if (Math.abs(moveX) != 0 && Math.abs(moveX) != mScrollWidth) {
 					smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(velocityX, moveX));
+					return true;
 				}
 			} else {
 				int moveY = getMoveDistance(mScrollOffset, mScrollHeight);
 				Loge(TAG, "snapFromFling: deltaY:" + moveY + ",mCurrentPage:" + mCurrentPage);
 				if (Math.abs(moveY) != 0 && Math.abs(moveY) != mScrollHeight) {
 					smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(velocityY, moveY));
+					return true;
 				}
 			}
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	private int getMoveDistance(int scrollDistance, int length) {

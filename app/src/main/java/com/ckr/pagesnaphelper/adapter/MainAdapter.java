@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.model.Item;
@@ -73,22 +74,24 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 				holder.imageView.setImageResource(R.drawable.bg_color2);
 			} else if (page < 3) {
 				holder.imageView.setImageResource(R.drawable.bg_color3);
-			}else if (page < 4) {
+			} else if (page < 4) {
 				holder.imageView.setImageResource(R.drawable.bg_color4);
-			}else if (page < 5) {
+			} else if (page < 5) {
 				holder.imageView.setImageResource(R.drawable.bg_color5);
-			}else if (page < 6) {
+			} else if (page < 6) {
 				holder.imageView.setImageResource(R.drawable.bg_color6);
 			}
 		}
 		if (item == null) {
 			holder.relativeLayout.setVisibility(View.INVISIBLE);
 			holder.itemView.setOnLongClickListener(null);
+			holder.itemView.setOnClickListener(null);
 			holder.imageButton.setOnClickListener(null);
 		} else {
 			holder.relativeLayout.setVisibility(View.VISIBLE);
 			holder.textView.setText(item.getName());
 			holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
+			holder.itemView.setOnClickListener(new OnItemClickListener(adjustedPosition));
 			holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
 			holder.imageButton.setVisibility(isShowDeleteIcon ? View.VISIBLE : View.GONE);
 		}
@@ -136,6 +139,8 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 			int id = v.getId();
 			if (id == R.id.imageButton) {
 				removeItem(mTargetPos);
+			} else {
+				Toast.makeText(mContext, "点击：" + mTargetPos, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
