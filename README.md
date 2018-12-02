@@ -17,8 +17,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.2.5'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.2.5'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.2.6'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.2.6'//gradle plugin 3.0 below used
 	}
 ```
 
