@@ -80,6 +80,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean firstEnter = true;
 	private boolean isPaused = false;
 	private View indicatorContainer;
+	private int threshold = 0;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -356,9 +357,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 	}
 
-	private void switchIndicatorContainer() {
+	public void switchIndicatorContainer() {
 		List data = mAdapter.getRawData();
-		if (data == null || data.size() == 0) {
+		int pageCount = mAdapter.getPageCount();
+		if (data == null || data.size() == 0 || pageCount <= threshold) {
 			if (indicatorContainer.getVisibility() != INVISIBLE) {
 				indicatorContainer.setVisibility(INVISIBLE);
 			}
@@ -367,6 +369,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				indicatorContainer.setVisibility(VISIBLE);
 			}
 		}
+	}
+
+	public void hideIndicatorContainer(int threshold) {
+		this.threshold = threshold;
 	}
 
 	public int getPageCount() {

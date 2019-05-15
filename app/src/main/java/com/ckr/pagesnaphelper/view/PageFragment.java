@@ -73,6 +73,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	private void initView() {
 		pageView.addOnPageChangeListener(this);
 		mainAdapter = new MainAdapter(getContext(), itemLayoutId);
+//		pageView.hideIndicatorContainer(1);
 		pageView.setAdapter(mainAdapter);
 		isLooping = mainAdapter.isLooping();
 		if (isLooping) {
