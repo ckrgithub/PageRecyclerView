@@ -17,8 +17,8 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 ### 添加依赖：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.2.6'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.2.6'//gradle plugin 3.0一下使用
+		implementation 'ckrjfrog.Page:PageView:1.2.7'//gradle plugin 3.0(包含)以上使用
+		//compile 'ckrjfrog.Page:PageView:1.2.7'//gradle plugin 3.0一下使用
 	}
 ```
 
