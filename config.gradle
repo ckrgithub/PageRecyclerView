@@ -16,8 +16,8 @@ ext {
     supportVersion = "25.3.1"
 
      pageViewConfig = [
-             versionCode: 126,
-             versionName: "1.2.6",
-             publishVersion: "1.2.6"
+             versionCode: 127,
+             versionName: "1.2.7",
+             publishVersion: "1.2.7"
      ]
 }
