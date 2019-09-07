@@ -3,6 +3,7 @@ package com.ckr.pageview.adapter;
 import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -213,7 +214,14 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	protected int adjustPosition(int index) {
 		int pos = index;
 		if (isGridLayout() && mOrientation == OnPageDataListener.LINEAR) {
-			pos = getAdjustedPosition(index, mRow * mColumn);
+			int sum = mColumn * mRow;
+			int remainder = index % sum;
+			int x = remainder / mRow;
+			int y = remainder % mRow;
+			pos = x + y * mColumn;
+			Log.d(TAG, "adjustPosition: index=" + index + ",pos=" + pos + ",x=" + x + ",y=" + y);
+//			pos = getAdjustedPosition(index, mRow * mColumn);
+			pos = pos + sum * (index / sum);
 		}
 		return pos;
 	}
