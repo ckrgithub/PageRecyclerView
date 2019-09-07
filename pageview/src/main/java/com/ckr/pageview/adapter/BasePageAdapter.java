@@ -171,11 +171,16 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	}
 
 	@Override
+	public int getItemViewType(int position) {
+		return position;
+	}
+
+	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View itemView = LayoutInflater.from(mContext).inflate(getLayoutId(viewType), parent, false);
 		if (isAutoSize()) {
 			ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
-			int itemWidthOrHeight = calculateItemWidthOrHeight();
+			int itemWidthOrHeight = calculateItemWidthOrHeight(viewType);
 			if (itemWidthOrHeight > 0) {
 				if (mOrientation == HORIZONTAL) {
 					layoutParams.width = itemWidthOrHeight;
@@ -280,12 +285,26 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 	}
 
 	@Override
-	public int calculateItemWidthOrHeight() {
+	public int calculateItemWidthOrHeight(int position) {
 		if (isGridLayout()) {
 			if (mOrientation == HORIZONTAL) {
-				return widthOrHeight / mColumn;
+				int countPerPage = mColumn * mRow;
+				int value = widthOrHeight / mColumn;
+				int remainder = position % countPerPage;
+				if (remainder == countPerPage - 2 || remainder == countPerPage - 1) {
+					return widthOrHeight - value * (mColumn - 1);
+				} else {
+					return value;
+				}
 			} else {
-				return widthOrHeight / mRow;
+				int countPerPage = mColumn * mRow;
+				int value = widthOrHeight / mRow;
+				int remainder = position % countPerPage;
+				if (remainder == countPerPage - 2 || remainder == countPerPage - 1) {
+					return widthOrHeight - value * (mRow - 1);
+				} else {
+					return value;
+				}
 			}
 		}
 		return 0;
