@@ -57,6 +57,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private PageRecyclerView.PageTransformer mPageTransformer;
 	private boolean isSaveState;
+	private boolean isOnSizeChanged;
 	private int mSize = INIT_VALUE;
 	private int mMeasureMode = MODE_DEFAULT;
 
@@ -94,8 +95,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				label:
 				if (mFirstLayout) {
 					if (mOrientation == OnPageDataListener.HORIZONTAL) {
-                        notifySizeChanged(mScrollWidth);
-                        mMeasureMode = MODE_AUTO_WIDTH;
+						notifySizeChanged(mScrollWidth);
+						mMeasureMode = MODE_AUTO_WIDTH;
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollWidth;
 						if (mScrollWidth == 0) {
@@ -104,21 +105,28 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							int remainder = mOffset % mScrollWidth;
-							Loge(TAG, "onLayoutChange: remainder:" + remainder);
-							if (remainder != 0) {
-								mScrollOffset = mOffset;
-								int moveX = mScrollWidth - remainder;
-								if (mForwardDirection) {
-									smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
-								} else {
-									smoothScrollBy(-remainder, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(remainder)));
+							if (isOnSizeChanged) {//屏幕大小变化，如：横竖屏切换
+								int lastScrollOffset = mCurrentPage * mScrollWidth;
+								mCurrentPage = 0;
+								mScrollOffset = 0;
+								smoothScrollBy(lastScrollOffset, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(lastScrollOffset)));
+							} else {
+								int remainder = mOffset % mScrollWidth;
+								Loge(TAG, "onLayoutChange: remainder:" + remainder);
+								if (remainder != 0) {//滑动中，页面切换回来后继续惯性滑动
+									mScrollOffset = mOffset;
+									int moveX = mScrollWidth - remainder;
+									if (mForwardDirection) {
+										smoothScrollBy(moveX, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(moveX)));
+									} else {
+										smoothScrollBy(-remainder, 0, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(remainder)));
+									}
 								}
 							}
 						}
 					} else {
-                        notifySizeChanged(mScrollHeight);
-                        mMeasureMode = MODE_AUTO_HEIGHT;
+						notifySizeChanged(mScrollHeight);
+						mMeasureMode = MODE_AUTO_HEIGHT;
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollHeight;
 						if (mScrollHeight == 0) {
@@ -127,14 +135,21 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							int remainder = mOffset % mScrollHeight;
-							if (remainder != 0) {
-								mScrollOffset = mOffset;
-								int moveY = mScrollHeight - remainder;
-								if (mForwardDirection) {
-									smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
-								} else {
-									smoothScrollBy(0, -remainder, calculateTimeForVerticalScrolling(mVelocity, Math.abs(remainder)));
+							if (isOnSizeChanged) {
+								int lastScrollOffset = mCurrentPage * mScrollHeight;
+								mCurrentPage = 0;
+								mScrollOffset = 0;
+								smoothScrollBy(0, lastScrollOffset, calculateTimeForHorizontalScrolling(mVelocity, Math.abs(lastScrollOffset)));
+							} else {
+								int remainder = mOffset % mScrollHeight;
+								if (remainder != 0) {
+									mScrollOffset = mOffset;
+									int moveY = mScrollHeight - remainder;
+									if (mForwardDirection) {
+										smoothScrollBy(0, moveY, calculateTimeForVerticalScrolling(mVelocity, Math.abs(moveY)));
+									} else {
+										smoothScrollBy(0, -remainder, calculateTimeForVerticalScrolling(mVelocity, Math.abs(remainder)));
+									}
 								}
 							}
 						}
@@ -170,6 +185,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
 		Logd(TAG, "onSizeChanged: w:" + w + ",h:" + h);
+		isOnSizeChanged = true;
 		int paddingLeft = getPaddingLeft();
 		int paddingRight = getPaddingRight();
 		int paddingTop = getPaddingTop();
