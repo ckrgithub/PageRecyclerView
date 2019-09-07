@@ -6,6 +6,6 @@ package com.ckr.pageview.adapter;
 
 public interface OnAutoSizeListener {
     void notifySizeChanged(int size);
-    int calculateItemWidthOrHeight();
+    int calculateItemWidthOrHeight(int position);
     boolean isAutoSize();
 }
