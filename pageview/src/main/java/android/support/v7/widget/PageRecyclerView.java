@@ -94,6 +94,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 				label:
 				if (mFirstLayout) {
 					if (mOrientation == OnPageDataListener.HORIZONTAL) {
+                        notifySizeChanged(mScrollWidth);
+                        mMeasureMode = MODE_AUTO_WIDTH;
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollWidth;
 						if (mScrollWidth == 0) {
@@ -115,6 +117,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 							}
 						}
 					} else {
+                        notifySizeChanged(mScrollHeight);
+                        mMeasureMode = MODE_AUTO_HEIGHT;
 						int mOffset = mScrollOffset;
 						mScrollOffset = mCurrentPage * mScrollHeight;
 						if (mScrollHeight == 0) {
@@ -142,38 +146,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			}
 		});
 		setChildDrawingOrderCallback(this);
-	}
-
-
-	@Override
-	protected void onMeasure(int widthSpec, int heightSpec) {
-		super.onMeasure(widthSpec, heightSpec);
-		Adapter adapter = getAdapter();
-		if (adapter != null && adapter instanceof BasePageAdapter) {
-			BasePageAdapter pageAdapter = (BasePageAdapter) adapter;
-			if (!pageAdapter.isAutoSize()) {//不启动item自适应
-				mMeasureMode = MODE_DEFAULT;
-				return;
-			}
-			int orientation = pageAdapter.getLayoutOrientation();
-			if (orientation == OnPageDataListener.HORIZONTAL) {
-				int mode = MeasureSpec.getMode(widthSpec);
-				int size = MeasureSpec.getSize(widthSpec);
-				Logd(TAG, "onMeasure  mode11: " + mode + ",size:" + size);
-				if (mode == MeasureSpec.EXACTLY) {
-					notifySizeChanged(size);
-					mMeasureMode = MODE_AUTO_WIDTH;
-				}
-			} else {
-				int mode = MeasureSpec.getMode(heightSpec);
-				int size = MeasureSpec.getSize(heightSpec);
-				Logd(TAG, "onMeasure  mode: " + mode + ",size:" + size);
-				if (mode == MeasureSpec.EXACTLY) {
-					notifySizeChanged(size);
-					mMeasureMode = MODE_AUTO_HEIGHT;
-				}
-			}
-		}
 	}
 
 	private void notifySizeChanged(int size) {
