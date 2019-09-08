@@ -105,7 +105,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							if (isOnSizeChanged) {//屏幕大小变化，如：横竖屏切换
+							if (!mIsLooping&&isOnSizeChanged) {//屏幕大小变化，如：横竖屏切换
 								int lastScrollOffset = mCurrentPage * mScrollWidth;
 								mCurrentPage = 0;
 								mScrollOffset = 0;
@@ -135,7 +135,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							if (isOnSizeChanged) {
+							if (!mIsLooping&&isOnSizeChanged) {
 								int lastScrollOffset = mCurrentPage * mScrollHeight;
 								mCurrentPage = 0;
 								mScrollOffset = 0;
