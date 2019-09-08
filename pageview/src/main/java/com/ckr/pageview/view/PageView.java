@@ -30,6 +30,8 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
+import static com.ckr.pageview.utils.PageLog.Logi;
+import static com.ckr.pageview.utils.PageLog.Logv;
 
 /**
  * Created by PC大佬 on 2018/1/16.
@@ -229,7 +231,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		layoutParams.setMargins(indicatorGroupMarginLeft, indicatorGroupMarginTop, indicatorGroupMarginRight, indicatorGroupMarginBottom);
 		final int verticalGravity = indicatorGroupAlignment & Gravity.VERTICAL_GRAVITY_MASK;
 		int horizontalGravity = indicatorGroupAlignment & Gravity.HORIZONTAL_GRAVITY_MASK;
-		Logd(TAG, "initView: indicatorGroupAlignment:" + indicatorGroupAlignment
+		Logv(TAG, "initView: indicatorGroupAlignment:" + indicatorGroupAlignment
 				+ ",verticalGravity:" + verticalGravity + ",horizontalGravity:" + horizontalGravity);
 		switch (horizontalGravity) {
 			case Gravity.CENTER_HORIZONTAL:
@@ -299,7 +301,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void stopLooping() {
-		Logd(TAG, "stopLooping: ");
+		Logi(TAG, "stopLooping: ");
 		if (mHandler != null) {
 			mHandler.removeMessages(PageHandler.MSG_START_LOOPING);
 			mHandler.removeMessages(PageHandler.MSG_STOP_LOOPING);
@@ -308,7 +310,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void restartLooping() {
-		Logd(TAG, "restartLooping: ");
+		Logi(TAG, "restartLooping: ");
 		if (mHandler != null) {
 			autoPlay = true;
 			if (isAutoLooping()) {

@@ -20,6 +20,8 @@ import java.text.DecimalFormat;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
 import static com.ckr.pageview.utils.PageLog.Loge;
+import static com.ckr.pageview.utils.PageLog.Logi;
+import static com.ckr.pageview.utils.PageLog.Logv;
 
 /**
  * Created by PC大佬 on 2018/7/14.
@@ -105,7 +107,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							if (!mIsLooping&&isOnSizeChanged) {//屏幕大小变化，如：横竖屏切换
+							if (!mIsLooping && isOnSizeChanged) {//屏幕大小变化，如：横竖屏切换
 								int lastScrollOffset = mCurrentPage * mScrollWidth;
 								mCurrentPage = 0;
 								mScrollOffset = 0;
@@ -135,7 +137,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 						if (mIsLooping && !isSaveState) {
 							PageRecyclerView.super.scrollToPosition(mCurrentPage);
 						} else {
-							if (!mIsLooping&&isOnSizeChanged) {
+							if (!mIsLooping && isOnSizeChanged) {
 								int lastScrollOffset = mCurrentPage * mScrollHeight;
 								mCurrentPage = 0;
 								mScrollOffset = 0;
@@ -184,7 +186,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
-		Logd(TAG, "onSizeChanged: w:" + w + ",h:" + h);
+		Logi(TAG, "onSizeChanged: w:" + w + ",h:" + h);
 		isOnSizeChanged = true;
 		int paddingLeft = getPaddingLeft();
 		int paddingRight = getPaddingRight();
@@ -210,7 +212,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
 	@Override
 	public int onGetChildDrawingOrder(int childCount, int i) {
-		Logd(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i);
+		Logv(TAG, "onGetChildDrawingOrder: childCount:" + childCount + ",i:" + i);
 		if (mPageTransformer != null) {
 			String name = mPageTransformer.getClass().getName();
 			if (name == StackTransformer.class.getName()
@@ -628,14 +630,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 		mForwardDirection = bundle.getBoolean(ARGS_FORWARD_DIRECTION, true);
 		isSaveState = bundle.getBoolean(ARGS_SAVE_STATE, false);
 		Parcelable parcelable = bundle.getParcelable(ARGS_SUPER);
-		Logd(TAG, "onLayoutChange onRestoreInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth
+		Logv(TAG, "onLayoutChange onRestoreInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth
 				+ ",mScrollHeight:" + mScrollHeight + ",mCurrentPage:" + mCurrentPage + ",mForwardDirection:" + mForwardDirection);
 		super.onRestoreInstanceState(parcelable);
 	}
 
 	@Override
 	protected Parcelable onSaveInstanceState() {
-		Logd(TAG, "onLayoutChange onSaveInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth
+		Logv(TAG, "onLayoutChange onSaveInstanceState: mOrientation:" + mOrientation + ",mScrollOffset:" + mScrollOffset + ",mScrollWidth:" + mScrollWidth
 				+ ",mScrollHeight:" + mScrollHeight + ",mCurrentPage:" + mCurrentPage + ",mForwardDirection:" + mForwardDirection);
 		Bundle bundle = new Bundle();
 		bundle.putInt(ARGS_SCROLL_OFFSET, mScrollOffset);

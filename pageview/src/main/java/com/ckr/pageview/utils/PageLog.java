@@ -14,6 +14,16 @@ public class PageLog {
 		PageLog.isDebug = true;
 	}
 
+	public static void Logv(String msg) {
+		Logv("", msg);
+	}
+
+	public static void Logv(String tag, String msg) {
+		if (isDebug) {
+			Log.v(TAG, tag + "--->" + msg);
+		}
+	}
+
 	public static void Logd(String msg) {
 		Logd("", msg);
 	}

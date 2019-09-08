@@ -3,7 +3,6 @@ package com.ckr.pageview.adapter;
 import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ckr.pageview.utils.PageLog.Logd;
-import static com.ckr.pageview.utils.PageLog.Loge;
-import static com.ckr.pageview.utils.PosUtil.adjustPosition22;
-import static com.ckr.pageview.utils.PosUtil.adjustPosition23;
-import static com.ckr.pageview.utils.PosUtil.adjustPosition24;
-import static com.ckr.pageview.utils.PosUtil.adjustPosition25;
+import static com.ckr.pageview.utils.PageLog.Logi;
 
 
 /**
@@ -188,7 +183,7 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 				} else {
 					layoutParams.height = itemWidthOrHeight;
 				}
-				Loge(TAG, "onMeasure  onCreateViewHolder: width:" + layoutParams.width + ",height:" + layoutParams.height);
+				Logi(TAG, "onMeasure  onCreateViewHolder: width:" + layoutParams.width + ",height:" + layoutParams.height);
 				itemView.setLayoutParams(layoutParams);
 			}
 		}
@@ -219,36 +214,9 @@ public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHol
 			int x = remainder / mRow;
 			int y = remainder % mRow;
 			pos = x + y * mColumn;
-			Log.d(TAG, "adjustPosition: index=" + index + ",pos=" + pos + ",x=" + x + ",y=" + y);
-//			pos = getAdjustedPosition(index, mRow * mColumn);
 			pos = pos + sum * (index / sum);
 		}
 		return pos;
-	}
-
-	protected int getAdjustedPosition(int position, int sum) {
-		if (mRow == OnPageDataListener.TWO) {
-			int index = position;
-			switch (mColumn) {
-				case OnPageDataListener.TWO:
-					index = adjustPosition22(position, sum);
-					break;
-				case OnPageDataListener.THREE:
-					index = adjustPosition23(position, sum);
-					break;
-				case OnPageDataListener.FOUR:
-					index = adjustPosition24(position, sum);
-					break;
-				case OnPageDataListener.FIVE:
-					index = adjustPosition25(position, sum);
-					break;
-				default:
-					break;
-			}
-			return index;
-		} else {
-			return position;
-		}
 	}
 
 	@Override
