@@ -77,11 +77,11 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 				} else if (i == 1) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid, R.layout.item_horizontal_grid));
 				} else if (i == 2) {
-					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid2, R.layout.item_horizontal_grid2));
-				} else if (i == 3) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_linear, R.layout.item_vertical_linear));
-				} else if (i == 4) {
+				} else if (i == 3) {
 					fragmentList.add(PageFragment.newInstance(R.layout.fragment_vertical_grid, R.layout.item_vertical_grid));
+				} else if (i == 4) {
+//					fragmentList.add(PageFragment.newInstance(R.layout.fragment_horizontal_grid2, R.layout.item_horizontal_grid2));
 				}
 			} else {
 				fragmentList.add(fragment);
