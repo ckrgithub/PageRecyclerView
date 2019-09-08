@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ckr.pagesnaphelper.R;
 import com.ckr.pagesnaphelper.adapter.MyFragmentPagerAdapter;
@@ -156,6 +157,8 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 				int page = 0;
 				if (!TextUtils.isEmpty(text)) {
 					page = Integer.valueOf(text);
+				}else {
+					Toast.makeText(getActivity(),"内容不能为空",Toast.LENGTH_LONG).show();
 				}
 				fragmentList.get(mCurrentPage).jumpToPage(page);
 				break;

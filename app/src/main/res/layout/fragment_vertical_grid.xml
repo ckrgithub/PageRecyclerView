@@ -3,8 +3,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/frameLayout"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.ckr.pagesnaphelper.view.VerticalFragment">
+             android:layout_height="match_parent">
 
     <com.ckr.pageview.view.PageView
         android:id="@+id/pageView"
@@ -12,6 +11,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         app:hide_indicator="false"
+        app:autosize="true"
         app:indicator_container_background="#40000000"
         app:indicator_container_height="@dimen/viewpager_indicator_container_height"
         app:indicator_group_alignment="bottom"
@@ -22,8 +22,8 @@
         app:layout_flag="grid"
         app:orientation="vertical"
         app:overlap_layout="true"
-        app:page_column="one"
-        app:page_row="two"
+        app:page_column="2"
+        app:page_row="3"
         app:selected_indicator_color="@color/viewpager_selected_indicator_color"
         app:selected_indicator_diameter="@dimen/viewpager_selected_indicator_diameter"
         app:selected_indicator_drawable="@drawable/shape_point_selected"
