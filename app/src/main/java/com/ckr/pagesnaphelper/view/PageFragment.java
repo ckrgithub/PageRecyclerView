@@ -33,7 +33,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	PageView pageView;
 	private MainAdapter mainAdapter;
 	private ArrayList<Item> items;
-	private final static int CAPACITY = 18;
+	private final static int CAPACITY = 24;
 	private int layoutId;
 	private int itemLayoutId;
 	private int startCount = 100;
@@ -191,8 +191,19 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	@Override
 	public void refreshFragment(BaseTransformer baseTransformer) {
+		if (mainAdapter == null) {
+			return;
+		}
 		if (mainAdapter.getPageRow() * mainAdapter.getPageColumn() == 1) {
 			pageView.addPageTransformer(baseTransformer);
+		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (pageView != null) {
+			pageView.release();
 		}
 	}
 }
