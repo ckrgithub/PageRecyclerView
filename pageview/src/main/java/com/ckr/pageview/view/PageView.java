@@ -41,6 +41,7 @@ import static com.ckr.pageview.utils.PageLog.Logv;
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private static final int INTERVAL = 3000;
+	private static final int MAX_SCROLL_DURATION = 600;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
@@ -83,6 +84,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean isPaused = false;
 	private View indicatorContainer;
 	private int threshold = 0;
+	private int maxScrollDuration = 0;
+	private int minScrollDuration = 0;
 
 	public PageView(Context context) {
 		this(context, null);
@@ -140,6 +143,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, 0);
 		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
 		indicatorGroupMarginBottom = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, 0);
+		maxScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_max_scroll_duration, MAX_SCROLL_DURATION));
+		minScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_min_scroll_duration, 0));
 		typedArray.recycle();
 	}
 
@@ -170,6 +175,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView.setClipToPadding(clipToPadding);
 		recyclerView.setOrientation(orientation);
 		recyclerView.setLooping(isLooping);
+		recyclerView.setMaxScrollDuration(maxScrollDuration);
+		recyclerView.setMinScrollDuration(minScrollDuration);
 		recyclerView.addOnPageChangeListener(this);
 		if (pageBackground != null) {
 			if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {

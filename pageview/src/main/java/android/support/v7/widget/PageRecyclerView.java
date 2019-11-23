@@ -36,7 +36,6 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private static final String ARGS_HEIGHT = "mScrollHeight";
 	private static final String ARGS_FORWARD_DIRECTION = "mForwardDirection";
 	private static final String ARGS_SAVE_STATE = "isSaveState";
-	private static final int MAX_SETTLE_DURATION = 600; // ms
 	private static final int DEFAULT_VELOCITY = 4000;
 	private static final int MODE_DEFAULT = 0;
 	private static final int MODE_AUTO_WIDTH = 1;
@@ -62,6 +61,8 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private boolean isOnSizeChanged;
 	private int mSize = INIT_VALUE;
 	private int mMeasureMode = MODE_DEFAULT;
+	private int maxScrollDuration = 0;
+	private int minScrollDuration = 0;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -74,6 +75,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	public PageRecyclerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
+	}
+
+	public void setMaxScrollDuration(int maxScrollDuration) {
+		this.maxScrollDuration = maxScrollDuration;
+	}
+
+	public void setMinScrollDuration(int minScrollDuration) {
+		this.minScrollDuration = minScrollDuration;
 	}
 
 	private void init() {
@@ -591,7 +600,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		duration = Math.min(duration, MAX_SETTLE_DURATION);
+		duration = Math.max(Math.min(duration, maxScrollDuration),minScrollDuration);
 		return duration;
 	}
 
@@ -610,7 +619,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			final float pageDelta = (float) Math.abs(dy) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		duration = Math.min(duration, MAX_SETTLE_DURATION);
+		duration = Math.max(Math.min(duration, maxScrollDuration),minScrollDuration);
 		return duration;
 	}
 
