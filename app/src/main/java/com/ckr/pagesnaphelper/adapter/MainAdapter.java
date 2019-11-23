@@ -22,7 +22,6 @@ import com.ckr.pageview.adapter.BasePageAdapter;
 
 public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	private static final String TAG = "MainAdapter";
-	public static final int MIN_VALUE = 6;
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
@@ -35,7 +34,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	public int getItemCount() {
 		int itemCount = super.getItemCount();
 		if (mIsLooping) {
-			return itemCount == 0 ? 0 : Math.max(itemCount * 2, MIN_VALUE);
+			return itemCount == 0 ? 0 : Math.max(itemCount * 2, MIN_ITEM_COUNT);
 		}
 		return itemCount;
 	}

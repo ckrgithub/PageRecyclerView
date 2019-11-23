@@ -36,6 +36,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.supportVersion"
     implementation "com.android.support:design:$rootProject.supportVersion"
+    implementation "android.arch.lifecycle:runtime:$rootProject.lifecycle"
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':pageview')

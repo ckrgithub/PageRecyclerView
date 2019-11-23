@@ -78,6 +78,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 			Log.d(TAG, "initView: " + isVisible);
 			pageView.updateAll(items.subList(0, 3));
 //			pageView.setCurrentItem(1, false);
+			pageView.registerLifeCycleObserver(this);
 		} else {
 			pageView.updateAll(items);
 		}
@@ -104,7 +105,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		}
 		isVisible = true;
 		if (pageView != null) {
-			pageView.restartLooping();
+//			pageView.restartLooping();
 		}
 	}
 
@@ -115,7 +116,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		}
 		isVisible = false;
 		if (pageView != null) {
-			pageView.stopLooping();
+//			pageView.stopLooping();
 		}
 	}
 
@@ -123,10 +124,10 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	public void onResume() {
 		super.onResume();
 		if (isLooping) {
-			Log.d(TAG, "onResume: " + isVisible);
+			Log.e(TAG, "InnerLifecycleObserver onResume: " + isVisible);
 		}
 		if (pageView != null && isVisible) {
-			pageView.restartLooping();
+//			pageView.restartLooping();
 		}
 	}
 
@@ -134,7 +135,7 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 	public void onStop() {
 		super.onStop();
 		if (isLooping) {
-			Log.d(TAG, "onStop: " + isVisible);
+			Log.e(TAG, "InnerLifecycleObserver onStop: " + isVisible);
 		}
 		if (pageView != null) {
 			pageView.stopLooping();
@@ -199,9 +200,9 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
 		if (pageView != null) {
 			pageView.release();
 		}
+		super.onDestroyView();
 	}
 }
