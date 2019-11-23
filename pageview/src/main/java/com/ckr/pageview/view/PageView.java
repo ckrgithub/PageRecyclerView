@@ -47,48 +47,65 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int unselectedIndicatorColor = Color.BLACK;
 	private int selectedIndicatorDiameter = 15;
 	private int unselectedIndicatorDiameter = 15;
+	//指示器间的间隔
 	private int indicatorMargin = 15;
 	private Drawable selectedIndicatorDrawable = null;
 	private Drawable unselectedIndicatorDrawable = null;
+	//recyclerView的背景色
 	private Drawable pageBackground = null;
+	//指示器容器的背景色
 	private Drawable indicatorContainerBackground = null;
+	//是否隐藏指示器
 	private boolean hideIndicator = false;
+	//指示器容器
+	private View indicatorContainer;
 	private int indicatorContainerHeight = 90;
 	private int indicatorContainerWidth = 90;
-	private int orientation = OnPageDataListener.HORIZONTAL;
-	private int pageRow = OnPageDataListener.ONE;
-	private int pageColumn = OnPageDataListener.ONE;
-	private int layoutFlag = OnPageDataListener.LINEAR;
-	private boolean isLooping = false;
-	private boolean autoPlay = false;
-	private boolean autoSize = false;
-	private boolean enableTouchScroll = true;
-	private boolean autoPos = false;
-	private int interval;
-	private int subInterval;
-	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
-	private boolean clipToPadding = false;
-	private int pagePadding;
+	//一组指示器的父View
+	private LinearLayout indicatorGroup;
 	private int indicatorGroupAlignment = 0x11;
 	private int indicatorGroupMarginLeft;
 	private int indicatorGroupMarginTop;
 	private int indicatorGroupMarginRight;
 	private int indicatorGroupMarginBottom;
-	private LinearLayout indicatorGroup;
-	private View moveIndicator;//可移动的指示器
+	//可移动的指示器
+	private View moveIndicator;
+	private int orientation = OnPageDataListener.HORIZONTAL;
+	private int pageRow = OnPageDataListener.ONE;
+	private int pageColumn = OnPageDataListener.ONE;
+	//布局标记，如：线性布局或网格布局
+	private int layoutFlag = OnPageDataListener.LINEAR;
+	private boolean isLooping = false;
+	private boolean autoPlay = false;
+	private int interval = INTERVAL;
+	//item宽高自适应
+	private boolean autoSize = false;
+	//是否允许触摸滑动
+	private boolean enableTouchScroll = true;
+	//无限轮播下，自动调整滚动下标
+	private boolean autoPos = false;
+	//无限轮播时，自动调整下标后，播放的时间间隔
+	private int subInterval = SUB_INTERVAL;
 	private PageRecyclerView recyclerView;
 	private BasePageAdapter mAdapter;
-	private int lastPage = -1;//上一页
-	private int lastPageCount;//上一次的页数
+	//指示器布局是否遮住PageRecyclerView
+	private boolean overlapStyle = false;
+	private boolean clipToPadding = true;
+	private int pagePadding;
+	//上一页
+	private int lastPage = -1;
+	//上一次的页数
+	private int lastPageCount;
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private OnIndicatorListener mOnIndicatorListener;
+	//当页数变化后，指示器是停留在第一页还是最后一页
 	private boolean isScrollToBeginPage = false;
 	private PageHandler mHandler;
-	private boolean firstEnter = true;
-	private boolean isPaused = false;
-	private View indicatorContainer;
-	private int threshold = 0;
-	private int maxScrollDuration = 0;
+	private boolean isStartLooping = true;
+	private boolean isLoopingPause = false;
+	//当页数小于等于该值时，隐藏掉指示器
+	private int thresholdToHideIndicator = 0;
+	private int maxScrollDuration = MAX_SCROLL_DURATION;
 	private int minScrollDuration = 0;
 
 	public PageView(Context context) {
@@ -138,19 +155,18 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		autoSize = typedArray.getBoolean(R.styleable.PageView_autosize, autoSize);
 		enableTouchScroll = typedArray.getBoolean(R.styleable.PageView_enable_touch_scroll, enableTouchScroll);
-		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
-		subInterval = Math.abs(typedArray.getInt(R.styleable.PageView_sub_loop_interval, SUB_INTERVAL));
+		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, interval));
+		subInterval = Math.abs(typedArray.getInt(R.styleable.PageView_sub_loop_interval, subInterval));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
-		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
-		pagePadding = typedArray.getDimensionPixelSize(R.styleable.PageView_pagePadding, 0);
+		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, clipToPadding);
+		pagePadding = typedArray.getDimensionPixelSize(R.styleable.PageView_pagePadding, pagePadding);
 		indicatorGroupAlignment = typedArray.getInteger(R.styleable.PageView_indicator_group_alignment, indicatorGroupAlignment);
-		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
-		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, 0);
-		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, 0);
-		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, 0);
-		indicatorGroupMarginBottom = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, 0);
-		maxScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_max_scroll_duration, MAX_SCROLL_DURATION));
-		minScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_min_scroll_duration, 0));
+		indicatorGroupMarginLeft = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginLeft, indicatorGroupMarginLeft);
+		indicatorGroupMarginTop = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginTop, indicatorGroupMarginTop);
+		indicatorGroupMarginRight = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginRight, indicatorGroupMarginRight);
+		indicatorGroupMarginBottom = typedArray.getDimensionPixelSize(R.styleable.PageView_indicator_group_marginBottom, indicatorGroupMarginBottom);
+		maxScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_max_scroll_duration, maxScrollDuration));
+		minScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_min_scroll_duration, minScrollDuration));
 		typedArray.recycle();
 	}
 
@@ -380,7 +396,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	public void switchIndicatorContainer() {
 		List data = mAdapter.getRawData();
 		int pageCount = mAdapter.getPageCount();
-		if (data == null || data.size() == 0 || pageCount <= threshold) {
+		if (data == null || data.size() == 0 || pageCount <= thresholdToHideIndicator) {
 			if (indicatorContainer.getVisibility() != INVISIBLE) {
 				indicatorContainer.setVisibility(INVISIBLE);
 			}
@@ -392,7 +408,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void hideIndicatorContainer(int threshold) {
-		this.threshold = threshold;
+		this.thresholdToHideIndicator = threshold;
 	}
 
 	public int getPageCount() {
@@ -412,10 +428,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 			return;
 		}
 		if (isAutoLooping()) {
-			isPaused = true;//标记已暂停轮询状态
+			//标记已暂停轮询状态
+			isLoopingPause = true;
 			pauseLooping();
 		}
-		Logd(TAG, "updateAll: isPaused:" + isPaused);
+		Logd(TAG, "updateAll: isLoopingPause:" + isLoopingPause);
 		mAdapter.updateAll(list);
 	}
 
@@ -432,9 +449,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		}
 		switchIndicatorContainer();
 		if (isAutoLooping()) {
-			Logd(TAG, "updateIndicator: isPaused:" + isPaused);
-			if (isPaused) {
-				isPaused = false;//解除已暂停轮询状态
+			Logd(TAG, "updateIndicator: isLoopingPause:" + isLoopingPause);
+			if (isLoopingPause) {
+				//解除已暂停轮询状态
+				isLoopingPause = false;
 			} else {
 				pauseLooping();
 			}
@@ -502,10 +520,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		int pageCount = mAdapter.getPageCount();
 		if (pageCount == 0) {
 			if (moveIndicator.getVisibility() != GONE) {
-				moveIndicator.setVisibility(View.GONE);               //隐藏移动的指示点
+				moveIndicator.setVisibility(View.GONE);
 			}
 		} else {
-			if (isLooping) {                //中断指示器移动
+			if (isLooping) {
 				if (orientation == OnPageDataListener.HORIZONTAL) {
 					int width = recyclerView.getWidth();
 					if (width == 0) {
@@ -528,7 +546,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				}
 			}
 			Logd(TAG, "updateMoveIndicator: lastPageCount:" + lastPageCount + ",lastPage:" + lastPage + ",pageCount:" + pageCount);
-			if (pageCount < lastPageCount && lastPage >= pageCount) {//2,3,1
+			//页数改变后，指示器自适应
+			if (pageCount < lastPageCount && lastPage >= pageCount) {
 				if (isScrollToBeginPage) {
 					if (isLooping) {
 						if (lastPageCount != 0) {
@@ -693,8 +712,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		moveIndicator(position, moveIndicator);
 		Logd(TAG, "onPageScrollStateChanged: position:" + position);
 		if (isAutoLooping()) {
-			if (firstEnter) {
-				firstEnter = false;
+			if (isStartLooping) {
+				isStartLooping = false;
 				if (mHandler != null) {
 					int delayMillis = autoPos ? subInterval : interval;
 					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, delayMillis);
@@ -711,12 +730,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		Logd(TAG, "onPageScrollStateChanged: state:" + state);
 		if (isAutoLooping()) {
 			switch (state) {
-				case RecyclerView.SCROLL_STATE_DRAGGING://1
+				case RecyclerView.SCROLL_STATE_DRAGGING:
 					if (mHandler != null) {
 						mHandler.sendEmptyMessage(PageHandler.MSG_STOP_LOOPING);
 					}
 					break;
-				case RecyclerView.SCROLL_STATE_IDLE://0
+				case RecyclerView.SCROLL_STATE_IDLE:
 					if (mHandler != null) {
 						mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 					}
