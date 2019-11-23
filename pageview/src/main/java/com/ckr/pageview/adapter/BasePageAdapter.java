@@ -20,6 +20,7 @@ import static com.ckr.pageview.utils.PageLog.Logi;
 
 public abstract class BasePageAdapter<T, ViewHolder extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<ViewHolder> implements OnPageDataListener<T>, OnAutoSizeListener {
 	private static final String TAG = "BasePageAdapter";
+	public static final int MIN_ITEM_COUNT = 6;
 	protected Context mContext;
 	protected List<T> mTargetData;
 	protected List<T> mRawData;
