@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PageRecyclerView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -83,7 +84,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	//是否允许触摸滑动
 	private boolean enableTouchScroll = true;
 	//无限轮播下，自动调整滚动下标
-	private boolean autoPos = false;
+	private boolean isAdjustPosition;
 	//无限轮播时，自动调整下标后，播放的时间间隔
 	private int subInterval = SUB_INTERVAL;
 	private PageRecyclerView recyclerView;
@@ -614,7 +615,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setCurrentItem(@IntRange(from = 0) int page, boolean smoothScroll) {
 		Logd(TAG, "setCurrentItem: page:" + page);
-		boolean isAdjustPosition = false;
+		this.isAdjustPosition = false;
 		int targetPage = page;
 		if (isAutoLooping()) {
 			List rawData = mAdapter.getRawData();
@@ -622,9 +623,11 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 				int size = rawData.size();
 				if (size > 0) {
 					int itemCount = mAdapter.getItemCount();
-					if (page > 0 && page >= itemCount - 1) {
-						isAdjustPosition = true;
-						targetPage = (page - 1) % size;
+					if (itemCount >= BasePageAdapter.MIN_ITEM_COUNT) {
+						if (page >= itemCount - 1) {
+							isAdjustPosition = true;
+							targetPage = (page - 1) % size;
+						}
 					}
 				}
 			}
@@ -706,17 +709,13 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageSelected(int position) {
-		if (lastPage == position && isAutoLooping()) {
-			autoPos = true;
-		}
 		moveIndicator(position, moveIndicator);
 		Logd(TAG, "onPageScrollStateChanged: position:" + position);
 		if (isAutoLooping()) {
 			if (isStartLooping) {
 				isStartLooping = false;
 				if (mHandler != null) {
-					int delayMillis = autoPos ? subInterval : interval;
-					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, delayMillis);
+					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
 				}
 			}
 		}
@@ -737,7 +736,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 					break;
 				case RecyclerView.SCROLL_STATE_IDLE:
 					if (mHandler != null) {
-						mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+						int delayMillis = isAdjustPosition ? subInterval : interval;
+						Logd(TAG, "onPageScrollStateChanged: delayMillis=" + delayMillis);
+						mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, delayMillis);
 					}
 					break;
 			}
