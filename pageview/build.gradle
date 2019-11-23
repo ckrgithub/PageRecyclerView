@@ -43,5 +43,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "com.android.support:appcompat-v7:$rootProject.supportVersion"
     compileOnly "com.android.support:recyclerview-v7:$rootProject.supportVersion"
-
+    compileOnly "android.arch.lifecycle:runtime:$rootProject.lifecycle"
 }
