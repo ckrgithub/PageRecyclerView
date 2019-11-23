@@ -22,7 +22,7 @@ import com.ckr.pageview.adapter.BasePageAdapter;
 
 public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 	private static final String TAG = "MainAdapter";
-	public static final int MAX_VALUE = 28800;
+	public static final int MIN_VALUE = 6;
 	private boolean isShowDeleteIcon;
 	private int mLayoutId;
 
@@ -33,10 +33,11 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 
 	@Override
 	public int getItemCount() {
+		int itemCount = super.getItemCount();
 		if (mIsLooping) {
-			return super.getItemCount() == 0 ? 0 : MAX_VALUE;
+			return itemCount == 0 ? 0 : Math.max(itemCount * 2, MIN_VALUE);
 		}
-		return super.getItemCount();
+		return itemCount;
 	}
 
 	@Override
@@ -90,6 +91,7 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 		} else {
 			holder.relativeLayout.setVisibility(View.VISIBLE);
 			holder.textView.setText(item.getName());
+
 			holder.itemView.setOnLongClickListener(new OnItemLongClickListener(adjustedPosition));
 			holder.itemView.setOnClickListener(new OnItemClickListener(adjustedPosition));
 			holder.imageButton.setOnClickListener(new OnItemClickListener(adjustedPosition));
@@ -144,5 +146,4 @@ public class MainAdapter extends BasePageAdapter<Item, MainAdapter.MainHolder> {
 			}
 		}
 	}
-
 }

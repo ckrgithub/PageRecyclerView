@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.ckr.pageview.adapter.BasePageAdapter;
@@ -63,6 +64,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 	private int mMeasureMode = MODE_DEFAULT;
 	private int maxScrollDuration = 0;
 	private int minScrollDuration = 0;
+	private boolean enableTouchScroll = true;
 
 	public PageRecyclerView(Context context) {
 		this(context, null);
@@ -83,6 +85,10 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
 	public void setMinScrollDuration(int minScrollDuration) {
 		this.minScrollDuration = minScrollDuration;
+	}
+
+	public void setEnableTouchScroll(boolean enableTouchScroll) {
+		this.enableTouchScroll = enableTouchScroll;
 	}
 
 	private void init() {
@@ -261,6 +267,22 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
 	private void smoothScrollBy(int dx, int dy, int duration) {
 		super.mViewFlinger.smoothScrollBy(dx, dy, duration, sQuinticInterpolator);
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent e) {
+		if (!enableTouchScroll) {
+			return false;
+		}
+		return super.onInterceptTouchEvent(e);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		if (!enableTouchScroll) {
+			return true;
+		}
+		return super.onTouchEvent(e);
 	}
 
 	@Override
@@ -600,7 +622,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			final float pageDelta = (float) Math.abs(dx) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		duration = Math.max(Math.min(duration, maxScrollDuration),minScrollDuration);
+		duration = Math.max(Math.min(duration, maxScrollDuration), minScrollDuration);
 		return duration;
 	}
 
@@ -619,7 +641,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 			final float pageDelta = (float) Math.abs(dy) / (pageWidth);
 			duration = (int) ((pageDelta + 1) * 100);
 		}
-		duration = Math.max(Math.min(duration, maxScrollDuration),minScrollDuration);
+		duration = Math.max(Math.min(duration, maxScrollDuration), minScrollDuration);
 		return duration;
 	}
 

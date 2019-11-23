@@ -41,6 +41,7 @@ import static com.ckr.pageview.utils.PageLog.Logv;
 public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private static final int INTERVAL = 3000;
+	private static final int SUB_INTERVAL = 100;
 	private static final int MAX_SCROLL_DURATION = 600;
 	private int selectedIndicatorColor = Color.RED;
 	private int unselectedIndicatorColor = Color.BLACK;
@@ -61,7 +62,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private boolean isLooping = false;
 	private boolean autoPlay = false;
 	private boolean autoSize = false;
+	private boolean enableTouchScroll = true;
+	private boolean autoPos = false;
 	private int interval;
+	private int subInterval;
 	private boolean overlapStyle = false;//指示器布局是否遮住PageRecyclerView
 	private boolean clipToPadding = false;
 	private int pagePadding;
@@ -74,7 +78,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private View moveIndicator;//可移动的指示器
 	private PageRecyclerView recyclerView;
 	private BasePageAdapter mAdapter;
-	private int lastPage;//上一页
+	private int lastPage = -1;//上一页
 	private int lastPageCount;//上一次的页数
 	private PageRecyclerView.OnPageChangeListener mOnPageChangeListener;
 	private OnIndicatorListener mOnIndicatorListener;
@@ -130,10 +134,12 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		pageRow = typedArray.getInteger(R.styleable.PageView_page_row, pageRow);
 		pageColumn = typedArray.getInteger(R.styleable.PageView_page_column, pageColumn);
 		layoutFlag = typedArray.getInteger(R.styleable.PageView_layout_flag, layoutFlag);
-		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && pageColumn * pageRow == 1;
+		isLooping = typedArray.getBoolean(R.styleable.PageView_loop, isLooping) && onlyOne();
 		autoPlay = typedArray.getBoolean(R.styleable.PageView_autoplay, autoPlay);
 		autoSize = typedArray.getBoolean(R.styleable.PageView_autosize, autoSize);
+		enableTouchScroll = typedArray.getBoolean(R.styleable.PageView_enable_touch_scroll, enableTouchScroll);
 		interval = Math.abs(typedArray.getInt(R.styleable.PageView_loop_interval, INTERVAL));
+		subInterval = Math.abs(typedArray.getInt(R.styleable.PageView_sub_loop_interval, SUB_INTERVAL));
 		overlapStyle = typedArray.getBoolean(R.styleable.PageView_overlap_layout, overlapStyle);
 		clipToPadding = typedArray.getBoolean(R.styleable.PageView_clipToPadding, true);
 		pagePadding = typedArray.getDimensionPixelSize(R.styleable.PageView_pagePadding, 0);
@@ -146,6 +152,10 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		maxScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_max_scroll_duration, MAX_SCROLL_DURATION));
 		minScrollDuration = Math.abs(typedArray.getInt(R.styleable.PageView_min_scroll_duration, 0));
 		typedArray.recycle();
+	}
+
+	private boolean onlyOne() {
+		return pageColumn * pageRow == 1;
 	}
 
 	private void initView() {
@@ -177,6 +187,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		recyclerView.setLooping(isLooping);
 		recyclerView.setMaxScrollDuration(maxScrollDuration);
 		recyclerView.setMinScrollDuration(minScrollDuration);
+		recyclerView.setEnableTouchScroll(enableTouchScroll);
 		recyclerView.addOnPageChangeListener(this);
 		if (pageBackground != null) {
 			if (Build.VERSION_CODES.JELLY_BEAN <= Build.VERSION.SDK_INT) {
@@ -584,8 +595,27 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public void setCurrentItem(@IntRange(from = 0) int page, boolean smoothScroll) {
 		Logd(TAG, "setCurrentItem: page:" + page);
-		recyclerView.scrollToPage(page, smoothScroll);
-		moveIndicator(page, moveIndicator);
+		boolean isAdjustPosition = false;
+		int targetPage = page;
+		if (isAutoLooping()) {
+			List rawData = mAdapter.getRawData();
+			if (rawData != null) {
+				int size = rawData.size();
+				if (size > 0) {
+					int itemCount = mAdapter.getItemCount();
+					if (page > 0 && page >= itemCount - 1) {
+						isAdjustPosition = true;
+						targetPage = (page - 1) % size;
+					}
+				}
+			}
+		}
+		if (isAdjustPosition) {
+			recyclerView.scrollToPage(targetPage, false);
+		} else {
+			recyclerView.scrollToPage(targetPage, smoothScroll);
+		}
+		moveIndicator(targetPage, moveIndicator);
 	}
 
 	private void scrollToBeginPage() {
@@ -657,13 +687,17 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	@Override
 	public void onPageSelected(int position) {
+		if (lastPage == position && isAutoLooping()) {
+			autoPos = true;
+		}
 		moveIndicator(position, moveIndicator);
 		Logd(TAG, "onPageScrollStateChanged: position:" + position);
 		if (isAutoLooping()) {
 			if (firstEnter) {
 				firstEnter = false;
 				if (mHandler != null) {
-					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
+					int delayMillis = autoPos ? subInterval : interval;
+					mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, delayMillis);
 				}
 			}
 		}

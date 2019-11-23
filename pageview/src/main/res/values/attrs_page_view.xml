@@ -18,7 +18,9 @@
         <attr name="loop" format="boolean"/>
         <attr name="autoplay" format="boolean"/>
         <attr name="autosize" format="boolean"/>
+        <attr name="enable_touch_scroll" format="boolean"/>
         <attr name="loop_interval" format="integer"/>
+        <attr name="sub_loop_interval" format="integer"/>
         <attr name="max_scroll_duration" format="integer"/>
         <attr name="min_scroll_duration" format="integer"/>
         <attr name="overlap_layout" format="boolean"/>
