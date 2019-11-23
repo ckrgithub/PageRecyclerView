@@ -18,8 +18,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 
-import static com.ckr.pagesnaphelper.adapter.MainAdapter.MAX_VALUE;
-
 //import com.ckr.pageview.view.PageRecyclerView;
 
 /**
@@ -78,8 +76,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 		isLooping = mainAdapter.isLooping();
 		if (isLooping) {
 			Log.d(TAG, "initView: " + isVisible);
-			pageView.updateAll(items.subList(0, 4));
-			pageView.setCurrentItem(MAX_VALUE / 2, false);
+			pageView.updateAll(items.subList(0, 3));
+//			pageView.setCurrentItem(1, false);
 		} else {
 			pageView.updateAll(items);
 		}
