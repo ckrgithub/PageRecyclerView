@@ -1,8 +1,5 @@
 package com.ckr.pageview.manager;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +13,7 @@ import static com.ckr.pageview.utils.PageLog.Logd;
  *
  * @author ckr
  */
-public class LifecycleManager implements LifecycleObserver {
+public class LifecycleManager {
 	private static final String TAG = "LifecycleManager";
 	private FragmentActivity mHostActivity;
 	private Fragment mHostFragment;
@@ -41,7 +38,6 @@ public class LifecycleManager implements LifecycleObserver {
 		Logd(TAG, "onAttachedToWindow");
 	}
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
 	public void onResume() {
 		Logd(TAG, "onResume");
 		if (mPageView != null) {
@@ -49,7 +45,6 @@ public class LifecycleManager implements LifecycleObserver {
 		}
 	}
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_STOP)
 	public void onStop() {
 		Logd(TAG, "onStop");
 		if (mPageView != null) {
@@ -57,7 +52,6 @@ public class LifecycleManager implements LifecycleObserver {
 		}
 	}
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
 	public void onDestroy() {
 		Logd(TAG, "onDestroy");
 	}
@@ -67,14 +61,14 @@ public class LifecycleManager implements LifecycleObserver {
 			return;
 		}
 		mHostActivity = activity;
-		activity.getLifecycle().addObserver(this);
+//		activity.getLifecycle().addObserver(this);
 	}
 
 	public void removeLifeCycleObserver(@NonNull FragmentActivity activity) {
 		if (activity == null) {
 			return;
 		}
-		activity.getLifecycle().removeObserver(this);
+//		activity.getLifecycle().removeObserver(this);
 	}
 
 	public void registerLifeCycleObserver(@NonNull Fragment fragment) {
@@ -82,13 +76,13 @@ public class LifecycleManager implements LifecycleObserver {
 			return;
 		}
 		mHostFragment = fragment;
-		mHostFragment.getLifecycle().addObserver(this);
+//		mHostFragment.getLifecycle().addObserver(this);
 	}
 
 	public void removeLifeCycleObserver(@NonNull Fragment fragment) {
 		if (fragment == null) {
 			return;
 		}
-		fragment.getLifecycle().removeObserver(this);
+//		fragment.getLifecycle().removeObserver(this);
 	}
 }
