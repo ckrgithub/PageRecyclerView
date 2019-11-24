@@ -1,8 +1,5 @@
 package com.ckr.pageview.view;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -20,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PageRecyclerView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -31,6 +27,7 @@ import com.ckr.pageview.R;
 import com.ckr.pageview.adapter.BasePageAdapter;
 import com.ckr.pageview.adapter.OnIndicatorListener;
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.manager.LifecycleManager;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -44,7 +41,7 @@ import static com.ckr.pageview.utils.PageLog.Logv;
  * <p>
  * this is a puzzle here ,line 233
  */
-public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener, LifecycleObserver {
+public class PageView extends RelativeLayout implements PageRecyclerView.OnPageChangeListener, OnIndicatorListener {
 	private static final String TAG = "PageView";
 	private static final int INTERVAL = 3000;
 	private static final int SUB_INTERVAL = 100;
@@ -114,8 +111,8 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int maxScrollDuration = MAX_SCROLL_DURATION;
 	private int minScrollDuration = 0;
 	private FragmentActivity mActivity;
-	private FragmentActivity mActivityLifeCycle;
-	private Fragment mFragmentLifeCycle;
+	private LifecycleManager mLifecycleManager;
+
 
 	public PageView(Context context) {
 		this(context, null);
@@ -135,6 +132,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (isAutoLooping()) {
 			mHandler = new PageHandler(new WeakReference<PageView>(this));
 		}
+		mLifecycleManager = new LifecycleManager(this);
 	}
 
 	private void initAttr(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -366,10 +364,6 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 	public void release() {
-		removeLifeCycleObserver(mActivityLifeCycle);
-		removeLifeCycleObserver(mFragmentLifeCycle);
-		mActivityLifeCycle=null;
-		mFragmentLifeCycle=null;
 		stopLooping();
 		mHandler = null;
 		mAdapter = null;
@@ -764,61 +758,23 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	}
 
 
-	@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-	public void onResume() {
-		Logd(TAG, "InnerLifecycleObserver onResume");
-		restartLooping();
-	}
-
-	@OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-	public void onStop() {
-		Logd(TAG, "InnerLifecycleObserver onStop");
-		stopLooping();
-	}
-
-	@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-	public void onDestroy() {
-		Logd(TAG, "InnerLifecycleObserver onDestroy");
-		release();
-	}
-
 	public void registerLifeCycleObserver() {
 		registerLifeCycleObserver(mActivity);
 	}
 
 	public void registerLifeCycleObserver(@NonNull FragmentActivity activity) {
-		if (activity == null) {
-			return;
-		}
-		mActivityLifeCycle=activity;
-		activity.getLifecycle().addObserver(this);
+		mLifecycleManager.registerLifeCycleObserver(activity);
 	}
 
 	public void removeLifeCycleObserver(@NonNull FragmentActivity activity) {
-		if (activity == null) {
-			return;
-		}
-		activity.getLifecycle().removeObserver(this);
+		mLifecycleManager.removeLifeCycleObserver(activity);
 	}
 
-	/**
-	 * 注意：由于没有fragment的onDestroyView的event,导致无法自动removeObserver，务必自行调用removeObserver
-	 *
-	 * @param fragment
-	 */
 	public void registerLifeCycleObserver(@NonNull Fragment fragment) {
-		if (fragment == null) {
-			return;
-		}
-		mFragmentLifeCycle=fragment;
-		mFragmentLifeCycle.getLifecycle().addObserver(this);
+		mLifecycleManager.registerLifeCycleObserver(fragment);
 	}
 
 	public void removeLifeCycleObserver(@NonNull Fragment fragment) {
-		if (fragment == null) {
-			return;
-		}
-		fragment.getLifecycle().removeObserver(this);
+		mLifecycleManager.removeLifeCycleObserver(fragment);
 	}
-
 }
