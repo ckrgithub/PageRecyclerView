@@ -70,6 +70,8 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	private void initView() {
 		pageView.addOnPageChangeListener(this);
+		//AppCompatActivity版本>=26.1.0才生效
+		//pageView.registerLifeCycleObserver();
 		//pageView.hideIndicatorContainer(2);
 		mainAdapter = new MainAdapter(getContext(), itemLayoutId);
 		pageView.setAdapter(mainAdapter);
@@ -199,9 +201,9 @@ public class PageFragment extends BaseFragment implements PageRecyclerView.OnPag
 
 	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
 		if (pageView != null) {
 			pageView.release();
 		}
+		super.onDestroyView();
 	}
 }
