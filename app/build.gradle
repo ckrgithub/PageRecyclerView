@@ -39,6 +39,6 @@ dependencies {
     implementation "android.arch.lifecycle:runtime:$rootProject.lifecycle"
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile project(':pageview')
-//    implementation 'ckrjfrog.Page:PageView:1.2.8'
+//    compile project(':pageview')
+    implementation 'ckrjfrog.Page:PageView:1.2.9'
 }
