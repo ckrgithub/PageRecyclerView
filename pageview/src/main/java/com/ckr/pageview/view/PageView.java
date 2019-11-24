@@ -10,12 +10,13 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PageRecyclerView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ import com.ckr.pageview.R;
 import com.ckr.pageview.adapter.BasePageAdapter;
 import com.ckr.pageview.adapter.OnIndicatorListener;
 import com.ckr.pageview.adapter.OnPageDataListener;
+import com.ckr.pageview.manager.LifecycleManager;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -108,6 +110,9 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 	private int thresholdToHideIndicator = 0;
 	private int maxScrollDuration = MAX_SCROLL_DURATION;
 	private int minScrollDuration = 0;
+	private FragmentActivity mActivity;
+	private LifecycleManager mLifecycleManager;
+
 
 	public PageView(Context context) {
 		this(context, null);
@@ -119,11 +124,15 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 
 	public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		if (context instanceof FragmentActivity) {
+			mActivity = (FragmentActivity) context;
+		}
 		initAttr(context, attrs, defStyleAttr);
 		initView();
 		if (isAutoLooping()) {
 			mHandler = new PageHandler(new WeakReference<PageView>(this));
 		}
+		mLifecycleManager = new LifecycleManager(this);
 	}
 
 	private void initAttr(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -746,5 +755,26 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
 		if (mOnPageChangeListener != null) {
 			mOnPageChangeListener.onPageScrollStateChanged(state);
 		}
+	}
+
+
+	public void registerLifeCycleObserver() {
+		registerLifeCycleObserver(mActivity);
+	}
+
+	public void registerLifeCycleObserver(@NonNull FragmentActivity activity) {
+		mLifecycleManager.registerLifeCycleObserver(activity);
+	}
+
+	public void removeLifeCycleObserver(@NonNull FragmentActivity activity) {
+		mLifecycleManager.removeLifeCycleObserver(activity);
+	}
+
+	public void registerLifeCycleObserver(@NonNull Fragment fragment) {
+		mLifecycleManager.registerLifeCycleObserver(fragment);
+	}
+
+	public void removeLifeCycleObserver(@NonNull Fragment fragment) {
+		mLifecycleManager.removeLifeCycleObserver(fragment);
 	}
 }
