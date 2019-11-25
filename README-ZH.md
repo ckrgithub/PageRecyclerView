@@ -17,8 +17,8 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 ### 添加依赖：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.2.8'//gradle plugin 3.0(包含)以上使用
-		//compile 'ckrjfrog.Page:PageView:1.2.8'//gradle plugin 3.0一下使用
+		implementation 'ckrjfrog.Page:PageView:1.2.10'//gradle plugin 3.0(包含)以上使用
+		//compile 'ckrjfrog.Page:PageView:1.2.10'//gradle plugin 3.0一下使用
 	}
 ```
 
@@ -83,6 +83,10 @@ PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](h
 | unselected_indicator_diameter	| 非当前页的指示器直径  					 | int      	| 15 		 |
 | selected_indicator_drawable   | 非当前页的指示器drawable(优先级高于颜色) 	 | drawable 	| null	     	|
 | page_background				| 当前页的背景		| drawable		| null			|
+| enable_touch_scroll           | 是否允许触摸滚动                            | boolean       | true  |
+| max_scroll_duration           | 每页滚动最大时间                            | int           | 600   |
+| min_scroll_duration           | 每页滚动最小时间                            | int           | 0     |
+| sub_loop_interval             | 轮播时，下标自动调整时下一页的轮播时间间隔     | int           | 100   |
 
 ### 3.代码使用
 ```
