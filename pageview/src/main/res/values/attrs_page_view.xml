@@ -59,6 +59,7 @@
             <enum name="linear" value="0"/>
             <enum name="grid" value="1"/>
         </attr>
+        <attr name="layout" format="integer"/>
     </declare-styleable>
 
     <integer name="loop_interval">3000</integer>
