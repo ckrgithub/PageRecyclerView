@@ -17,8 +17,8 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 ### add dependencies：
 ```
 	dependencies {
-		implementation 'ckrjfrog.Page:PageView:1.2.8'//gradle plugin 3.0(inclusive) above used
-		//compile 'ckrjfrog.Page:PageView:1.2.8'//gradle plugin 3.0 below used
+		implementation 'ckrjfrog.Page:PageView:1.2.10'//gradle plugin 3.0(inclusive) above used
+		//compile 'ckrjfrog.Page:PageView:1.2.10'//gradle plugin 3.0 below used
 	}
 ```
 
@@ -83,6 +83,10 @@ PageRecyclerView achieves page turning function and unlimited carousel [中文�
 | unselected_indicator_diameter	| indicator diameter for the non-current page  		| int          | 15 		        |
 | selected_indicator_drawable   | indicator drawable for the non-current page(priority is higher than color) | drawable  | null |
 | page_background		| the background of the current page			| drawable		| null		|
+| enable_touch_scroll           | Whether to allow touch scrolling                      | boolean       | true  |
+| max_scroll_duration           | Maximum scrolling time of the page                    | int           | 600   |
+| min_scroll_duration           | Minimum scrolling time of the page                    | int           | 0     |
+| sub_loop_interval             | When the index is adjusted, loop interval             | int           | 100   |
 
 ### 3.code to use
 ```
