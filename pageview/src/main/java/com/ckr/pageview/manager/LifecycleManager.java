@@ -23,7 +23,7 @@ public class LifecycleManager {
 		this.mPageView = view;
 	}
 
-	protected void onDetachedFromWindow() {
+	public void onDetachedFromWindow() {
 		Logd(TAG, "onDetachedFromWindow");
 		removeLifeCycleObserver(mHostActivity);
 		removeLifeCycleObserver(mHostFragment);
@@ -34,7 +34,7 @@ public class LifecycleManager {
 		}
 	}
 
-	protected void onAttachedToWindow() {
+	public void onAttachedToWindow() {
 		Logd(TAG, "onAttachedToWindow");
 	}
 
