@@ -26,7 +26,7 @@ public class LifecycleManager implements LifecycleObserver {
 		this.mPageView = view;
 	}
 
-	protected void onDetachedFromWindow() {
+	public void onDetachedFromWindow() {
 		Logd(TAG, "onDetachedFromWindow");
 		removeLifeCycleObserver(mHostActivity);
 		removeLifeCycleObserver(mHostFragment);
@@ -37,7 +37,7 @@ public class LifecycleManager implements LifecycleObserver {
 		}
 	}
 
-	protected void onAttachedToWindow() {
+	public void onAttachedToWindow() {
 		Logd(TAG, "onAttachedToWindow");
 	}
 

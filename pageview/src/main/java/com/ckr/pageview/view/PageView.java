@@ -765,6 +765,21 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mLifecycleManager != null) {
+            mLifecycleManager.onAttachedToWindow();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mLifecycleManager != null) {
+            mLifecycleManager.onDetachedFromWindow();
+        }
+    }
 
     public void registerLifeCycleObserver() {
         registerLifeCycleObserver(mActivity);
