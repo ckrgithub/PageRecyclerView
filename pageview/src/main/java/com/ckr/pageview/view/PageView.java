@@ -80,6 +80,7 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
     private int layoutFlag = OnPageDataListener.LINEAR;
     private boolean isLooping = false;
     private boolean autoPlay = false;
+    private boolean isPreparing = true;
     private int interval = INTERVAL;
     //item宽高自适应
     private boolean autoSize = false;
@@ -352,20 +353,24 @@ public class PageView extends RelativeLayout implements PageRecyclerView.OnPageC
         return autoPlay && isLooping;
     }
 
+    public final boolean isAllowLooping() {
+        return isPreparing && autoPlay && isLooping;
+    }
+
     public void stopLooping() {
         Logi(TAG, "stopLooping: ");
         if (mHandler != null) {
             mHandler.removeMessages(PageHandler.MSG_START_LOOPING);
             mHandler.removeMessages(PageHandler.MSG_STOP_LOOPING);
-            autoPlay = false;
+            isPreparing = false;
         }
     }
 
     public void restartLooping() {
         Logi(TAG, "restartLooping: ");
         if (mHandler != null) {
-            autoPlay = true;
-            if (isAutoLooping()) {
+            isPreparing = true;
+            if (isAllowLooping()) {
                 mHandler.sendEmptyMessageDelayed(PageHandler.MSG_START_LOOPING, interval);
             }
         }
