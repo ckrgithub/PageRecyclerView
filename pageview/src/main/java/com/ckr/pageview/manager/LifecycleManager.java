@@ -27,15 +27,20 @@ public class LifecycleManager {
 		Logd(TAG, "onDetachedFromWindow");
 		removeLifeCycleObserver(mHostActivity);
 		removeLifeCycleObserver(mHostFragment);
-		mHostActivity = null;
-		mHostFragment = null;
+//		mHostActivity = null;
+//		mHostFragment = null;
 		if (mPageView != null) {
-			mPageView.release();
+			mPageView.stopLooping();
 		}
 	}
 
 	public void onAttachedToWindow() {
 		Logd(TAG, "onAttachedToWindow");
+		registerLifeCycleObserver(mHostActivity);
+		registerLifeCycleObserver(mHostFragment);
+		if (mPageView != null) {
+			mPageView.restartLooping();
+		}
 	}
 
 	public void onResume() {
