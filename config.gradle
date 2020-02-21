@@ -16,8 +16,8 @@ ext {
     lifecycle = "1.0.0"
 
     pageViewConfig = [
-            versionCode   : 132,
-            versionName   : "1.2.12",
-            publishVersion: "1.2.12"
+            versionCode   : 133,
+            versionName   : "1.2.13",
+            publishVersion: "1.2.13"
     ]
 }
