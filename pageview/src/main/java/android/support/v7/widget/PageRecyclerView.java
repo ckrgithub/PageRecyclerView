@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -18,7 +17,6 @@ import com.ckr.pageview.adapter.OnPageDataListener;
 import com.ckr.pageview.transform.DepthPageTransformer;
 import com.ckr.pageview.transform.StackTransformer;
 
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -73,6 +71,14 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
     private boolean enableTouchScroll = true;
     private Method smoothScrollBy = null;
     private Field mViewFlingerField = null;
+
+    private static final Interpolator mQuinticInterpolator = new Interpolator() {
+        @Override
+        public float getInterpolation(float t) {
+            t -= 1.0f;
+            return t * t * t * t * t + 1.0f;
+        }
+    };
 
     public PageRecyclerView(Context context) {
         this(context, null);
@@ -299,7 +305,7 @@ public class PageRecyclerView extends RecyclerView implements RecyclerView.Child
 
     private void smoothScrollBy(int dx, int dy, int duration) {
         try {
-            smoothScrollBy.invoke(mViewFlingerField.get(this), dx, dy, duration, sQuinticInterpolator);
+            smoothScrollBy.invoke(mViewFlingerField.get(this), dx, dy, duration, mQuinticInterpolator);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
