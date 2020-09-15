@@ -1,7 +1,3 @@
->### GitAds
->[![GitAds](https://images.gitads.io/PageRecyclerView)](https://tracking.gitads.io/?repo=PageRecyclerView)
-  
-  
 # PageRecyclerView
 PageRecyclerView achieves page turning function and unlimited carousel [中文文档](README-ZH.md)。
 
