@@ -1,7 +1,3 @@
->### GitAds
->[![GitAds](https://images.gitads.io/PageRecyclerView)](https://tracking.gitads.io/?repo=PageRecyclerView)
-  
-
 # PageRecyclerView
 PageRecyclerView实现翻页功能及无限轮播。另外，使用了[banner](https://github.com/youth5201314/banner)的作者的翻页动画。
 
